@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+      Perfil Gabr
+    </title>
+    <link href="https://fonts.googleapis.com/css2?family=Agbalumo&amp;family=Roboto:ital,wght@1,700&amp;display=swap" rel="stylesheet">
+    <style>
+        /* Estilos generales y solución del fondo blanco */
+        html, body {
+            margin: 0;
+            padding: 0;
+            /* Aquí vendemos fundos gif / psbacks / pstyle */
+            background: url('https://xatimg.com/image/y7Zi7XEbdkZc.jpg') no-repeat center center fixed !important; 
+            background-color: #3d0845 !important; /* Respaldo negro en lugar de blanco */
+            background-size: cover !important;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            /* Cursor personalizado */
+            cursor: url('Curso'), auto;
+        }
+
+        /* Estilos para el título principal */
+        h1.main-title {
+            margin: 0;
+            color: #b1b1b1;
+            text-shadow: 0 0 10px rgba(177, 177, 177, 0.7);
+            font-size: 3em;
+            font-weight: bold;
+            background: linear-gradient( #939e14, #0a69a8, #939e14);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textGlow 1.5s ease-in-out infinite;
+        }
+
+        @keyframes textGlow {
+            0% { text-shadow: 0 0 5px rgba(177, 177, 177, 0.5); }
+            50% { text-shadow: 0 0 15px rgba(177, 177, 177, 1); }
+            100% { text-shadow: 0 0 5px rgba(177, 177, 177, 0.5); }
+        }
+
+        /* Contenedor principal del perfil */
+        .profile-container {
+            width: 95%;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: rgba(15, 15, 15, 0.85); /* Un poco más oscuro para que resalte sobre el gif */
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-height: calc(100vh - 100px);
+            transition: all 0.5s ease;
+            backdrop-filter: blur(5px); /* Efecto borroso elegante */
+        }
+
+        .profile-cover {
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(to bottom, rgba(26,26,26,0.8), rgba(0,0,1,0.9));
+            background-size: cover;
+            position: relative;
+            border-bottom: 5px solid #7e8081;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .avatar-container {
+            position: absolute;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 150px;
+            border-radius: 5%;
+            overflow: hidden;
+            border: 5px solid #7e8081;
+            box-shadow: 0 0 15px rgba(168, 168, 168, 0.7);
+            z-index: 10;
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-details {
+            text-align: center;
+            margin-top: 100px;
+        }
+
+        .profile-details p {
+            margin: 10px 0;
+            font-size: 1.1rem;
+            color: #D3D3D3;
+            font-style: italic;
+        }
+
+        .profile-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .btn-style {
+            display: inline-block;
+            padding: 12px 25px;
+            text-decoration: none;
+            color: #fff;
+            background-color: #7e8081;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: url('Cursor'), pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .btn-style:hover {
+            background-color: #959595;
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(255,255,255,0.3);
+        }
+
+        /* Tarjetas de información */
+        .info-cards {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-top: 30px;
+            gap: 20px;
+        }
+
+        .info-card {
+            background-color: rgba(50, 50, 50, 0.9);
+            border: 1px solid #111;
+            border-radius: 8px;
+            padding: 20px;
+            flex: 1 1 30%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 20px;
+            min-width: 250px;
+        }
+
+        .info-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 6px 15px rgba(150, 150, 150, 0.5);
+        }
+
+        .info-card h3 {
+            margin-top: 0;
+            color: #fff;
+            font-size: 1.5rem;
+            border-bottom: 1px solid #777;
+            padding-bottom: 5px;
+        }
+
+        .info-card p {
+            margin: 10px 0;
+            color: #e0e0e0;
+        }
+
+        .spotify-container {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .footer-text {
+            text-align: center;
+            margin-top: auto;
+            padding-top: 20px;
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        /* VISTAS */
+        #view-profile {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        #view-gifs {
+            display: none;
+            animation: fadeIn 0.5s;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ESTILOS PARA LA SECCIÓN DE GIFS */
+        .gifs-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #7e8081;
+            padding-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .canvas-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            overflow: hidden;
+            margin-bottom: 20px;
+            background: #000;
+            border-radius: 10px;
+            border: 2px solid #7e8081;
+        }
+
+        /* Estilos heredados exactamente de Gif.html para compatibilidad visual */
+        .Mesaj {
+            margin: 20px auto;
+            padding: 5px;
+            width: 95%;
+            height: 30px;
+            text-align: center;
+            background-repeat: repeat;
+            background-size: 1850px 50px;
+            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #7e8081;
+            position: relative;
+            box-shadow: rgba(82, 82, 82, 0.1) 0px 8px 24px, rgba(82, 82, 82, 0.1) 0px 16px 56px, rgba(82, 82, 82, 0.1) 0px 24px 80px;
+        }
+
+        .Mesaj marquee {
+            font-family: 'Agbalumo', cursive;
+            color: #fff;
+            text-shadow: 0 0 5px #f00;
+            font-size: 20px;
+            width: 100%;
+        }
+
+        /* Convertimos el Table rígido en uno responsivo para todos los navegadores */
+        #gifs-galleries-container table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        #gifs-galleries-container tbody {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+        }
+        
+        #gifs-galleries-container td {
+            display: block;
+            padding: 7px; /* Espaciado idéntico al visualizado en la tabla */
+        }
+
+        /* Notificación Toast de Copyright */
+        #copyright-toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #7e8081;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            bottom: 30px;
+            font-size: 17px;
+            transform: translateX(-50%);
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.5);
+            opacity: 0;
+            transition: opacity 0.5s, bottom 0.5s;
+        }
+
+        #copyright-toast.show {
+            visibility: visible;
+            opacity: 1;
+            bottom: 50px;
+        }
+
+        /* Responsivo para móviles */
+        @media (max-width: 600px) {
+            h1.main-title { font-size: 2em; }
+            .info-card { flex: 1 1 100%; }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  </head>
+  <body>
+    <div class="profile-container">
+      <!-- Elementos comunes en la parte superior -->
+      <div class="profile-cover"></div>
+      <div class="avatar-container">
+        <img src="https://xatimg.com/image/AqZ2buQJOoBL.png" alt="Avatar" class="avatar" onerror="this.src='https://via.placeholder.com/150'">
+      </div>
+      <div class="profile-details">
+        <h1 class="main-title">
+          ✎😡  ᎶÃ𝐁Ř  🍟🐲
+        </h1>
+        <p>
+          ID: /f(182413908) me Adicione 
+        </p>
+        <p>
+          Para Valores 
+        </p>
+        <div class="profile-buttons">
+          <button class="btn-style" onclick="toggleView('gifs')">Galería de Gifs</button> <a class="btn-style" href="linkvenon" target="_blank">PcBack</a> <a class="btn-style" href="https://www.flickr.com/photos/mccobra/albums/72157710162960711/" target="_blank">Fondos</a>
+        </div>
+      </div><!-- ================= VISTA DE PERFIL ================= -->
+      <div id="view-profile">
+        <div class="info-cards">
+          <div class="info-card">
+            <h3>
+              Sobre mím
+            </h3>
+            <p>
+              Sell / Vendo Pstyle / pcback / Fundos / gifs para o xat.com.
+            </p>
+          </div>
+          <div class="info-card">
+            <h3>
+              Xat.com
+            </h3>
+            <p>
+              Me encontra http://xat.com/conexaosertanejoo
+            </p>
+          </div>
+          <div class="info-card">
+            <h3>
+              Contacto
+            </h3>
+            <p>
+              Adicionar  Gabr  nos  amigos /f(182413908).
+            </p>
+          </div>
+        </div>
+        <div class="spotify-container">
+          <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1DWVPifjQJoRjt?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+        </div>
+      </div><!-- ================= VISTA DE GIFS ================= -->
+      <div id="view-gifs">
+        <div class="gifs-header">
+          <h2 style="color: #fff; font-family: 'Agbalumo', cursive; margin: 0;">
+            Galería Exclusiva
+          </h2><button class="btn-style" onclick="toggleView('profile')" style="background-color: #d9534f; margin: 0;">⬅ Volver al Perfil</button>
+        </div><!-- Efecto Canvas Text Glow idéntico al de Gif.html -->
+        <div class="canvas-container" id="canvasContainer">
+          <canvas id="canvas" height="150"></canvas>
+        </div><!-- Contenedor donde se inyectarán las TABLAS ORIGINALES de los GIFs -->
+        <div id="gifs-galleries-container"></div>
+      </div>
+      <div class="footer-text">
+        <p>
+          © 2026 Gabr / Gifs / fundos / Pcback / Pstyle .
+        </p>
+      </div>
+    </div><!-- Contenedor para el mensaje de Copyright -->
+    <div id="copyright-toast">
+       Copyright iiCarvaozim 
+    </div>
+    <script>
+        // ==========================================
+        // LÓGICA DE NAVEGACIÓN Y VISTAS
+        // ==========================================
+        let canvasInitialized = false;
+
+        function toggleView(viewName) {
+            const profileView = document.getElementById('view-profile');
+            const gifsView = document.getElementById('view-gifs');
+            
+            if (viewName === 'gifs') {
+                profileView.style.display = 'none';
+                gifsView.style.display = 'block';
+                // Iniciar el canvas la primera vez que se abre para que tome el ancho correcto
+                if (!canvasInitialized) {
+                    initGifsGallery();
+                    initCanvasEffect();
+                    canvasInitialized = true;
+                }
+            } else {
+                gifsView.style.display = 'none';
+                profileView.style.display = 'block';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        // ==========================================
+        // GENERADOR DE GALERÍA DE GIFS (TABLAS EXACTAS Y EDITABLES)
+        // ==========================================
+        const categories = [
+            {
+                marquee: "Blufftitler - Only  Name",
+                bgUrl: "https://xatimg.com/image/BHzeouAHm6JY.png",
+                prefix: "Gif - ",
+                count: 10,
+                ids: [
+                 // 1
+					{ id: "bidwh1D", url: "" },
+// 2
+					{ id: "wR2NpTV", url: "" },
+// 3
+					{ id: "IMrOUcP", url: "" },
+// 4
+					{ id: "Hdi04Sg", url: "" },
+// 5
+					{ id: "OcGaTXA", url: "" },
+// 6
+					{ id: "wJZiwkG", url: "" },
+// 7
+					{ id: "jDgxhBQ", url: "" },
+// 8
+					{ id: "USQgVk8", url: "" },
+// 9
+					{ id: "4bhAWa5", url: "" },
+// 10
+					{ id: "0LL3muu", url: "" },
+                ]
+            },
+            {
+                marquee: "Blufftitler - Nome + Photo",
+                bgUrl: "https://xatimg.com/image/BHzeouAHm6JY.png",
+                prefix: "Blufftitler -",
+                count: 17,
+                ids: [
+                    // 1
+					{ id: "F0b4mnJ", url: "" },
+//2
+					{ id: "65bzz5V", url: "" },
+// 3
+					{ id: "ZetkVFF", url: "" },
+// 4
+					{ id: "JqzxOwt", url: "" },
+// 5
+					{ id: "NK9Z8rU", url: "" },
+// 6
+					{ id: "RNIlFI3", url: "" },
+// 7
+					{ id: "bSmUjsQ", url: "" },
+// 8
+					{ id: "R6klF5K", url: "" },
+// 9
+					{ id: "cgyGLHQ", url: "" },
+// 10
+					{ id: "ctF1vyH", url: "" },
+// 11
+					{ id: "Ge90Xy7", url: "" },
+// 12
+					{ id: "7Z8xEC8", url: "" },
+// 13
+					{ id: "G8HFkiG", url: "" },
+// 14
+					{ id: "sh7u3UM", url: "" },
+// 15
+					{ id: "y0WgmxJ", url: "" },
+// 16
+					{ id: "Vvw2SMU", url: "" },
+// 17
+					{ id: "uoNJlEe", url: "" },
+                ]
+            },
+            {
+                marquee: "Canva Name + Photo ",
+                bgUrl: "https://xatimg.com/image/BHzeouAHm6JY.png",
+                prefix: "Canva - ",
+                count: 10,
+                ids: [
+                    // 1
+					{ id: "hWVyLox", url: "" },
+// 2
+					{ id: "Uxlzu5C", url: "" },
+// 3
+					{ id: "Crt716T", url: "" },
+// 4
+					{ id: "xo4npxf", url: "" },
+// 5
+					{ id: "jUG54d4", url: "" },
+// 6
+					{ id: "gMQ3Fo9", url: "" },
+// 7
+					{ id: "xvM1ixb", url: "" },
+// 8
+					{ id: "cwRIh51", url: "" },
+// 9
+					{ id: "db8sdi9", url: "" },
+// 10
+					{ id: "nRJQ0BB", url: "" },
+                ]
+            },
+            {
+                marquee: "AfterEffects - Name + Photo",
+                bgUrl: "https://xatimg.com/image/BHzeouAHm6JY.png",
+                prefix: "DJ - ",
+                count: 10,
+                ids: [
+                   // 1
+					{ id: "S5pXaVI", url: "" },
+// 2
+					{ id: "qQB5w4C", url: "" },
+// 3
+					{ id: "QlniJvg", url: "" },
+// 4
+					{ id: "shyBpPS", url: "" },
+// 5
+					{ id: "LzTvWk4", url: "" },
+// 6
+					{ id: "aLBEkKq", url: "" },
+// 7
+					{ id: "kJmAoul", url: "" },
+// 8
+					{ id: "uOwOmwM", url: "" },
+// 9
+					{ id: "u0Cse5Q", url: "" },
+// 10
+					{ id: "ioDaClP", url: "" },
+                ]
+            },
+            {
+                marquee: "AfterEffects - Name + (2) Photo",
+                bgUrl: "https://xatimg.com/image/BHzeouAHm6JY.png",
+                prefix: "Love - ",
+                count: 5,
+                ids: [
+					// 1
+					{ id: "NnEIlrv", url: "" },
+// 2
+					{ id: "8hrgq1D", url: "" },
+// 3
+					{ id: "MqnmO8R", url: "" },
+// 4
+					{ id: "wPFx9Fa", url: "" },
+// 5
+					{ id: "wPFx9Fa", url: "" },
+                ]
+            },
+            {
+                marquee: "PhotoScape - (1) Photo, (2) Photo, (3) Photo",
+                bgUrl: "https://xatimg.com/image/BHzeouAHm6JY.png",
+                prefix: "Santa-",
+                count: 6,
+                ids: [
+                    // 1
+					{ id: "bXTTG5V", url: "" },
+// 2
+					{ id: "MdemxH0", url: "" },
+// 3
+					{ id: "VpU6eOY", url: "" },
+// 4
+					{ id: "NUIGQ3f", url: "" },
+// 5
+					{ id: "NP25oCb", url: "" },
+					
+                ]
+            },
+            {
+                marquee: "⭐After Editavel* - 400xats⭐◉●•◦",
+                bgUrl: "https://xatimg.com/image/BHzeouAHm6JY.png",
+                prefix: "Hall-",
+                count: 6,
+                ids: [
+                    // 1
+                    { id: "mUyGHFF", url: "" },
+                    { id: "VENON", url: "" },
+                    // 9
+					{ id: "VENON", url: "" },
+                    // 9
+					{ id: "VENON", url: "" },
+                    // 9
+					{ id: "VENON", url: "" },
+                    // 9
+					{ id: "VENON", url: "" },
+                    // 9
+					{ id: "VENON", url: "" },
+                    // 9
+					{ id: "VENON", url: "" },
+                    // 9
+					
+                ]
+            },
+            {
+                marquee: "◦•●◉🏆𝑮𝒊𝒇𝒔 Mixed🏆◉●•",
+                bgUrl: "https://xatimg.com/image/BHzeouAHm6JY.png",
+                prefix: "Mix-A-",
+                count: 6,
+                ids: [
+                    // 1
+                    { id: "2bISAr5", url: "" },
+                   { id: "VENON", url: "" },
+                    // 9
+					{ id: "VENON", url: "" },
+                    // 9
+					{ id: "VENON", url: "" },
+                    // 9
+					{ id: "VENON", url: "" },
+                    // 9
+					{ id: "VENON", url: "" },
+                    // 9
+					{ id: "VENON", url: "" },
+                    // 9
+					{ id: "VENON", url: "" },
+                    // 9
+					{ id: "VENON", url: "" },
+                    // 9
+                ]
+            }
+        ];
+
+        function initGifsGallery() {
+            const container = document.getElementById('gifs-galleries-container');
+            container.innerHTML = ""; 
+
+            const defaultImg = "https://xatimg.com/image/ovqkRnybaD8U.png";
+
+            categories.forEach(cat => {
+                // Banner exacto de Gif.html
+                const marqueeDiv = document.createElement('div');
+                marqueeDiv.className = 'Mesaj';
+                marqueeDiv.style.backgroundImage = `url('${cat.bgUrl}')`;
+                marqueeDiv.innerHTML = `<marquee>${cat.marquee}</marquee>`;
+                container.appendChild(marqueeDiv);
+
+                // Estructura de Tabla para mantener exactitud con el diseño
+                const table = document.createElement('table');
+                table.setAttribute('cellpadding', '0');
+                table.setAttribute('cellspacing', '0');
+                table.setAttribute('width', '100%');
+                const tbody = document.createElement('tbody');
+                
+                const fragment = document.createDocumentFragment();
+            
+            for(let i = 0; i < cat.count; i++) {
+                let imgSrc = defaultImg;
+                let isMissing = false;
+                
+                if (i < cat.ids.length) {
+                    const item = cat.ids[i];
+                    const customUrl = String(item.url || "").trim();
+                    const id = String(item.id || "").trim();
+                    
+                    if (customUrl !== "") {
+                        // ✅ Si url tiene contenido -> usar esa imagen directamente
+                        imgSrc = customUrl.startsWith("http") ? customUrl : "https://" + customUrl;
+                        isMissing = false;
+                    } else {
+                        // Si url está vacío -> usar el sistema actual con id
+                        if (id === "" || id.includes("AKsLGM7.png")) {
+                            isMissing = true;
+                        } else if (id.startsWith("http") || id.includes("/") || id.includes(".")) {
+                            imgSrc = id.startsWith("http") ? id : "https://" + id;
+                        } else {
+                            imgSrc = `https://i.imgur.com/${id}.gif`;
+                        }
+                    }
+                } else {
+                    isMissing = true;
+                }
+
+                // Recreación exacta del <td><div style=...> original solicitado
+                const itemTd = document.createElement('td');
+                
+                // Capa visual dinámica:
+                // Si falta la imagen, muestra el número grande.
+                // Si la imagen falla al cargar (enlace roto), el 'onerror' oculta la imagen y muestra el número.
+                const displayContent = isMissing 
+                    ? `<div style="width: 100%; height: 80px; display: flex; justify-content: center; align-items: center; color: #777; font-size: 32px; font-weight: bold; font-family: 'Agbalumo', cursive;">${i + 1}</div>`
+                    : `<img src="${imgSrc}" style="max-width: 80px; max-height: 80px; object-fit: contain;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" loading="lazy">
+                       <div style="display: none; width: 100%; height: 80px; justify-content: center; align-items: center; color: #777; font-size: 32px; font-weight: bold; font-family: 'Agbalumo', cursive;">${i + 1}</div>`;
+
+                itemTd.innerHTML = `
+                <div style="text-align: center; width: 110px; height: 120px; background-color:#1b1b1b; border: 1px solid rgb(82, 82, 82); border-radius:15px; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'; this.style.borderColor='#fff'" onmouseout="this.style.transform='scale(1)'; this.style.borderColor='rgb(82, 82, 82)'">
+                    <font color="#ffffff" style="font-family: Arial, sans-serif; font-size:13px; margin-bottom: 5px;"><b>${cat.prefix}${i + 1}</b></font> 
+                    ${displayContent}
+                </div>`;
+                
+                fragment.appendChild(itemTd);
+            }
+            
+            tbody.appendChild(fragment);
+                table.appendChild(tbody);
+                container.appendChild(table);
+            });
+        }
+
+        // ==========================================
+        // EFECTO CANVAS DE LUCES
+        // ==========================================
+        function initCanvasEffect() {
+            var txt = "Gifs / Pstyle / Pacback / GABR";
+            var txtH = 50;
+            var font = "'Roboto', sans-serif";
+            var canvas = document.getElementById("canvas");
+            var ctx = canvas.getContext("2d");
+            
+            var parent = document.getElementById("canvasContainer");
+            var cw = canvas.width = parent.clientWidth;
+            var ch = canvas.height = 150;
+            var w2 = cw / 2;
+            var h2 = ch / 2;
+            var pi = Math.PI;
+            var pi2 = pi * .5;
+            
+            var txtCanvas = document.createElement("canvas");
+            var txtCtx = txtCanvas.getContext("2d");
+            txtCtx.font = txtH + "px " + font;
+            txtCtx.textBaseline = "middle";
+            var txtW = Math.floor(txtCtx.measureText(txt).width);
+            txtCanvas.width = txtW;
+            txtCanvas.height = txtH * 1.5;
+            
+            var gradient = ctx.createRadialGradient(w2, h2, 0, w2, h2, txtW);
+            gradient.addColorStop(0, "#ffffff");
+            gradient.addColorStop(.5, "#ffffff");
+            gradient.addColorStop(1, "#ffffff");
+            ctx.strokeStyle = gradient;
+            
+            txtCtx.fillStyle = gradient;
+            txtCtx.font = txtH + "px " + font;
+            txtCtx.textBaseline = "middle";
+            txtCtx.fillText(txt, 0, txtH * .5);
+            txtH *= 1.5;
+
+            var bufferCanvas = document.createElement("canvas");
+            bufferCanvas.width = txtW;
+            bufferCanvas.height = txtH;
+            var buffer = bufferCanvas.getContext("2d");
+
+            var sx = (cw - txtW) * 0.5;
+            var sy = (ch - txtH) * 0.5;
+
+            var rays = [];
+            var txtData = txtCtx.getImageData(0, 0, txtW, txtH);
+            for (var i = 0; i < txtData.data.length; i += 4) {
+                var alpha = txtData.data[i + 3];
+                if (alpha !== 0) {
+                    var ii = i / 4;
+                    var c = "rgba(" + txtData.data[i] + "," + txtData.data[i + 1] + "," + txtData.data[i + 2] + "," + (alpha / 255) + ")";
+                    rays.push(new Ray(Math.floor(ii / txtW), ii % txtW, c));
+                }
+            }
+
+            var current = 0;
+            tick();
+
+            function tick() {
+                ctx.clearRect(0, 0, cw, ch);
+                ctx.drawImage(bufferCanvas, 0, 0, current, txtH, sx, sy, current, txtH);
+                ctx.save();
+                ctx.globalAlpha = .05;
+                ctx.globalCompositeOperation = "lighter";
+                if (drawRays(current)) {
+                    current++;
+                    current = Math.min(current, txtW);
+                    window.requestAnimationFrame(tick);
+                } else {
+                    fadeOut();
+                }
+                ctx.restore();
+            }
+
+            function fadeOut() {
+                ctx.clearRect(0, 0, cw, ch);
+                ctx.globalAlpha *= .95;
+                ctx.drawImage(bufferCanvas, 0, 0, current, txtH, sx, sy, current, txtH);
+                if (ctx.globalAlpha > .01) {
+                    window.requestAnimationFrame(fadeOut);
+                } else {
+                    window.setTimeout(restart, 500);
+                }
+            }
+
+            function restart() {
+                for (var i = 0; i < rays.length; i++) {
+                    rays[i].reset();
+                }
+                ctx.globalAlpha = 1;
+                buffer.clearRect(0, 0, txtW, txtH);
+                current = 0;
+                tick();
+            }
+
+            function drawRays(c) {
+                var count = 0;
+                ctx.beginPath();
+                for (var i = 0; i < rays.length; i++) {
+                    var ray = rays[i];
+                    if (ray.col < c) {
+                        count += ray.draw();
+                    }
+                }
+                ctx.stroke();
+                return count !== rays.length;
+            }
+
+            function Ray(row, col, f) {
+                this.col = col;
+                this.row = row;
+                this.xp = sx + col;
+                this.yp = sy + row;
+                this.fill = f;
+                
+                var ath = txtH / 1.5;
+                this.a = pi2 * (this.row - ath * .5) / ath;
+                if (this.a === 0) this.a = (Math.random() - .5) * pi2;
+                this.da = .02 * Math.sign(this.a);
+
+                this.q = 2 * pi * (this.col - txtW * .5) / txtW;
+                if (this.q === 0) this.q = (Math.random() - .5) * pi;
+                this.dq = .02 * Math.sign(this.q);
+
+                this.da += (Math.random() - .5) * .005;
+                this.l = 0;
+                this.dl = Math.random() * 2 + 2;
+                this.buffered = false;
+
+                this.reset = function () {
+                    this.q = 2 * pi * (this.col - txtW * .5) / txtW;
+                    this.a = pi2 * (this.row - ath * .5) / ath;
+                    if (this.a === 0) this.a = -pi2 * .5;
+                    this.l = 0;
+                    this.buffered = false;
+                };
+
+                this.draw = function () {
+                    if (this.l < 0) {
+                        if (!this.buffered) {
+                            buffer.fillStyle = this.fill;
+                            buffer.fillRect(this.col, this.row, 1, 1);
+                            this.buffered = true;
+                        }
+                        return 1;
+                    } else {
+                        ctx.moveTo(this.xp, this.yp);
+                        ctx.quadraticCurveTo(
+                            this.xp + Math.cos(this.q) * this.l * .5,
+                            this.yp + Math.sin(this.q) * this.l * .5,
+                            this.xp + Math.cos(this.a) * this.l,
+                            this.yp + Math.sin(this.a) * this.l
+                        );
+                        this.a += this.da;
+                        this.q += this.dq;
+                        this.l += Math.cos(this.a) * this.dl;
+                        return 0;
+                    }
+                };
+            }
+            
+            window.addEventListener('resize', () => {
+                if(document.getElementById('view-gifs').style.display !== 'none') {
+                    cw = canvas.width = parent.clientWidth;
+                    sx = (cw - txtW) * 0.5;
+                }
+            });
+        }
+
+        // ==========================================
+        // SEGURIDAD Y DERECHOS DE AUTOR
+        // ==========================================
+        const toast = document.getElementById("copyright-toast");
+        let toastTimeout;
+
+        function showToast() {
+            toast.className = "show";
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(function(){ 
+                toast.className = toast.className.replace("show", ""); 
+            }, 3000);
+        }
+
+        // Deshabilitar menú contextual y scripts nativos solicitados
+        var message = "Stop Copyright Bycobra";
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            showToast();
+            console.log("Right Click Disabled");
+        });
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+        });
+        document.addEventListener('dragstart', function(e) {
+            if (e.target.tagName === 'IMG') {
+                e.preventDefault();
+            }
+        });
+    </script>
+  </body>
+</html>
