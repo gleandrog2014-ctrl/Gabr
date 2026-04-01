@@ -8,7 +8,7 @@
 <body style="margin: 0; background-color: #000; overflow-x: hidden;">
 
 <div id="splash-screen">
-    <div class="container-enter">
+    <div id="splash-container" class="container-enter">
         <h1 class="logo-wrs logo-glitter" data-text="GALERIA">GALERIA</h1>
         
         <div class="menu-wrapper">
@@ -56,6 +56,20 @@
         align-items: center;
         z-index: 999999;
         transition: all 0.8s ease-in-out;
+        /* Necessário para o posicionamento das gotas */
+        overflow: hidden; 
+    }
+
+    /* Container para limitar o efeito do mouse */
+    #splash-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        pointer-events: auto; /* Garante que os botões funcionem */
     }
 
     .container-enter { text-align: center; }
@@ -73,6 +87,8 @@
         color: transparent;
         animation: gradientMove 4s linear infinite;
         display: block;
+        position: relative; /* Mantém acima das gotas */
+        z-index: 10;
     }
 
     @keyframes gradientMove {
@@ -83,7 +99,14 @@
 
     .logo-glitter { text-shadow: 0 0 15px rgba(0, 72, 255, 0.4); }
 
-    .menu-wrapper { display: flex; flex-direction: column; gap: 20px; align-items: center; }
+    .menu-wrapper { 
+        display: flex; 
+        flex-direction: column; 
+        gap: 20px; 
+        align-items: center; 
+        position: relative; /* Mantém acima das gotas */
+        z-index: 10;
+    }
 
     .btn-glow {
         background: transparent;
@@ -125,7 +148,7 @@
         display: block;
     }
 
-    /* EFEITO DE HOVER CORRIGIDO */
+    /* EFEITO DE HOVER MANTIDO */
     .friend-item:hover {
         background: #0048FF;
         color: #fff;
@@ -165,9 +188,62 @@
         font-weight: bold;
         text-shadow: 0 0 8px #0048FF;
     }
+
+    /* NOVO CSS PARA O EFEITO DE GOTAS */
+    .drop {
+        position: absolute;
+        background-color: rgba(0, 72, 255, 0.7); /* Azul WRS */
+        border-radius: 50%;
+        pointer-events: none; /* Não atrapalha os cliques */
+        transform: translate(-50%, -50%);
+        animation: fadeOutDrop 1s linear forwards;
+        z-index: 5; /* Abaixo dos botões, acima do fundo */
+    }
+
+    @keyframes fadeOutDrop {
+        0% {
+            width: 0px;
+            height: 0px;
+            opacity: 1;
+        }
+        100% {
+            width: 50px; /* Tamanho final da gota */
+            height: 50px;
+            opacity: 0;
+        }
+    }
 </style>
 
 <script>
+    // Configurações do efeito de gotas
+    const splashContainer = document.getElementById('splash-container');
+    const dropContainer = document.getElementById('splash-screen');
+
+    // Função para criar a gota
+    function createDrop(e) {
+        // Cria o elemento da gota
+        const drop = document.createElement('div');
+        drop.classList.add('drop');
+
+        // Define a posição baseada no mouse
+        // Usamos e.clientX/Y para posição absoluta na janela
+        drop.style.left = e.clientX + 'px';
+        drop.style.top = e.clientY + 'px';
+
+        // Adiciona ao container do splash
+        dropContainer.appendChild(drop);
+
+        // Remove a gota após 1 segundo (tempo da animação CSS)
+        setTimeout(() => {
+            drop.remove();
+        }, 1000);
+    }
+
+    // Ativa o efeito apenas quando o mouse se move dentro do splash
+    splashContainer.addEventListener('mousemove', createDrop);
+
+
+    // Funções originais mantidas
     function toggleAmigos() {
         document.getElementById('lista-amigos').classList.toggle('show-list');
         document.getElementById('lista-xat').classList.remove('show-list');
@@ -179,6 +255,8 @@
     }
 
     function entrarNoPerfil() {
+        // Remove os ouvintes de evento para economizar memória após fechar o splash
+        splashContainer.removeEventListener('mousemove', createDrop);
         document.getElementById('splash-screen').classList.add('hidden-splash');
     }
 
