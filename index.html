@@ -1,173 +1,150 @@
 <div id="splash-screen">
-    <div class="container-enter">
-        <h1 class="logo-wrs logo-glitter" data-text="GALERIA">GALERIA</h1>
-        <button class="btn-glow" onclick="entrarNoPerfil()">ENTRE</button>
-        
-        <button class="btn-glow btn-amigos" onclick="toggleAmigos()" style="margin-top: 20px; font-size: 16px; padding: 10px 40px;">AMIGOS</button>
-        
-        <div id="lista-amigos" class="amigos-content">
-            <ul>
-                <li>Mnna - (Married)</li>
-                <li>Gold</li>
-				<li>Gothica</li>
-				<li>Marbella</li>
-				<li>Promise</li>
-            </ul>
-        </div>
-    </div>
+    <div class="container-enter">
+        <h1 class="logo-wrs logo-glitter" data-text="GALERIA">GALERIA</h1>
+        <button class="btn-glow" onclick="entrarNoPerfil()">ENTRE</button>
+    </div>
 </div>
 
 <style>
-    #splash-screen {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: #000;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 999999;
-        transition: all 0.8s ease-in-out;
-        overflow: hidden;
-    }
+    #splash-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 999999;
+        transition: all 0.8s ease-in-out;
+        overflow: hidden;
+    }
 
-    .container-enter {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
+    .logo-wrs {
+        font-family: 'Arial Black', sans-serif;
+        font-size: 70px;
+        letter-spacing: 15px;
+        text-align: center;
+        margin-bottom: 50px;
+        position: relative;
+        
+        background: linear-gradient(
+            270deg, 
+            #FFFFFF, 
+            #0048FF, 
+            #FFFFFF, 
+            #0048FF,
+            #FFFFFF
+        );
+        background-size: 400% 400%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        animation: gradientMove 4s ease infinite;
+        filter: drop-shadow(0 0 15px rgba(0, 72, 255, 0.8));
+    }
 
-    .logo-wrs {
-        font-family: 'Arial Black', sans-serif;
-        font-size: 70px;
-        letter-spacing: 15px;
-        text-align: center;
-        margin-bottom: 50px;
-        position: relative;
-        background: linear-gradient(270deg, #FFFFFF, #0048FF, #FFFFFF, #0048FF, #FFFFFF);
-        background-size: 400% 400%;
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-        animation: gradientMove 4s ease infinite;
-        filter: drop-shadow(0 0 15px rgba(0, 72, 255, 0.8));
-    }
+    /* EFEITO DE GLITTER (Mantido) */
+    .logo-glitter::before {
+        content: attr(data-text);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #FFFFFF;
+        -webkit-mask-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4t95AAAACVBMVEUAAAD8/Pz///9p4iNRAAAAAXRSTlMAQObYZgAAAFRJREFUeNpjYGRkYmJmYWFjY2NnZ+fk5OXl5efn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn58cBwWMB2I1q5XMAAAAASUVORK5CYII=');
+        -webkit-mask-size: 50px 50px;
+        animation: glitterAnim 0.3s steps(4) infinite;
+        z-index: 1;
+        filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
+        pointer-events: none;
+    }
 
-    .logo-glitter::before {
-        content: attr(data-text);
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: #FFFFFF;
-        -webkit-mask-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4t95AAAACVBMVEUAAAD8/Pz///9p4iNRAAAAAXRSTlMAQObYZgAAAFRJREFUeNpjYGRkYmJmYWFjY2NnZ+fk5OXl5efn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn58cBwWMB2I1q5XMAAAAASUVORK5CYII=');
-        -webkit-mask-size: 50px 50px;
-        animation: glitterAnim 0.3s steps(4) infinite;
-        z-index: 1;
-        filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
-        pointer-events: none;
-    }
+    @keyframes glitterAnim {
+        0% { background-position: 0 0; opacity: 1; }
+        100% { background-position: 10px 10px; opacity: 0.8; }
+    }
 
-    /* ESTILO DA LISTA DE AMIGOS */
-    .amigos-content {
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.5s ease-out, opacity 0.5s;
-        opacity: 0;
-        margin-top: 15px;
-        text-align: center;
-    }
+    @keyframes gradientMove {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
 
-    .amigos-content.show {
-        max-height: 200px;
-        opacity: 1;
-    }
+    .btn-glow {
+        background: transparent;
+        border: 2px solid #0048FF;
+        color: #0048FF;
+        padding: 15px 60px;
+        font-size: 20px;
+        cursor: pointer;
+        font-weight: bold;
+        letter-spacing: 5px;
+        box-shadow: 0 0 15px #0048FF;
+        transition: 0.4s;
+        display: block;
+        margin: 0 auto;
+        position: relative;
+        overflow: hidden;
+    }
 
-    .amigos-content ul {
-        list-style: none;
-        padding: 0;
-        color: #FFFFFF;
-        font-family: 'Arial', sans-serif;
-        text-shadow: 0 0 10px #0048FF;
-        letter-spacing: 2px;
-        font-weight: bold;
-    }
+    .btn-glow:hover {
+        background: #0048FF;
+        color: #fff;
+        box-shadow: 0 0 40px #0048FF;
+        transform: scale(1.05);
+    }
 
-    .amigos-content li {
-        margin: 10px 0;
-        border-bottom: 1px solid rgba(0, 72, 255, 0.3);
-        padding-bottom: 5px;
-    }
+    .hidden-splash {
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-100%);
+    }
 
-    /* ANIMAÇÕES EXISTENTES */
-    @keyframes glitterAnim { 0% { background-position: 0 0; opacity: 1; } 100% { background-position: 10px 10px; opacity: 0.8; } }
-    @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+    /* ESTILOS PARA AS GOTAS DO CURSOR (Mantido) */
+    .mouse-drip {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: #0048FF;
+        pointer-events: none;
+        box-shadow: 0 0 10px #0048FF, 0 0 5px #FFFFFF;
+        animation: mouseDripFade 1s forwards ease-out;
+        z-index: 1000;
+    }
 
-    .btn-glow {
-        background: transparent;
-        border: 2px solid #0048FF;
-        color: #0048FF;
-        padding: 15px 60px;
-        font-size: 20px;
-        cursor: pointer;
-        font-weight: bold;
-        letter-spacing: 5px;
-        box-shadow: 0 0 15px #0048FF;
-        transition: 0.4s;
-        display: block;
-        margin: 0 auto;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .btn-glow:hover {
-        background: #0048FF;
-        color: #fff;
-        box-shadow: 0 0 40px #0048FF;
-        transform: scale(1.05);
-    }
-
-    .hidden-splash { opacity: 0; visibility: hidden; transform: translateY(-100%); }
-
-    .mouse-drip {
-        position: absolute;
-        width: 10px; height: 10px; border-radius: 50%;
-        background-color: #0048FF; pointer-events: none;
-        box-shadow: 0 0 10px #0048FF, 0 0 5px #FFFFFF;
-        animation: mouseDripFade 1s forwards ease-out; z-index: 1000;
-    }
-
-    @keyframes mouseDripFade { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(0.2); opacity: 0; } }
+    @keyframes mouseDripFade {
+        0% { transform: scale(1); opacity: 1; }
+        100% { transform: scale(0.2); opacity: 0; }
+    }
 </style>
 
 <script>
-    const splashScreen = document.getElementById('splash-screen');
+    const splashScreen = document.getElementById('splash-screen');
 
-    // Efeito de gotas no mouse
-    splashScreen.addEventListener('mousemove', (e) => {
-        const drip = document.createElement('div');
-        drip.classList.add('mouse-drip');
-        drip.style.left = (e.clientX - 5) + 'px';
-        drip.style.top = (e.clientY - 5) + 'px';
-        splashScreen.appendChild(drip);
-        setTimeout(() => { drip.remove(); }, 1000);
-    });
+    splashScreen.addEventListener('mousemove', (e) => {
+        const drip = document.createElement('div');
+        drip.classList.add('mouse-drip');
+        drip.style.left = (e.clientX - 5) + 'px';
+        drip.style.top = (e.clientY - 5) + 'px';
+        splashScreen.appendChild(drip);
+        
+        setTimeout(() => {
+            drip.remove();
+        }, 1000);
+    });
 
-    // Função para entrar
-    function entrarNoPerfil() {
-        const splash = document.getElementById('splash-screen');
-        splash.classList.add('hidden-splash');
-        setTimeout(() => { splash.style.display = 'none'; }, 800);
-    }
-
-    // FUNÇÃO PARA MOSTRAR/ESCONDER AMIGOS
-    function toggleAmigos() {
-        const lista = document.getElementById('lista-amigos');
-        lista.classList.toggle('show');
-    }
+    function entrarNoPerfil() {
+        const splash = document.getElementById('splash-screen');
+        splash.classList.add('hidden-splash');
+        
+        setTimeout(() => {
+            splash.style.display = 'none';
+        }, 800);
+    }
 </script>
 <!DOCTYPE html>
 <html lang="es">
