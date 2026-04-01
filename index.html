@@ -2,36 +2,32 @@
     <div class="container-enter">
         <h1 class="logo-wrs logo-glitter" data-text="GALERIA">GALERIA</h1>
         
-        <button class="btn-glow" onclick="entrarNoPerfil()">ENTRE</button>
+        <div class="menu-wrapper">
+            <button class="btn-glow" onclick="entrarNoPerfil()">ENTRE</button>
 
-        <div class="friends-container">
-            <button class="btn-friend" onclick="verAmigo('Mnna')">Mnna (Married)</button>
-            <button class="btn-friend" onclick="verAmigo('Gold')">Gold</button>
-            <button class="btn-friend" onclick="verAmigo('Venon')">Venon</button>
+            <button class="btn-glow btn-friends-toggle" onclick="toggleAmigos()">AMIGOS</button>
+            
+            <div id="lista-amigos" class="friends-list-hidden">
+                <div class="friend-item" onclick="verAmigo('Mnna')">Mnna (Married)</div>
+                <div class="friend-item" onclick="verAmigo('Gold')">Gold</div>
+                <div class="friend-item" onclick="verAmigo('Venon')">Venon</div>
+            </div>
         </div>
     </div>
 </div>
 
 <style>
-    /* ... Seus estilos anteriores se mantêm iguais ... */
-
+    /* Mantendo seus estilos base */
     #splash-screen {
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
         background-color: #000;
         display: flex;
         justify-content: center;
         align-items: center;
         z-index: 999999;
         transition: all 0.8s ease-in-out;
-        overflow: hidden;
-    }
-
-    .container-enter {
-        text-align: center;
     }
 
     .logo-wrs {
@@ -39,43 +35,20 @@
         font-size: 70px;
         letter-spacing: 15px;
         text-align: center;
-        margin-bottom: 50px;
-        position: relative;
+        margin-bottom: 40px;
         background: linear-gradient(270deg, #FFFFFF, #0048FF, #FFFFFF, #0048FF, #FFFFFF);
         background-size: 400% 400%;
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
         animation: gradientMove 4s ease infinite;
-        filter: drop-shadow(0 0 15px rgba(0, 72, 255, 0.8));
     }
 
-    /* ESTILO DOS NOVOS BOTÕES */
-    .friends-container {
-        margin-top: 30px;
+    .menu-wrapper {
         display: flex;
-        gap: 15px;
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-
-    .btn-friend {
-        background: rgba(0, 72, 255, 0.1);
-        border: 1px solid #0048FF;
-        color: #fff;
-        padding: 10px 20px;
-        font-size: 14px;
-        cursor: pointer;
-        font-family: sans-serif;
-        letter-spacing: 2px;
-        transition: 0.3s;
-        text-transform: uppercase;
-    }
-
-    .btn-friend:hover {
-        background: #0048FF;
-        box-shadow: 0 0 20px #0048FF;
-        transform: translateY(-3px);
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
     }
 
     .btn-glow {
@@ -89,71 +62,68 @@
         letter-spacing: 5px;
         box-shadow: 0 0 15px #0048FF;
         transition: 0.4s;
-        display: block;
-        margin: 0 auto;
-        position: relative;
-        overflow: hidden;
+        width: 280px; /* Largura fixa para alinhar os botões */
     }
 
     .btn-glow:hover {
         background: #0048FF;
         color: #fff;
         box-shadow: 0 0 40px #0048FF;
-        transform: scale(1.05);
     }
 
-    /* Mantive suas animações e o efeito mouse-drip... */
-    .mouse-drip {
-        position: absolute;
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background-color: #0048FF;
-        pointer-events: none;
-        box-shadow: 0 0 10px #0048FF, 0 0 5px #FFFFFF;
-        animation: mouseDripFade 1s forwards ease-out;
-        z-index: 1000;
+    /* Estilo da Lista de Amigos */
+    .friends-list-hidden {
+        display: none;
+        flex-direction: column;
+        background: rgba(0, 72, 255, 0.1);
+        border: 1px solid #0048FF;
+        width: 280px;
+        margin-top: -10px;
+        animation: slideDown 0.3s ease-out;
     }
 
-    @keyframes mouseDripFade {
-        0% { transform: scale(1); opacity: 1; }
-        100% { transform: scale(0.2); opacity: 0; }
+    .friends-list-show {
+        display: flex !important;
     }
 
-    .hidden-splash {
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(-100%);
+    .friend-item {
+        color: #fff;
+        padding: 12px;
+        border-bottom: 1px solid rgba(0, 72, 255, 0.3);
+        cursor: pointer;
+        transition: 0.3s;
+        font-family: sans-serif;
+        letter-spacing: 1px;
     }
+
+    .friend-item:hover {
+        background: rgba(0, 72, 255, 0.4);
+        padding-left: 20px;
+    }
+
+    @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Efeito de sumir a splash screen */
+    .hidden-splash { opacity: 0; visibility: hidden; transform: translateY(-100%); }
 </style>
 
 <script>
-    const splashScreen = document.getElementById('splash-screen');
-
-    // Efeito das gotas seguindo o mouse
-    splashScreen.addEventListener('mousemove', (e) => {
-        const drip = document.createElement('div');
-        drip.classList.add('mouse-drip');
-        drip.style.left = (e.clientX - 5) + 'px';
-        drip.style.top = (e.clientY - 5) + 'px';
-        splashScreen.appendChild(drip);
-        
-        setTimeout(() => {
-            drip.remove();
-        }, 1000);
-    });
-
-    function entrarNoPerfil() {
-        splashScreen.classList.add('hidden-splash');
-        setTimeout(() => {
-            splashScreen.style.display = 'none';
-        }, 800);
+    // Função para mostrar/esconder a lista
+    function toggleAmigos() {
+        const lista = document.getElementById('lista-amigos');
+        lista.classList.toggle('friends-list-show');
     }
 
-    // Função para os botões de amigos
+    function entrarNoPerfil() {
+        document.getElementById('splash-screen').classList.add('hidden-splash');
+    }
+
     function verAmigo(nome) {
-        alert("Acessando perfil de: " + nome);
-        // Aqui você pode redirecionar, ex: window.location.href = 'perfil_' + nome + '.html';
+        console.log("Selecionado: " + nome);
+        // Aqui você coloca o que acontece ao clicar no nome do amigo
     }
 </script>
 <!DOCTYPE html>
