@@ -59,7 +59,136 @@
         background-color: #FFFFFF;
         
         /* Uso de uma imagem de ruído (noise) como máscara para criar as partículas */
-        -webkit-mask-image: url('data:image/png;base64,iVB
+        -webkit-mask-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4t95AAAACVBMVEUAAAD8/Pz///9p4iNRAAAAAXRSTlMAQObYZgAAAFRJREFUeNpjYGRkYmJmYWFjY2NnZ+fk5OXl5efn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn58cBwWMB2I1q5XMAAAAASUVORK5CYII=');
+        -webkit-mask-size: 50px 50px; /* Tamanho do granulado */
+        
+        /* Animação para o glitter piscar e se mover */
+        animation: glitterAnim 0.3s steps(4) infinite;
+        
+        /* Garante que o glitter fique sobre o gradiente */
+        z-index: 1;
+        
+        /* Brilho adicional */
+        filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
+        pointer-events: none; /* Não interfere no clique */
+    }
+
+    /* Precisamos adicionar o atributo data-text no HTML para o glitter funcionar */
+    /* <h1 class="logo-wrs logo-glitter" data-text="GALERIA">GALERIA</h1> */
+
+    @keyframes glitterAnim {
+        0% { background-position: 0 0; opacity: 1; }
+        100% { background-position: 10px 10px; opacity: 0.8; } /* Pequeno movimento e variação */
+    }
+    /* ------------------------------------------- */
+
+    /* EFEITO DE GOTAS NAS LETRAS (Mantido e ajustado) */
+    .logo-wrs::after {
+        content: '';
+        position: absolute;
+        bottom: -15px; /* Ajustado para começar um pouco abaixo */
+        background: #0048FF; 
+        box-shadow: inset -2px -4px 8px rgba(0,0,0,0.3), 0 0 15px #0048FF;
+        border-radius: 0 0 20px 20px;
+        width: 8px;
+        height: 25px;
+        z-index: -1;
+        animation: dripAnim 3s infinite ease-in;
+    }
+
+    /* Outras animações e estilos mantidos */
+    @keyframes dripAnim {
+        0% { transform: translateY(0) scaleY(1); opacity: 0.7; }
+        50% { transform: translateY(10px) scaleY(1.3); opacity: 1; }
+        100% { transform: translateY(20px) scaleY(1.1); opacity: 0; }
+    }
+
+    @keyframes gradientMove {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    .btn-glow {
+        background: transparent;
+        border: 2px solid #0048FF;
+        color: #0048FF;
+        padding: 15px 60px;
+        font-size: 20px;
+        cursor: pointer;
+        font-weight: bold;
+        letter-spacing: 5px;
+        box-shadow: 0 0 15px #0048FF;
+        transition: 0.4s;
+        display: block;
+        margin: 0 auto;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-glow:hover {
+        background: #0048FF;
+        color: #fff;
+        box-shadow: 0 0 40px #0048FF;
+        transform: scale(1.05);
+    }
+
+    .hidden-splash {
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-100%);
+    }
+
+    /* --- NOVO: ESTILOS PARA AS GOTAS DO CURSOR --- */
+    .mouse-drip {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: #0048FF; /* Azul principal */
+        pointer-events: none; /* Não interfere nos cliques */
+        box-shadow: 0 0 10px #0048FF, 0 0 5px #FFFFFF; /* Brilho misto */
+        animation: mouseDripFade 1s forwards ease-out;
+        z-index: 1000; /* Acima de tudo na splash */
+    }
+
+    @keyframes mouseDripFade {
+        0% { transform: scale(1); opacity: 1; }
+        100% { transform: scale(0.2); opacity: 0; }
+    }
+    /* ---------------------------------------------- */
+</style>
+
+<script>
+    // --- NOVO: LÓGICA DO CURSOR DO MOUSE ---
+    const splashScreen = document.getElementById('splash-screen');
+
+    splashScreen.addEventListener('mousemove', (e) => {
+        const drip = document.createElement('div');
+        drip.classList.add('mouse-drip');
+        
+        // Posiciona a gota no local do mouse, ajustando para o centro
+        drip.style.left = (e.clientX - 5) + 'px';
+        drip.style.top = (e.clientY - 5) + 'px';
+        
+        splashScreen.appendChild(drip);
+        
+        // Remove a gota após a animação
+        setTimeout(() => {
+            drip.remove();
+        }, 1000);
+    });
+    // ----------------------------------------
+
+    function entrarNoPerfil() {
+        const splash = document.getElementById('splash-screen');
+        splash.classList.add('hidden-splash');
+        
+        setTimeout(() => {
+            splash.style.display = 'none';
+        }, 800);
+    }
+</script>
 <!DOCTYPE html>
 <html lang="es">
   <head>
