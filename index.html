@@ -7,7 +7,68 @@
       Perfil Gabr
     </title>
     <link href="https://fonts.googleapis.com/css2?family=Agbalumo&amp;family=Roboto:ital,wght@1,700&amp;display=swap" rel="stylesheet">
-    <style>
+    <style> 
+		<style>
+    /* Tela que cobre o fundo */
+    #tela-entrada-perfil {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #000; /* Fundo preto */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 99999; /* Fica acima de tudo */
+        transition: opacity 0.8s ease;
+    }
+
+    /* Estilo do Botão Enter */
+    .btn-enter-ziva {
+        background: transparent;
+        border: 2px solid #00d2ff; /* Azul Neon */
+        color: #00d2ff;
+        padding: 15px 50px;
+        font-size: 20px;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 5px;
+        cursor: pointer;
+        box-shadow: 0 0 15px #00d2ff;
+        transition: all 0.3s ease;
+        border-radius: 2px;
+        font-family: sans-serif;
+    }
+
+    /* Efeito ao passar o mouse */
+    .btn-enter-ziva:hover {
+        background: #00d2ff;
+        color: #000;
+        box-shadow: 0 0 40px #00d2ff;
+        transform: scale(1.1);
+    }
+</style>
+
+<div id="tela-entrada-perfil">
+    <button class="btn-enter-GALERIA" onclick="executarEntrada()">
+        ENTER
+    </button>
+</div>
+
+<script>
+    function executarEntrada() {
+        const tela = document.getElementById('tela-entrada-perfil');
+        
+        // Faz a tela ficar transparente
+        tela.style.opacity = '0';
+        
+        // Remove a tela totalmente após a transição
+        setTimeout(() => {
+            tela.style.display = 'none';
+        }, 800);
+    }
+</script>
         /* Estilos generales y solución del fondo blanco */
         html, body {
             margin: 0;
