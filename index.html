@@ -1310,34 +1310,5 @@ animate();
 
 </body> ```
 
-<style>
-    #contador-container {
-        position: fixed;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(0, 21, 255, 0.2);
-        border: 1px solid rgba(0, 21, 255, 0.5);
-        padding: 10px 20px;
-        border-radius: 50px;
-        color: #fff;
-        font-family: sans-serif;
-        text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-        box-shadow: 0 0 15px rgba(0, 21, 255, 0.4);
-        z-index: 999;
-    }
-</style>
-
-<div id="contador-container">
-    Visitas: <span id="valor-visitas">0</span>
-</div>
-
-<script>
-    // Lógica para atualizar o número (Exemplo integrado com a CountAPI)
-    fetch('https://api.countapi.xyz/hit/wrs-galeria/visitas')
-      .then(res => res.json())
-      .then(res => {
-        document.getElementById('valor-visitas').innerText = res.value;
-      });
-</script> </body>
+ </body>
 </html>
