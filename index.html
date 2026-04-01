@@ -1,11 +1,12 @@
 <div id="splash-screen">
     <div class="container-enter">
-        <h1 class="logo-wrs dripping">GALERIA</h1>
+        <h1 class="logo-wrs logo-glitter">GALERIA</h1>
         <button class="btn-glow" onclick="entrarNoPerfil()">ENTRE</button>
     </div>
 </div>
 
 <style>
+    /* Estilos base mantidos */
     #splash-screen {
         position: fixed;
         top: 0;
@@ -18,6 +19,7 @@
         align-items: center;
         z-index: 999999;
         transition: all 0.8s ease-in-out;
+        overflow: hidden; /* Importante para o rastro do mouse */
     }
 
     .logo-wrs {
@@ -25,8 +27,8 @@
         font-size: 70px;
         letter-spacing: 15px;
         text-align: center;
-        margin-bottom: 50px; /* Aumentado para dar espaço às gotas */
-        position: relative; /* Necessário para as gotas */
+        margin-bottom: 50px;
+        position: relative;
         
         background: linear-gradient(
             270deg, 
@@ -44,90 +46,20 @@
         filter: drop-shadow(0 0 15px rgba(0, 72, 255, 0.8));
     }
 
-    /* --- EFEITO DE GOTAS (DRIPPING) --- */
-    .dripping::after, .dripping::before {
-        content: '';
+    /* --- NOVO: EFEITO DE GLITTER EM GALERIA --- */
+    .logo-glitter::before {
+        content: attr(data-text); /* Pega o texto do HTML */
         position: absolute;
-        background: #0048FF; /* Cor base da gota */
-        /* Brilho reflexivo na gota */
-        box-shadow: inset -2px -4px 8px rgba(0,0,0,0.3), 0 0 15px #0048FF;
-        border-radius: 0 0 20px 20px;
-        width: 8px;
-        z-index: -1;
-        animation: dripAnim 3s infinite ease-in;
-    }
-
-    /* Gota 1 - Esquerda */
-    .dripping::before {
-        left: 20%;
-        height: 25px;
-        animation-delay: 0.5s;
-    }
-
-    /* Gota 2 - Direita */
-    .dripping::after {
-        right: 30%;
-        height: 40px;
-        animation-delay: 1.2s;
-        width: 10px;
-        background: #FFFFFF; /* Gota branca para contraste */
-        box-shadow: 0 0 15px #FFFFFF;
-    }
-
-    @keyframes dripAnim {
-        0% { transform: translateY(0) scaleY(1); opacity: 0.7; }
-        50% { transform: translateY(15px) scaleY(1.3); opacity: 1; }
-        100% { transform: translateY(30px) scaleY(1.1); opacity: 0; }
-    }
-    /* ---------------------------------- */
-
-    @keyframes gradientMove {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    }
-
-    .btn-glow {
-        background: transparent;
-        border: 2px solid #0048FF;
-        color: #0048FF;
-        padding: 15px 60px;
-        font-size: 20px;
-        cursor: pointer;
-        font-weight: bold;
-        letter-spacing: 5px;
-        box-shadow: 0 0 15px #0048FF;
-        transition: 0.4s;
-        display: block;
-        margin: 0 auto;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .btn-glow:hover {
-        background: #0048FF;
-        color: #fff;
-        box-shadow: 0 0 40px #0048FF;
-        transform: scale(1.05);
-    }
-
-    .hidden-splash {
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(-100%);
-    }
-</style>
-
-<script>
-    function entrarNoPerfil() {
-        const splash = document.getElementById('splash-screen');
-        splash.classList.add('hidden-splash');
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
         
-        setTimeout(() => {
-            splash.style.display = 'none';
-        }, 800);
-    }
-</script>
+        /* Cor base do glitter (Branco Brilhante) */
+        background-color: #FFFFFF;
+        
+        /* Uso de uma imagem de ruído (noise) como máscara para criar as partículas */
+        -webkit-mask-image: url('data:image/png;base64,iVB
 <!DOCTYPE html>
 <html lang="es">
   <head>
