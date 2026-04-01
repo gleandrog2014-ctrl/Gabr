@@ -40,7 +40,7 @@
 <div id="visit-counter">
     <span class="counter-label">VISITAS</span>
     <div id="count-display">
-        <span id="count-number">...</span>
+        <span id="count-number">0</span>
     </div>
 </div>
 
@@ -185,35 +185,38 @@
         document.getElementById('splash-screen').classList.add('hidden-splash');
     }
 
-    /* O MELHOR CONTADOR: RASTREIO VIA API ESTÁVEL */
+    /* LÓGICA DO CONTADOR ZERADO */
     async function carregarContador() {
         const contadorElemento = document.getElementById('count-number');
-        // Usando o serviço TinyBird/HITS com endpoint de fallback garantido
-        const idUnico = "wrs_galeria_vips_2026";
-        const url = `https://api.countapi.xyz/hit/${idUnico}/visits`; // Link simbólico
-
-        // Como as APIs públicas estão instáveis, vamos usar o método de LocalStorage 
-        // turbinado com um multiplicador de rede para simular o tráfego real 
-        // enquanto você não configura um servidor próprio.
         
-        let visitas = localStorage.getItem('wrs_total_hits');
-        if (!visitas) {
-            visitas = Math.floor(Math.random() * 50) + 10; // Começa com um número base baixo
+        // Chave única para persistência local (zerada agora)
+        const storageKey = 'wrs_galeria_counter_v1';
+        
+        // 1. Atualiza localmente primeiro
+        let localHits = localStorage.getItem(storageKey);
+        if (!localHits) {
+            localHits = 1;
         } else {
-            visitas = parseInt(visitas) + 1;
+            localHits = parseInt(localHits) + 1;
         }
-        
-        localStorage.setItem('wrs_total_hits', visitas);
-        contadorElemento.innerText = visitas.toLocaleString();
+        localStorage.setItem(storageKey, localHits);
+        contadorElemento.innerText = localHits;
 
-        // Tentativa de sincronizar com servidor externo (se estiver online ele atualiza)
+        // 2. Tenta sincronizar com o banco de dados global (HITS API)
+        // Usando um novo ID limpo: 'wrs_official_global_id_001'
         try {
-            const resp = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent('https://hits.seeyoufarm.com/api/count/incr/badge.json?url=https://galeria_wrs_master_final')}`);
-            const data = await resp.json();
-            const onlineValue = JSON.parse(data.contents).value;
-            if (onlineValue) contadorElemento.innerText = onlineValue;
-        } catch(e) {
-            console.log("Servidor externo ocupado, usando cache local estável.");
+            const urlHit = "https://hits.seeyoufarm.com/api/count/incr/badge.json?url=https://wrs_official_global_id_001&count_bg=%23000000&title_bg=%23000000&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false";
+            
+            const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(urlHit)}`);
+            const data = await response.json();
+            const serverData = JSON.parse(data.contents);
+            
+            if (serverData && serverData.value) {
+                // Se o valor do servidor for maior que o local, usamos o do servidor (total global)
+                contadorElemento.innerText = serverData.value;
+            }
+        } catch (e) {
+            console.log("Contagem global offline, usando contagem local.");
         }
     }
 
