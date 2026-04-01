@@ -1,94 +1,12 @@
-<style>
-    .camada-entrada {
-        position: absolute;
-        top: 40%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        text-align: center;
-        z-index: 10;
-        pointer-events: none; /* Deixa os cliques passarem para o fundo se necessário */
-    }
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeria</title>
+</head>
+<body style="margin: 0; background-color: #000;">
 
-    .contador-box {
-        background: rgba(0, 21, 255, 0.1);
-        border: 1px solid rgba(0, 21, 255, 0.4);
-        padding: 15px 30px;
-        border-radius: 8px;
-        box-shadow: 0 0 20px rgba(0, 21, 255, 0.3);
-        backdrop-filter: blur(4px);
-    }
-
-    .contador-texto {
-        color: white;
-        font-family: 'Segoe UI', sans-serif;
-        font-size: 14px;
-        letter-spacing: 3px;
-        margin: 0;
-        text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-    }
-
-    #numero-visitas {
-        display: block;
-        font-size: 28px;
-        font-weight: bold;
-        color: #fff;
-        margin-top: 5px;
-    }
-</style>
-
-<div class="camada-entrada">
-    <div class="contador-box">
-        <p class="contador-texto">VISITAS</p>
-        <span id="numero-visitas">...</span>
-    </div>
-</div>
-
-<script>
-// Lógica do Contador (Inicia antes da animação)
-async function carregarVisitas() {
-    try {
-        // Substitua 'galeria_wrs_2026' por um ID único seu
-        const res = await fetch('https://api.countapi.xyz/hit/galeria_wrs_2026/visitas');
-        const data = await res.json();
-        document.getElementById('numero-visitas').innerText = data.value;
-    } catch (e) {
-        document.getElementById('numero-visitas').innerText = "1";
-    }
-}
-carregarVisitas();
-
-// SEU CÓDIGO DE ANIMAÇÃO AJUSTADO
-const canvas = document.querySelector('canvas'); // Garanta que seu canvas está selecionado
-const ctx = canvas.getContext('2d');
-let points = []; // Array que deve ser preenchido pelo resto do seu script
-
-function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    for (let i = 0; i < points.length; i++) {
-        let p = points[i];
-        p.y += 2; 
-        p.alpha -= 0.02; 
-        
-        // EFEITO DE BRILHO
-        ctx.shadowBlur = 12; 
-        ctx.shadowColor = `rgba(255, 255, 255, ${p.alpha})`; 
-        ctx.fillStyle = `rgba(0, 21, 255, ${p.alpha})`; 
-        
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fill();
-        
-        if (p.alpha <= 0) {
-            points.splice(i, 1);
-            i--;
-        }
-    }
-    ctx.shadowBlur = 0;
-    requestAnimationFrame(animate);
-}
-animate();
-</script>
 <div id="splash-screen">
     <div class="container-enter">
         <h1 class="logo-wrs logo-glitter" data-text="GALERIA">GALERIA</h1>
@@ -119,6 +37,11 @@ animate();
     </div>
 </div>
 
+<div id="visit-counter">
+    <span class="counter-label">VISITAS</span>
+    <span id="count-number">...</span>
+</div>
+
 <style>
     /* Tela de Splash */
     #splash-screen {
@@ -140,20 +63,15 @@ animate();
         letter-spacing: 15px;
         text-align: center;
         margin-bottom: 40px;
-        
-        /* O segredo do efeito: cores intercaladas */
         background: linear-gradient(270deg, #FFFFFF, #0048FF, #FFFFFF, #0048FF, #FFFFFF);
         background-size: 400% 400%;
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
-        
-        /* Chamada da animação */
         animation: gradientMove 4s linear infinite;
         display: block;
     }
 
-    /* Keyframes que fazem o gradiente se mover */
     @keyframes gradientMove {
         0% { background-position: 0% 50%; }
         50% { background-position: 100% 50%; }
@@ -236,11 +154,42 @@ animate();
         to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Classe para sumir com o splash */
     .hidden-splash { 
         opacity: 0; 
         visibility: hidden; 
         transform: translateY(-100%); 
+    }
+
+    /* --- ESTILO DO CONTADOR (Canto Inferior Esquerdo) --- */
+    #visit-counter {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        z-index: 1000001;
+        background: rgba(0, 0, 0, 0.8);
+        border: 1px solid #0048FF;
+        box-shadow: 0 0 10px rgba(0, 72, 255, 0.5);
+        padding: 8px 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 90px;
+        border-radius: 4px;
+        font-family: 'Arial Black', sans-serif;
+        pointer-events: none;
+    }
+
+    .counter-label {
+        color: #0048FF;
+        font-size: 9px;
+        letter-spacing: 2px;
+        margin-bottom: 2px;
+    }
+
+    #count-number {
+        color: #fff;
+        font-size: 18px;
+        text-shadow: 0 0 5px #0048FF;
     }
 </style>
 
@@ -266,7 +215,32 @@ animate();
     function verAmigo(nome) {
         console.log("Selecionado: " + nome);
     }
+
+    /* LÓGICA DO CONTADOR */
+    async function carregarVisitas() {
+        try {
+            // Note: Usando uma URL de exemplo. Se a CountAPI estiver offline, o valor padrão será exibido.
+            // Para um contador persistente real, você pode usar serviços como 'hits.seeyoufarm.com' ou similares.
+            const namespace = "galeria_wrs_exclusivo";
+            const response = await fetch(`https://api.countapi.xyz/hit/${namespace}/visits`).catch(() => null);
+            
+            if (response) {
+                const data = await response.json();
+                document.getElementById('count-number').innerText = data.value;
+            } else {
+                // Simulação caso a API falhe (apenas para visualização local)
+                document.getElementById('count-number').innerText = Math.floor(Math.random() * 100) + 1;
+            }
+        } catch (error) {
+            document.getElementById('count-number').innerText = "1";
+        }
+    }
+
+    window.addEventListener('DOMContentLoaded', carregarVisitas);
 </script>
+
+</body>
+</html>
 <!DOCTYPE html>
 <html lang="es">
   <head>
