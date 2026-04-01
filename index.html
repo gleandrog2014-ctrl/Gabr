@@ -1,67 +1,72 @@
 <!DOCTYPE html>
 <html lang="es">
- <style>
-    /* Estilo da tela de entrada */
-    #enter-screen {
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: #000;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 10000;
-        transition: opacity 1s ease, visibility 1s;
-    }
-    .enter-content { text-align: center; font-family: sans-serif; }
-    .logo-wrs {
-        color: #0015FF;
-        font-size: 50px;
-        letter-spacing: 10px;
-        text-shadow: 0 0 20px #0015FF;
-        margin-bottom: 20px;
-    }
-    #btn-enter {
-        background: transparent;
-        border: 1px solid #0015FF;
-        color: #0015FF;
-        padding: 10px 40px;
-        cursor: pointer;
-        box-shadow: 0 0 10px #0015FF;
-        transition: 0.4s;
-    }
-    #btn-enter:hover { background: #0015FF; color: #fff; box-shadow: 0 0 30px #0015FF; }
-    .fade-out { opacity: 0; visibility: hidden; }
-</style> <head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-      Perfil Gabr
-    </title>
-    <link href="https://fonts.googleapis.com/css2?family=Agbalumo&amp;family=Roboto:ital,wght@1,700&amp;display=swap" rel="stylesheet">
+    <title>Perfil Gabr</title>
+    <link href="https://fonts.googleapis.com/css2?family=Agbalumo&family=Roboto:ital,wght@1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        /* Estilos generales y solución del fondo blanco */
+        /* TELA DE ENTRADA - FIXADA */
+        #enter-screen {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 20000; /* Z-index muito alto para ficar na frente de tudo */
+            transition: opacity 1s ease, visibility 1s;
+        }
+        .enter-content { text-align: center; font-family: sans-serif; }
+        .logo-wrs {
+            color: #0015FF;
+            font-size: 50px;
+            letter-spacing: 10px;
+            text-shadow: 0 0 20px #0015FF;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+        #btn-enter {
+            background: transparent;
+            border: 1px solid #0015FF;
+            color: #0015FF;
+            padding: 12px 50px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 0 10px #0015FF;
+            transition: 0.4s;
+            z-index: 20001;
+        }
+        #btn-enter:hover { background: #0015FF; color: #fff; box-shadow: 0 0 30px #0015FF; }
+        .fade-out { opacity: 0; visibility: hidden; pointer-events: none; }
+
+        /* CANVAS DAS GOTAS */
+        #cursor-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            pointer-events: none; /* Permite clicar no que está atrás */
+            z-index: 15000; /* Abaixo da tela de entrada, acima da galeria */
+        }
+
+        /* ESTILOS ORIGINAIS DO SEU PERFIL */
         html, body {
-            margin: 0;
-            padding: 0;
-            /* Aquí vendemos fundos gif / psbacks / pstyle */
+            margin: 0; padding: 0;
             background: url('https://xatimg.com/image/y7Zi7XEbdkZc.jpg') no-repeat center center fixed !important; 
-            background-color: #000000 !important; /* Respaldo negro en lugar de blanco */
+            background-color: #000000 !important;
             background-size: cover !important;
             font-family: 'Arial', sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             overflow-x: hidden;
-            /* Cursor personalizado */
-            cursor: url('Curso'), auto;
         }
 
-        /* Estilos para el título principal */
         h1.main-title {
             margin: 0;
             color: #b1b1b1;
-            text-shadow: 0 0 10px rgba(177, 177, 177, 0.7);
             font-size: 3em;
             font-weight: bold;
             background: linear-gradient( #0015FF, #0015FF, #FFFFFF, #0015FF, #0015FF);
@@ -76,40 +81,34 @@
             100% { text-shadow: 0 0 5px rgba(177, 177, 177, 0.5); }
         }
 
-        /* Contenedor principal del perfil */
         .profile-container {
             width: 95%;
             max-width: 900px;
             margin: 50px auto;
             padding: 20px;
-            background-color: rgba(15, 15, 15, 0.85); /* Un poco más oscuro para que resalte sobre el gif */
+            background-color: rgba(15, 15, 15, 0.85);
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
             position: relative;
             display: flex;
             flex-direction: column;
             min-height: calc(100vh - 100px);
-            transition: all 0.5s ease;
-            backdrop-filter: blur(5px); /* Efecto borroso elegante */
+            backdrop-filter: blur(5px);
         }
 
         .profile-cover {
             width: 100%;
             height: 150px;
             background: linear-gradient(to bottom, rgba(26,26,26,0.8), rgba(0,0,1,0.9));
-            background-size: cover;
-            position: relative;
             border-bottom: 5px solid #7e8081;
             border-radius: 5px 5px 0 0;
         }
 
         .avatar-container {
             position: absolute;
-            top: 70px;
-            left: 50%;
+            top: 70px; left: 50%;
             transform: translateX(-50%);
-            width: 150px;
-            height: 150px;
+            width: 150px; height: 150px;
             border-radius: 5%;
             overflow: hidden;
             border: 5px solid #7e8081;
@@ -117,31 +116,12 @@
             z-index: 10;
         }
 
-        .avatar {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+        .avatar { width: 100%; height: 100%; object-fit: cover; }
 
-        .profile-details {
-            text-align: center;
-            margin-top: 100px;
-        }
+        .profile-details { text-align: center; margin-top: 100px; }
+        .profile-details p { margin: 10px 0; color: #D3D3D3; font-style: italic; }
 
-        .profile-details p {
-            margin: 10px 0;
-            font-size: 1.1rem;
-            color: #D3D3D3;
-            font-style: italic;
-        }
-
-        .profile-buttons {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
+        .profile-buttons { margin-top: 20px; display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
 
         .btn-style {
             display: inline-block;
@@ -149,198 +129,42 @@
             text-decoration: none;
             color: #fff;
             background-color: #7e8081;
-            border: none;
             border-radius: 5px;
-            font-size: 1rem;
             font-weight: bold;
-            cursor: url('Cursor'), pointer;
-            transition: background-color 0.3s, transform 0.3s;
+            cursor: pointer;
+            transition: 0.3s;
         }
+        .btn-style:hover { background-color: #959595; transform: scale(1.05); }
 
-        .btn-style:hover {
-            background-color: #959595;
-            transform: scale(1.05);
-            box-shadow: 0 0 10px rgba(255,255,255,0.3);
-        }
-
-        /* Tarjetas de información */
-        .info-cards {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            margin-top: 30px;
-            gap: 20px;
-        }
-
+        .info-cards { display: flex; justify-content: space-between; flex-wrap: wrap; margin-top: 30px; gap: 20px; }
         .info-card {
             background-color: rgba(50, 50, 50, 0.9);
             border: 1px solid #111;
             border-radius: 8px;
             padding: 20px;
             flex: 1 1 30%;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
-            transition: transform 0.3s, box-shadow 0.3s;
-            margin-bottom: 20px;
             min-width: 250px;
         }
+        .info-card h3 { color: #fff; border-bottom: 1px solid #777; padding-bottom: 5px; }
 
-        .info-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 6px 15px rgba(150, 150, 150, 0.5);
-        }
+        #view-profile { display: block; }
+        #view-gifs { display: none; margin-top: 20px; width: 100%; }
 
-        .info-card h3 {
-            margin-top: 0;
-            color: #fff;
-            font-size: 1.5rem;
-            border-bottom: 1px solid #777;
-            padding-bottom: 5px;
-        }
-
-        .info-card p {
-            margin: 10px 0;
-            color: #e0e0e0;
-        }
-
-        .spotify-container {
-            margin-top: 20px;
-            width: 100%;
-        }
-
-        .footer-text {
-            text-align: center;
-            margin-top: auto;
-            padding-top: 20px;
-            color: #ffffff;
-            font-size: 1rem;
-            font-weight: bold;
-        }
-
-        /* VISTAS */
-        #view-profile {
-            display: block;
-            animation: fadeIn 0.5s;
-        }
-        
-        #view-gifs {
-            display: none;
-            animation: fadeIn 0.5s;
-            margin-top: 20px;
-            width: 100%;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ESTILOS PARA LA SECCIÓN DE GIFS */
-        .gifs-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #7e8081;
-            padding-bottom: 10px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .canvas-container {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            overflow: hidden;
-            margin-bottom: 20px;
-            background: #000;
-            border-radius: 10px;
-            border: 2px solid #7e8081;
-        }
-
-        /* Estilos heredados exactamente de Gif.html para compatibilidad visual */
         .Mesaj {
-            margin: 20px auto;
-            padding: 5px;
-            width: 95%;
-            height: 30px;
-            text-align: center;
-            background-repeat: repeat;
-            background-size: 1850px 50px;
-            border-radius: 7px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid #7e8081;
-            position: relative;
-            box-shadow: rgba(82, 82, 82, 0.1) 0px 8px 24px, rgba(82, 82, 82, 0.1) 0px 16px 56px, rgba(82, 82, 82, 0.1) 0px 24px 80px;
-        }
-
-        .Mesaj marquee {
-            font-family: 'Agbalumo', cursive;
-            color: #fff;
-            text-shadow: 0 0 5px #f00;
-            font-size: 20px;
-            width: 100%;
-        }
-
-        /* Convertimos el Table rígido en uno responsivo para todos los navegadores */
-        #gifs-galleries-container table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        #gifs-galleries-container tbody {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            width: 100%;
-        }
-        
-        #gifs-galleries-container td {
-            display: block;
-            padding: 7px; /* Espaciado idéntico al visualizado en la tabla */
-        }
-
-        /* Notificación Toast de Copyright */
-        #copyright-toast {
-            visibility: hidden;
-            min-width: 250px;
-            background-color: #7e8081;
-            color: #fff;
-            text-align: center;
-            border-radius: 5px;
-            padding: 16px;
-            position: fixed;
-            z-index: 1000;
-            left: 50%;
-            bottom: 30px;
-            font-size: 17px;
-            transform: translateX(-50%);
-            box-shadow: 0px 4px 10px rgba(0,0,0,0.5);
-            opacity: 0;
-            transition: opacity 0.5s, bottom 0.5s;
-        }
-
-        #copyright-toast.show {
-            visibility: visible;
-            opacity: 1;
-            bottom: 50px;
-        }
-
-        /* Responsivo para móviles */
-        @media (max-width: 600px) {
-            h1.main-title { font-size: 2em; }
-            .info-card { flex: 1 1 100%; }
+            margin: 20px auto; width: 95%; height: 35px;
+            background-size: cover; border-radius: 7px;
+            display: flex; align-items: center; justify-content: center;
+            border: 2px solid #7e8081; color: #fff;
         }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  </head>
-  <body>
-	  <div id="enter-screen">
-    <div class="enter-content">
-        <div class="logo-wrs">Galeria</div>
-        <button id="btn-enter" onclick="entrar()">ENTRE</button>
-    </div>
+</head>
+<body>
+
+    <div id="enter-screen">
+        <div class="enter-content">
+            <div class="logo-wrs">GALERIA</div>
+            <button id="btn-enter" onclick="entrar()">ENTRAR</button>
+        </div>
 </div>
 
 <canvas id="cursor-canvas" style="position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999;"></canvas>
