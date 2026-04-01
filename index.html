@@ -22,24 +22,41 @@
 
     .logo-wrs {
         font-family: 'Arial Black', sans-serif;
-        font-size: 60px; /* Aumentei um pouco para o gradiente aparecer melhor */
+        font-size: 70px; /* Leve aumento para destaque */
         letter-spacing: 15px;
         text-align: center;
         margin-bottom: 30px;
         
-        /* --- AQUI ESTÁ O EFEITO GRADIENTE --- */
-        background: linear-gradient(180deg, #FFFFFF 0%, #0048FF 100%);
-        -webkit-background-clip: text; /* Para navegadores baseados no Chrome/Safari */
+        /* Configuração do Gradiente Animado */
+        background: linear-gradient(
+            270deg, 
+            #FFFFFF, 
+            #0048FF, 
+            #00D4FF, 
+            #FFFFFF
+        );
+        background-size: 400% 400%;
+        -webkit-background-clip: text;
         background-clip: text;
-        color: transparent; /* Torna a cor original transparente para mostrar o fundo */
+        color: transparent;
         
-        /* Brilho neon ajustado para as novas cores */
-        text-shadow: 0 0 15px rgba(0, 72, 255, 0.5); 
+        /* Animação */
+        animation: gradientMove 4s ease infinite;
+        
+        /* Brilho neon dinâmico */
+        filter: drop-shadow(0 0 10px rgba(0, 72, 255, 0.6));
+    }
+
+    /* Movimento do Gradiente */
+    @keyframes gradientMove {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
     }
 
     .btn-glow {
         background: transparent;
-        border: 2px solid #0048FF; /* Usando o azul forte */
+        border: 2px solid #0048FF;
         color: #0048FF;
         padding: 15px 60px;
         font-size: 20px;
@@ -50,15 +67,18 @@
         transition: 0.4s;
         display: block;
         margin: 0 auto;
+        position: relative;
+        overflow: hidden;
     }
 
     .btn-glow:hover {
         background: #0048FF;
-        color: #000;
+        color: #fff;
         box-shadow: 0 0 40px #0048FF;
-        transform: scale(1.1);
+        transform: scale(1.05);
     }
 
+    /* Classe para esconder o splash via JS */
     .hidden-splash {
         opacity: 0;
         visibility: hidden;
@@ -68,8 +88,13 @@
 
 <script>
     function entrarNoPerfil() {
-        var tela = document.getElementById('splash-screen');
-        tela.classList.add('hidden-splash');
+        const splash = document.getElementById('splash-screen');
+        splash.classList.add('hidden-splash');
+        
+        // Opcional: remover do DOM após a transição
+        setTimeout(() => {
+            splash.style.display = 'none';
+        }, 800);
     }
 </script>
 <!DOCTYPE html>
