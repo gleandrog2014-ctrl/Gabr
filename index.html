@@ -1,12 +1,3 @@
-<div id="tela-entrada">
-    <div class="glow-container">
-        <h1 class="neon-text">WRS</h1> <button class="btn-enter" onclick="liberarAcesso()">ENTER</button>
-    </div>
-</div>
-
-<div id="conteudo-perfil" style="visibility: hidden; opacity: 0;">
-    <iframe src="https://xat.me/ziva" width="100%" height="600px" frameborder="0"></iframe>
-</div>
 <!DOCTYPE html>
 <html lang="es">
   <head>
@@ -1077,52 +1068,7 @@ function animate() {
 animate();
 </script>
 
-<div id="enter-screen">
-        <div class="enter-content">
-            <div class="logo-wrs">GALERIA</div>
-            <button id="btn-enter" onclick="entrar()">ENTRAR</button>
-        </div>
-    </div>
-
-    <div class="profile-container">
-        <h1 class="main-title">Perfil Gabr</h1>
-        </div>
-
-    <script>
-        function entrar() {
-            // 1. Seleciona a tela de entrada
-            const screen = document.getElementById('enter-screen');
-            
-            // 2. Adiciona a classe de fade-out (que você já criou no CSS)
-            screen.classList.add('fade-out');
-
-            // 3. Opcional: Tocar música se houver um player de áudio
-            // var audio = document.getElementById('meuAudio');
-            // audio.play();
-
-            // 4. Remove do DOM após a animação para não atrapalhar cliques
-            setTimeout(() => {
-                screen.style.display = 'none';
-            }, 1000);
-        }
-    </script> <script>
-function liberarAcesso() {
-    const entrada = document.getElementById('tela-entrada');
-    const perfil = document.getElementById('conteudo-perfil');
-
-    // Remove a tela de entrada
-    entrada.style.opacity = '0';
-    
-    setTimeout(() => {
-        entrada.style.display = 'none';
-        // Mostra o seu conteúdo
-        perfil.style.visibility = 'visible';
-        perfil.style.opacity = '1';
-    }, 1000); // Espera 1 segundo para sumir totalmente
-}
-</script>
-</body>
-</html> </body> ```
+</body> ```
 
 ### Como verificar se deu certo:
 1. Abra seu arquivo HTML no navegador.
