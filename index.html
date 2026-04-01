@@ -1,6 +1,38 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
+ <style>
+    /* Estilo da tela de entrada */
+    #enter-screen {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000;
+        transition: opacity 1s ease, visibility 1s;
+    }
+    .enter-content { text-align: center; font-family: sans-serif; }
+    .logo-wrs {
+        color: #0015FF;
+        font-size: 50px;
+        letter-spacing: 10px;
+        text-shadow: 0 0 20px #0015FF;
+        margin-bottom: 20px;
+    }
+    #btn-enter {
+        background: transparent;
+        border: 1px solid #0015FF;
+        color: #0015FF;
+        padding: 10px 40px;
+        cursor: pointer;
+        box-shadow: 0 0 10px #0015FF;
+        transition: 0.4s;
+    }
+    #btn-enter:hover { background: #0015FF; color: #fff; box-shadow: 0 0 30px #0015FF; }
+    .fade-out { opacity: 0; visibility: hidden; }
+</style> <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
@@ -303,7 +335,15 @@
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   </head>
-  <body>
+  <body> 
+	  <div id="enter-screen">
+    <div class="enter-content">
+        <div class="logo-wrs">WRS</div>
+        <button id="btn-enter" onclick="entrar()">ENTER</button>
+    </div>
+</div>
+
+<canvas id="cursor-canvas" style="position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999;"></canvas>
     <div class="profile-container">
       <!-- Elementos comunes en la parte superior -->
       <div class="profile-cover"></div>
@@ -1068,7 +1108,55 @@ function animate() {
 animate();
 </script>
 
-</body> ```
+<script>
+    const canvas = document.getElementById('cursor-canvas');
+    const ctx = canvas.getContext('2d');
+    let points = [];
+    let ativo = false; // Começa desativado
+
+    function entrar() {
+        document.getElementById('enter-screen').classList.add('fade-out');
+        ativo = true; // Só ativa o mouse depois do clique
+    }
+
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    window.addEventListener('mousemove', (e) => {
+        if(!ativo) return; // Se não clicou no enter, não sai gota
+        points.push({
+            x: e.clientX,
+            y: e.clientY,
+            alpha: 1,
+            size: Math.random() * 2 + 1
+        });
+    });
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i < points.length; i++) {
+            let p = points[i];
+            p.y += 2;
+            p.alpha -= 0.015;
+            
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = `rgba(0, 21, 255, ${p.alpha})`; 
+            ctx.fillStyle = `rgba(0, 21, 255, ${p.alpha})`; 
+            
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fill();
+            
+            if (p.alpha <= 0) { points.splice(i, 1); i--; }
+        }
+        requestAnimationFrame(animate);
+    }
+    animate();
+</script> </body> ```
 
 ### Como verificar se deu certo:
 1. Abra seu arquivo HTML no navegador.
