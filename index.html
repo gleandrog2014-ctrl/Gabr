@@ -12,27 +12,34 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: #000; /* Fundo preto total */
+        background-color: #000;
         display: flex;
         justify-content: center;
         align-items: center;
-        z-index: 999999; /* Garante que fica por cima de tudo */
+        z-index: 999999;
         transition: all 0.8s ease-in-out;
     }
 
     .logo-wrs {
-        color: #0048FF;
         font-family: 'Arial Black', sans-serif;
-        font-size: 50px;
+        font-size: 60px; /* Aumentei um pouco para o gradiente aparecer melhor */
         letter-spacing: 15px;
-        text-shadow: 0 0 20px #0048FF;
-        margin-bottom: 20px;
         text-align: center;
+        margin-bottom: 30px;
+        
+        /* --- AQUI ESTÁ O EFEITO GRADIENTE --- */
+        background: linear-gradient(180deg, #FFFFFF 0%, #0048FF 100%);
+        -webkit-background-clip: text; /* Para navegadores baseados no Chrome/Safari */
+        background-clip: text;
+        color: transparent; /* Torna a cor original transparente para mostrar o fundo */
+        
+        /* Brilho neon ajustado para as novas cores */
+        text-shadow: 0 0 15px rgba(0, 72, 255, 0.5); 
     }
 
     .btn-glow {
         background: transparent;
-        border: 2px solid #0048FF;
+        border: 2px solid #0048FF; /* Usando o azul forte */
         color: #0048FF;
         padding: 15px 60px;
         font-size: 20px;
@@ -52,11 +59,10 @@
         transform: scale(1.1);
     }
 
-    /* Classe que o JavaScript vai usar para sumir */
     .hidden-splash {
         opacity: 0;
         visibility: hidden;
-        transform: translateY(-100%); /* Faz a tela subir ao sair */
+        transform: translateY(-100%);
     }
 </style>
 
