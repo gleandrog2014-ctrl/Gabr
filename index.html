@@ -335,11 +335,11 @@
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   </head>
-  <body> 
+  <body>
 	  <div id="enter-screen">
     <div class="enter-content">
-        <div class="logo-wrs">WRS</div>
-        <button id="btn-enter" onclick="entrar()">ENTER</button>
+        <div class="logo-wrs">Galeria</div>
+        <button id="btn-enter" onclick="entrar()">ENTRE</button>
     </div>
 </div>
 
@@ -1108,55 +1108,7 @@ function animate() {
 animate();
 </script>
 
-<script>
-    const canvas = document.getElementById('cursor-canvas');
-    const ctx = canvas.getContext('2d');
-    let points = [];
-    let ativo = false; // Começa desativado
-
-    function entrar() {
-        document.getElementById('enter-screen').classList.add('fade-out');
-        ativo = true; // Só ativa o mouse depois do clique
-    }
-
-    function resize() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    }
-    window.addEventListener('resize', resize);
-    resize();
-
-    window.addEventListener('mousemove', (e) => {
-        if(!ativo) return; // Se não clicou no enter, não sai gota
-        points.push({
-            x: e.clientX,
-            y: e.clientY,
-            alpha: 1,
-            size: Math.random() * 2 + 1
-        });
-    });
-
-    function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        for (let i = 0; i < points.length; i++) {
-            let p = points[i];
-            p.y += 2;
-            p.alpha -= 0.015;
-            
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = `rgba(0, 21, 255, ${p.alpha})`; 
-            ctx.fillStyle = `rgba(0, 21, 255, ${p.alpha})`; 
-            
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-            ctx.fill();
-            
-            if (p.alpha <= 0) { points.splice(i, 1); i--; }
-        }
-        requestAnimationFrame(animate);
-    }
-    animate();
-</script> </body> ```
+</body> ```
 
 ### Como verificar se deu certo:
 1. Abra seu arquivo HTML no navegador.
