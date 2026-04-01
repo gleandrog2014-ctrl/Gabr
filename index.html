@@ -5,15 +5,24 @@
         <div class="menu-wrapper">
             <button class="btn-glow" onclick="entrarNoPerfil()">ENTRE</button>
 
-            <button class="btn-glow btn-friends-toggle" onclick="toggleAmigos()">AMIGOS</button>
-            
-            <div id="lista-amigos" class="friends-list-hidden">
-                <div class="friend-item" onclick="verAmigo('Mnna')">Mnna (Married)❤️</div>
-                <div class="friend-item" onclick="verAmigo('Gold')">Gold</div>
-				<div class="friend-item" onclick="verAmigo('Venon')">Venon</div>
-				<div class="friend-item" onclick="verAmigo('Promise')">Promise</div>
-				<div class="friend-item" onclick="verAmigo('Gothica')">Gothica</div>
-				<div class="friend-item" onclick="verAmigo('Marbella')">Marbella</div>
+            <div class="dropdown-wrapper">
+                <button class="btn-glow" onclick="toggleXat()">XAT</button>
+                <div id="lista-xat" class="custom-list-hidden">
+                    <a href="https://xat.com/tuga" target="_blank" class="friend-item">XAT TUGA</a>
+                    <a href="https://xat.com/conexaosertanejoo" target="_blank" class="friend-item">XAT CONEXÃO</a>
+                </div>
+            </div>
+
+            <div class="dropdown-wrapper">
+                <button class="btn-glow btn-friends-toggle" onclick="toggleAmigos()">AMIGOS</button>
+                <div id="lista-amigos" class="friends-list-hidden">
+                    <div class="friend-item" onclick="verAmigo('Mnna')">Mnna (Married)❤️</div>
+                    <div class="friend-item" onclick="verAmigo('Gold')">Gold</div>
+                    <div class="friend-item" onclick="verAmigo('Venon')">Venon</div>
+                    <div class="friend-item" onclick="verAmigo('Promise')">Promise</div>
+                    <div class="friend-item" onclick="verAmigo('Gothica')">Gothica</div>
+                    <div class="friend-item" onclick="verAmigo('Marbella')">Marbella</div>
+                </div>
             </div>
         </div>
     </div>
@@ -54,6 +63,12 @@
         align-items: center;
     }
 
+    .dropdown-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
     .btn-glow {
         background: transparent;
         border: 2px solid #0048FF;
@@ -65,7 +80,7 @@
         letter-spacing: 5px;
         box-shadow: 0 0 15px #0048FF;
         transition: 0.4s;
-        width: 280px; /* Largura fixa para alinhar os botões */
+        width: 280px;
     }
 
     .btn-glow:hover {
@@ -74,18 +89,18 @@
         box-shadow: 0 0 40px #0048FF;
     }
 
-    /* Estilo da Lista de Amigos */
-    .friends-list-hidden {
+    /* Estilos das Listas (Amigos e Xat) */
+    .friends-list-hidden, .custom-list-hidden {
         display: none;
         flex-direction: column;
         background: rgba(0, 72, 255, 0.1);
         border: 1px solid #0048FF;
         width: 280px;
-        margin-top: -10px;
+        margin-top: 5px;
         animation: slideDown 0.3s ease-out;
     }
 
-    .friends-list-show {
+    .show-list {
         display: flex !important;
     }
 
@@ -97,6 +112,8 @@
         transition: 0.3s;
         font-family: sans-serif;
         letter-spacing: 1px;
+        text-decoration: none; /* Para os links do XAT */
+        text-align: center;
     }
 
     .friend-item:hover {
@@ -109,15 +126,26 @@
         to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Efeito de sumir a splash screen */
     .hidden-splash { opacity: 0; visibility: hidden; transform: translateY(-100%); }
 </style>
 
 <script>
-    // Função para mostrar/esconder a lista
+    // Função para mostrar/esconder a lista de Amigos
     function toggleAmigos() {
         const lista = document.getElementById('lista-amigos');
-        lista.classList.toggle('friends-list-show');
+        const listaXat = document.getElementById('lista-xat');
+        
+        lista.classList.toggle('show-list');
+        listaXat.classList.remove('show-list'); // Fecha a outra lista se estiver aberta
+    }
+
+    // Função para mostrar/esconder a lista de XAT
+    function toggleXat() {
+        const listaXat = document.getElementById('lista-xat');
+        const listaAmigos = document.getElementById('lista-amigos');
+        
+        listaXat.classList.toggle('show-list');
+        listaAmigos.classList.remove('show-list'); // Fecha a outra lista se estiver aberta
     }
 
     function entrarNoPerfil() {
@@ -126,7 +154,6 @@
 
     function verAmigo(nome) {
         console.log("Selecionado: " + nome);
-        // Aqui você coloca o que acontece ao clicar no nome do amigo
     }
 </script>
 <!DOCTYPE html>
