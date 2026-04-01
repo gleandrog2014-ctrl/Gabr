@@ -1049,8 +1049,8 @@ function animate() {
         
         // EFEITO DE BRILHO
         ctx.shadowBlur = 12; // Intensidade do brilho
-        ctx.shadowColor = `rgba(255, 0, 0, ${p.alpha})`; // Cor do brilho segue a transparência
-        ctx.fillStyle = `rgba(255, 0, 0, ${p.alpha})`; // Cor da gota
+        ctx.shadowColor = `rgba(255, 255, 255, ${p.alpha})`; // Cor do brilho segue a transparência
+        ctx.fillStyle = `rgba(0, 255, 255, ${p.alpha})`; // Cor da gota
         
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
