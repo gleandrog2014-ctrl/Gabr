@@ -29,7 +29,7 @@
 </div>
 
 <style>
-    /* Mantendo seus estilos base */
+    /* Tela de Splash */
     #splash-screen {
         position: fixed;
         top: 0; left: 0;
@@ -42,20 +42,38 @@
         transition: all 0.8s ease-in-out;
     }
 
+    /* Logo com Efeito Gradiente Animado */
     .logo-wrs {
         font-family: 'Arial Black', sans-serif;
         font-size: 70px;
         letter-spacing: 15px;
         text-align: center;
         margin-bottom: 40px;
+        
+        /* O segredo do efeito: cores intercaladas */
         background: linear-gradient(270deg, #FFFFFF, #0048FF, #FFFFFF, #0048FF, #FFFFFF);
         background-size: 400% 400%;
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
-        animation: gradientMove 4s ease infinite;
+        
+        /* Chamada da animação */
+        animation: gradientMove 4s linear infinite;
+        display: block;
     }
 
+    /* Keyframes que fazem o gradiente se mover */
+    @keyframes gradientMove {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    .logo-glitter {
+        text-shadow: 0 0 15px rgba(0, 72, 255, 0.4);
+    }
+
+    /* Menu e Botões */
     .menu-wrapper {
         display: flex;
         flex-direction: column;
@@ -81,6 +99,7 @@
         box-shadow: 0 0 15px #0048FF;
         transition: 0.4s;
         width: 280px;
+        outline: none;
     }
 
     .btn-glow:hover {
@@ -89,7 +108,7 @@
         box-shadow: 0 0 40px #0048FF;
     }
 
-    /* Estilos das Listas (Amigos e Xat) */
+    /* Listas Escondidas */
     .friends-list-hidden, .custom-list-hidden {
         display: none;
         flex-direction: column;
@@ -112,7 +131,7 @@
         transition: 0.3s;
         font-family: sans-serif;
         letter-spacing: 1px;
-        text-decoration: none; /* Para os links do XAT */
+        text-decoration: none;
         text-align: center;
     }
 
@@ -126,26 +145,27 @@
         to { opacity: 1; transform: translateY(0); }
     }
 
-    .hidden-splash { opacity: 0; visibility: hidden; transform: translateY(-100%); }
+    /* Classe para sumir com o splash */
+    .hidden-splash { 
+        opacity: 0; 
+        visibility: hidden; 
+        transform: translateY(-100%); 
+    }
 </style>
 
 <script>
-    // Função para mostrar/esconder a lista de Amigos
     function toggleAmigos() {
         const lista = document.getElementById('lista-amigos');
         const listaXat = document.getElementById('lista-xat');
-        
         lista.classList.toggle('show-list');
-        listaXat.classList.remove('show-list'); // Fecha a outra lista se estiver aberta
+        listaXat.classList.remove('show-list');
     }
 
-    // Função para mostrar/esconder a lista de XAT
     function toggleXat() {
         const listaXat = document.getElementById('lista-xat');
         const listaAmigos = document.getElementById('lista-amigos');
-        
         listaXat.classList.toggle('show-list');
-        listaAmigos.classList.remove('show-list'); // Fecha a outra lista se estiver aberta
+        listaAmigos.classList.remove('show-list');
     }
 
     function entrarNoPerfil() {
