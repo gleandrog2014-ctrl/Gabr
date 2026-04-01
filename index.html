@@ -1,41 +1,11 @@
 <div id="splash-screen">
     <div class="container-enter">
         <h1 class="logo-wrs logo-glitter" data-text="GALERIA">GALERIA</h1>
-        
         <button class="btn-glow" onclick="entrarNoPerfil()">ENTRE</button>
-        
-        <div class="xat-container" style="margin-top: 20px; display: flex; gap: 10px;">
-            <div style="text-align: center;">
-               <button class="btn-glow btn-amigos" onclick="toggleXatMenu()" style="margin-top: 20px; font-size: 16px; padding: 10px 40px;">XAT</button>
-
-<div id="menu-xat" class="amigos-content">
-    <ul>
-        <li><a href="https://xat.com/TUGA" target="_blank" class="link-xat-menu">Xat TUGA</a></li>
-        <li><a href="https://xat.com/conexaosertanejoo" target="_blank" class="link-xat-menu">Xat Conexão</a></li>
-    </ul>
-</div>
-            </div>
-
-            <button class="btn-glow btn-small" onclick="window.open('https://xat.com/conexaosertanejoo', '_blank')">XAT CONEXÃO</button>
-        </div>
-
-        <button class="btn-glow btn-amigos" onclick="toggleAmigos()" style="margin-top: 20px; font-size: 16px; padding: 10px 40px;">AMIGOS</button>
-        
-        <div id="lista-amigos" class="amigos-content">
-            <ul>
-                <li>Mnna - (Married)</li>
-                <li>Gold</li>
-                <li>Gothica</li>
-                <li>Marbella</li>
-                <li>Promise</li>
-            </ul>
-        </div>
     </div>
 </div>
 
 <style>
-    /* ... (Seu CSS anterior permanece igual) ... */
-    
     #splash-screen {
         position: fixed;
         top: 0;
@@ -51,12 +21,6 @@
         overflow: hidden;
     }
 
-    .container-enter {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
     .logo-wrs {
         font-family: 'Arial Black', sans-serif;
         font-size: 70px;
@@ -64,7 +28,15 @@
         text-align: center;
         margin-bottom: 50px;
         position: relative;
-        background: linear-gradient(270deg, #FFFFFF, #0048FF, #FFFFFF, #0048FF, #FFFFFF);
+        
+        background: linear-gradient(
+            270deg, 
+            #FFFFFF, 
+            #0048FF, 
+            #FFFFFF, 
+            #0048FF,
+            #FFFFFF
+        );
         background-size: 400% 400%;
         -webkit-background-clip: text;
         background-clip: text;
@@ -73,41 +45,32 @@
         filter: drop-shadow(0 0 15px rgba(0, 72, 255, 0.8));
     }
 
-    /* ESTILO REDUZIDO PARA BOTÕES SECUNDÁRIOS */
-    .btn-small {
-        font-size: 14px !important;
-        padding: 8px 20px !important;
-        letter-spacing: 2px !important;
+    /* EFEITO DE GLITTER (Mantido) */
+    .logo-glitter::before {
+        content: attr(data-text);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #FFFFFF;
+        -webkit-mask-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4t95AAAACVBMVEUAAAD8/Pz///9p4iNRAAAAAXRSTlMAQObYZgAAAFRJREFUeNpjYGRkYmJmYWFjY2NnZ+fk5OXl5efn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn58cBwWMB2I1q5XMAAAAASUVORK5CYII=');
+        -webkit-mask-size: 50px 50px;
+        animation: glitterAnim 0.3s steps(4) infinite;
+        z-index: 1;
+        filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
+        pointer-events: none;
     }
 
-    .amigos-content {
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.5s ease-out, opacity 0.5s;
-        opacity: 0;
-        margin-top: 15px;
-        text-align: center;
+    @keyframes glitterAnim {
+        0% { background-position: 0 0; opacity: 1; }
+        100% { background-position: 10px 10px; opacity: 0.8; }
     }
 
-    .amigos-content.show {
-        max-height: 200px;
-        opacity: 1;
-    }
-
-    .amigos-content ul {
-        list-style: none;
-        padding: 0;
-        color: #FFFFFF;
-        font-family: 'Arial', sans-serif;
-        text-shadow: 0 0 10px #0048FF;
-        letter-spacing: 2px;
-        font-weight: bold;
-    }
-
-    .amigos-content li {
-        margin: 10px 0;
-        border-bottom: 1px solid rgba(0, 72, 255, 0.3);
-        padding-bottom: 5px;
+    @keyframes gradientMove {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
     }
 
     .btn-glow {
@@ -134,48 +97,54 @@
         transform: scale(1.05);
     }
 
-    .hidden-splash { opacity: 0; visibility: hidden; transform: translateY(-100%); }
+    .hidden-splash {
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-100%);
+    }
 
-    /* Estilos das gotas e animações omitidos aqui para brevidade, mas devem ser mantidos */
-    @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+    /* ESTILOS PARA AS GOTAS DO CURSOR (Mantido) */
+    .mouse-drip {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: #0048FF;
+        pointer-events: none;
+        box-shadow: 0 0 10px #0048FF, 0 0 5px #FFFFFF;
+        animation: mouseDripFade 1s forwards ease-out;
+        z-index: 1000;
+    }
+
+    @keyframes mouseDripFade {
+        0% { transform: scale(1); opacity: 1; }
+        100% { transform: scale(0.2); opacity: 0; }
+    }
 </style>
 
 <script>
     const splashScreen = document.getElementById('splash-screen');
 
-    // Função para entrar
+    splashScreen.addEventListener('mousemove', (e) => {
+        const drip = document.createElement('div');
+        drip.classList.add('mouse-drip');
+        drip.style.left = (e.clientX - 5) + 'px';
+        drip.style.top = (e.clientY - 5) + 'px';
+        splashScreen.appendChild(drip);
+        
+        setTimeout(() => {
+            drip.remove();
+        }, 1000);
+    });
+
     function entrarNoPerfil() {
         const splash = document.getElementById('splash-screen');
         splash.classList.add('hidden-splash');
-        setTimeout(() => { splash.style.display = 'none'; }, 800);
+        
+        setTimeout(() => {
+            splash.style.display = 'none';
+        }, 800);
     }
-
-    // FUNÇÃO MOSTRAR AMIGOS
-    function toggleAmigos() {
-        document.getElementById('lista-amigos').classList.toggle('show');
-    }
-
-    // FUNÇÃO MOSTRAR LINK TUGA
-    function toggleXatTuga() {
-        document.getElementById('link-tuga').classList.toggle('show');
-    }
-
-    // Efeito de gotas (mantido do original)
-    splashScreen.addEventListener('mousemove', (e) => {
-        const drip = document.createElement('div');
-        drip.style.position = 'absolute';
-        drip.style.width = '10px';
-        drip.style.height = '10px';
-        drip.style.borderRadius = '50%';
-        drip.style.backgroundColor = '#0048FF';
-        drip.style.left = (e.clientX - 5) + 'px';
-        drip.style.top = (e.clientY - 5) + 'px';
-        drip.style.pointerEvents = 'none';
-        drip.style.boxShadow = '0 0 10px #0048FF';
-        drip.style.zIndex = '1000';
-        splashScreen.appendChild(drip);
-        setTimeout(() => { drip.remove(); }, 1000);
-    });
 </script>
 <!DOCTYPE html>
 <html lang="es">
