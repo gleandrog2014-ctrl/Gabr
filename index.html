@@ -14,7 +14,7 @@
             padding: 0;
             /* Aquí vendemos fundos gif / psbacks / pstyle */
             background: url('https://xatimg.com/image/y7Zi7XEbdkZc.jpg') no-repeat center center fixed !important; 
-            background-color: #000000 !important; /* Respaldo negro en lugar de blanco */
+            background-color: #3d0845 !important; /* Respaldo negro en lugar de blanco */
             background-size: cover !important;
             font-family: 'Arial', sans-serif;
             display: flex;
@@ -405,52 +405,6 @@
                 profileView.style.display = 'block';
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
-			<canvas id="cursor-canvas" style="position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999;"></canvas>
-
-<script>
-const canvas = document.getElementById('cursor-canvas');
-const ctx = canvas.getContext('2d');
-let points = [];
-
-function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
-window.addEventListener('resize', resize);
-resize();
-
-window.addEventListener('mousemove', (e) => {
-    points.push({
-        x: e.clientX,
-        y: e.clientY,
-        age: 0,
-        alpha: 1,
-        color: '#ff0000' // Altere a cor aqui (ex: #ffffff para branco)
-    });
-});
-
-function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (let i = 0; i < points.length; i++) {
-        let p = points[i];
-        p.y += 2; // Velocidade da queda
-        p.age++;
-        p.alpha -= 0.02; // Desaparecimento gradual
-        
-        ctx.fillStyle = `rgba(255, 0, 0, ${p.alpha})`; // Cor da gota com transparência
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
-        ctx.fill();
-        
-        if (p.alpha <= 0) {
-            points.splice(i, 1);
-            i--;
-        }
-    }
-    requestAnimationFrame(animate);
-}
-animate();
-</script>          0000000
         }
 
         // ==========================================
