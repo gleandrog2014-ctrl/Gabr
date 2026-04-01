@@ -105,7 +105,7 @@
     .friends-list-hidden, .custom-list-hidden {
         display: none;
         flex-direction: column;
-        background: rgba(0, 72, 255, 0.1);
+        background: rgba(0, 0, 0, 0.9);
         border: 1px solid #0048FF;
         width: 280px;
         margin-top: 5px;
@@ -121,6 +121,15 @@
         text-align: center;
         text-decoration: none;
         font-family: sans-serif;
+        transition: 0.3s;
+        display: block;
+    }
+
+    /* EFEITO DE HOVER CORRIGIDO */
+    .friend-item:hover {
+        background: #0048FF;
+        color: #fff;
+        box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.5);
     }
 
     .hidden-splash { opacity: 0; visibility: hidden; transform: translateY(-100%); }
@@ -173,35 +182,16 @@
         document.getElementById('splash-screen').classList.add('hidden-splash');
     }
 
-    /* NOVA LÓGICA DE CONTADOR GLOBAL (ESTÁVEL) */
     async function carregarContador() {
         const contadorElemento = document.getElementById('count-number');
-        
-        // Usando a API do 'api.countapi.xyz' alternativa ou Tinybird
-        // Como muitas APIs públicas estão instáveis, esta técnica usa o 'hits.seeyoufarm' corrigido:
-        
-        const siteID = "galeria_wrs_2026_unique"; // Mude isso para resetar
+        const siteID = "galeria_wrs_2026_unique"; 
 
         try {
-            // Chamada para uma API de contador de hits confiável
-            const response = await fetch(`https://api.countapi.xyz/hit/wrs-galeria/${siteID}`).catch(() => {
-                // Se a CountAPI falhar (comum ultimamente), tentamos a GoatCounter ou similar
-                // Para este exemplo, usaremos uma alternativa via JSONP/Fetch
-                return fetch(`https://api.counterapi.dev/v1/wrs-galeria/${siteID}/up`);
-            });
-
+            const response = await fetch(`https://api.counterapi.dev/v1/wrs-galeria/${siteID}/up`);
             const data = await response.json();
-            
-            // A estrutura de resposta varia por API, tratamos as duas mais comuns:
             const total = data.value || data.count;
-            
-            if (total) {
-                contadorElemento.innerText = total;
-            } else {
-                contadorElemento.innerText = "1";
-            }
+            contadorElemento.innerText = total ? total : "1";
         } catch (error) {
-            console.log("Erro ao carregar contador.");
             contadorElemento.innerText = "1";
         }
     }
