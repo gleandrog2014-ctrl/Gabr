@@ -1,3 +1,71 @@
+<div id="splash-screen">
+    <div class="container-enter">
+        <h1 class="logo-wrs">WRS</h1>
+        <button class="btn-glow" onclick="entrarNoPerfil()">ENTER</button>
+    </div>
+</div>
+
+<style>
+    #splash-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #000; /* Fundo preto total */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 999999; /* Garante que fica por cima de tudo */
+        transition: all 0.8s ease-in-out;
+    }
+
+    .logo-wrs {
+        color: #00d2ff;
+        font-family: 'Arial Black', sans-serif;
+        font-size: 50px;
+        letter-spacing: 15px;
+        text-shadow: 0 0 20px #00d2ff;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .btn-glow {
+        background: transparent;
+        border: 2px solid #00d2ff;
+        color: #00d2ff;
+        padding: 15px 60px;
+        font-size: 20px;
+        cursor: pointer;
+        font-weight: bold;
+        letter-spacing: 5px;
+        box-shadow: 0 0 15px #00d2ff;
+        transition: 0.4s;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .btn-glow:hover {
+        background: #00d2ff;
+        color: #000;
+        box-shadow: 0 0 40px #00d2ff;
+        transform: scale(1.1);
+    }
+
+    /* Classe que o JavaScript vai usar para sumir */
+    .hidden-splash {
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-100%); /* Faz a tela subir ao sair */
+    }
+</style>
+
+<script>
+    function entrarNoPerfil() {
+        var tela = document.getElementById('splash-screen');
+        tela.classList.add('hidden-splash');
+    }
+</script>
 <!DOCTYPE html>
 <html lang="es">
   <head>
