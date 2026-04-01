@@ -1016,51 +1016,64 @@
  <canvas id="cursor-canvas" style="position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999;"></canvas>
 
 <script>
-  const canvas = document.getElementById('cursor-canvas');
-  const ctx = canvas.getContext('2d');
-  let points = [];
+const canvas = document.getElementById('cursor-canvas');
+const ctx = canvas.getContext('2d');
+let points = [];
 
-  function resize() {
+function resize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-  }
-  window.addEventListener('resize', resize);
-  resize();
+}
+window.addEventListener('resize', resize);
+resize();
 
-  window.addEventListener('mousemove', (e) => {
-    // Adiciona as partículas na posição do mouse
-    points.push({
-      x: e.clientX,
-      y: e.clientY,
-      age: 0,
-      alpha: 1,
-      // Se quiser mudar a cor, altere os valores de RGB abaixo
-      color: '255, 0, 0' 
-    });
-  });
-
-  function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (let i = 0; i < points.length; i++) {
-      let p = points[i];
-      p.y += 2; // Faz a gota cair
-      p.alpha -= 0.02; // Faz a gota sumir aos poucos
-      
-      ctx.fillStyle = `rgba(${p.color}, ${p.alpha})`;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
-      ctx.fill();
-      
-      // Remove da memória quando a gota fica invisível
-      if (p.alpha <= 0) {
-        points.splice(i, 1);
-        i--;
-      }
+window.addEventListener('mousemove', (e) => {
+    // Adiciona 2 gotas por vez para um efeito mais cheio
+    for(let i = 0; i < 2; i++) {
+        points.push({
+            x: e.clientX + (Math.random() * 6 - 3), // Espalha um pouco as gotas
+            y: e.clientY,
+            alpha: 1,
+            size: Math.random() * 2 + 1
+        });
     }
+});
+
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    for (let i = 0; i < points.length; i++) {
+        let p = points[i];
+        p.y += 2; 
+        p.alpha -= 0.02; 
+        
+        // EFEITO DE BRILHO
+        ctx.shadowBlur = 12; // Intensidade do brilho
+        ctx.shadowColor = `rgba(255, 0, 0, ${p.alpha})`; // Cor do brilho segue a transparência
+        ctx.fillStyle = `rgba(255, 0, 0, ${p.alpha})`; // Cor da gota
+        
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+        
+        if (p.alpha <= 0) {
+            points.splice(i, 1);
+            i--;
+        }
+    }
+    // Reseta o brilho para não afetar outras coisas se houver
+    ctx.shadowBlur = 0;
     requestAnimationFrame(animate);
-  }
-  animate();
+}
+animate();
 </script>
-</body>
-</html> </body>
+
+</body> ```
+
+### Como verificar se deu certo:
+1. Abra seu arquivo HTML no navegador.
+2. Mova o mouse rapidamente.
+3. Você verá gotas vermelhas com uma "aura" iluminada caindo.
+
+**Dica:** Se o seu fundo for muito claro, o brilho aparece menos. Esse efeito fica incrível em fundos escuros ou pretos! </body>
 </html>
