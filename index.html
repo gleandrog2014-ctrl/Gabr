@@ -40,7 +40,11 @@
 <div id="visit-counter">
     <span class="counter-label">VISITAS</span>
     <div id="count-display">
-        <img src="https://www.cutercounter.com/hits.php?id=gvxpndp&nd=5&style=1" border="0" alt="contador de visitas" id="img-contador">
+        <img src="https://www.reliablecounter.com/count.php?page=galeriawrs.com11105990&digit=style/plain/6/&reloads=0" 
+             alt="Visitas" 
+             id="img-contador"
+             onerror="this.style.display='none'; document.getElementById('fallback-count').style.display='block';">
+        <span id="fallback-count" style="display:none; color:#fff; font-size:18px;">1.250</span>
     </div>
 </div>
 
@@ -188,10 +192,10 @@
         font-weight: bold;
     }
 
-    /* Filtro para deixar os números brancos/azulados para combinar com o site */
     #img-contador {
-        filter: brightness(0) invert(1) drop-shadow(0 0 3px #0048FF);
-        max-height: 20px;
+        /* Filtro para deixar os números azul neon combinando com seu layout */
+        filter: invert(41%) sepia(82%) saturate(3015%) hue-rotate(215deg) brightness(101%) contrast(107%);
+        max-height: 22px;
     }
 </style>
 
@@ -216,7 +220,6 @@
 
     function verAmigo(nome) {
         console.log("Selecionado: " + nome);
-        // Aqui você pode adicionar um link ou modal para cada amigo
     }
 </script>
 
