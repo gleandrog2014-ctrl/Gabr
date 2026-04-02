@@ -5,125 +5,171 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Galeria WRS - Portal Galáctico</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
-        body { margin: 0; background-color: #000; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
+        body {
+            margin: 0;
+            background-color: #000;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+        }
+
+        /* Tela de Splash */
         #splash-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at bottom right, rgba(0, 72, 255, 0.15), transparent 40%), #000;
-            display: flex; justify-content: center; align-items: center; z-index: 999999;
-            transition: all 0.8s ease;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle at bottom right, rgba(0, 72, 255, 0.15), transparent 40%),
+                        radial-gradient(circle at top left, rgba(80, 0, 255, 0.1), transparent 30%),
+                        #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999999;
+            transition: all 0.8s cubic-bezier(0.65, 0, 0.35, 1);
         }
+
+        #splash-container {
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            text-align: center;
+        }
+
         .logo-wrs {
-            font-family: 'Arial Black', sans-serif; font-size: 75px; letter-spacing: 15px;
-            background: linear-gradient(270deg, #FFFFFF, #0048FF, #FFFFFF); background-size: 400%;
-            -webkit-background-clip: text; background-clip: text; color: transparent;
-            animation: gradientMove 4s linear infinite;
+            font-family: 'Arial Black', sans-serif;
+            font-size: 75px; letter-spacing: 15px;
+            background: linear-gradient(270deg, #FFFFFF, #0048FF, #FFFFFF, #0048FF, #FFFFFF);
+            background-size: 400% 400%;
+            -webkit-background-clip: text; background-clip: text;
+            color: transparent; animation: gradientMove 4s linear infinite;
+            margin-bottom: 20px;
         }
-        @keyframes gradientMove { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
+        @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
         .btn-glow {
             background: rgba(0, 0, 0, 0.6); border: 2px solid #0048FF; color: #0048FF;
-            padding: 15px 30px; font-size: 16px; cursor: pointer; font-weight: bold;
-            margin: 10px; transition: 0.3s;
+            padding: 15px 40px; font-size: 16px; cursor: pointer; font-weight: bold; letter-spacing: 3px;
+            transition: 0.3s; backdrop-filter: blur(5px);
         }
-        .btn-glow:hover { background: #0048FF; color: #fff; box-shadow: 0 0 20px #0048FF; }
+        .btn-glow:hover { background: #0048FF; color: #fff; box-shadow: 0 0 30px #0048FF; transform: scale(1.05); }
 
-        /* Estilo do Botão de Like */
-        #like-container { position: fixed; bottom: 20px; right: 20px; z-index: 1000001; }
+        /* Estilo do Contador de Visitas (Esquerda) */
+        #visit-counter {
+            position: fixed; bottom: 20px; left: 20px; z-index: 1000;
+            background: rgba(0, 0, 0, 0.8); border: 1px solid #0048FF;
+            padding: 10px 15px; border-radius: 5px; text-align: center;
+        }
+        #visit-counter span { display: block; }
+        .label-v { font-size: 9px; color: #0048FF; letter-spacing: 2px; font-weight: bold; }
+        #count-number { font-size: 18px; font-family: 'Courier New', monospace; text-shadow: 0 0 5px #0048FF; }
+
+        /* Estilo do Botão de Like com Contador Interno (Direita) */
+        #like-container {
+            position: fixed; bottom: 20px; right: 20px; z-index: 1000;
+        }
         .like-btn {
             background: rgba(0, 0, 0, 0.8); border: 2px solid #ff0055; color: #ff0055;
             width: 80px; height: 80px; border-radius: 50%; cursor: pointer;
             display: flex; flex-direction: column; justify-content: center; align-items: center; 
-            transition: 0.3s; box-shadow: 0 0 15px rgba(255, 0, 85, 0.3);
+            transition: 0.3s; box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
         }
         .like-btn i { font-size: 22px; margin-bottom: 2px; }
-        #like-number { font-size: 16px; color: #fff; font-family: 'Courier New', monospace; font-weight: bold; }
-
-        #visit-counter {
-            position: fixed; bottom: 20px; left: 20px; z-index: 1000001;
-            background: rgba(0,0,0,0.8); border: 1px solid #0048FF; padding: 10px; border-radius: 5px;
-            color: #fff; text-align: center;
+        #like-number { 
+            font-size: 16px; color: #fff; font-family: 'Courier New', monospace; font-weight: bold; 
+            text-shadow: 0 0 5px #ff0055;
         }
+        .like-btn:hover { background: #ff0055; color: #fff; transform: scale(1.1); }
 
-        .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle var(--duration) infinite; }
-        @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+        /* Estrelas de fundo */
+        .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle var(--duration) infinite; pointer-events: none; }
+        @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
+        
         .hidden-splash { opacity: 0; visibility: hidden; transform: translateY(-100%); }
     </style>
 </head>
 <body>
 
 <div id="splash-screen">
-    <div style="text-align: center;">
+    <div id="splash-container">
         <h1 class="logo-wrs">GALERIA</h1>
-        <button class="btn-glow" onclick="document.getElementById('splash-screen').classList.add('hidden-splash')">ENTRAR</button>
+        <button class="btn-glow" onclick="document.getElementById('splash-screen').classList.add('hidden-splash')">
+            <i class="fas fa-rocket"></i> ENTRAR
+        </button>
     </div>
 </div>
 
 <div id="visit-counter">
-    <div style="font-size: 9px; color: #0048FF;">VISITAS</div>
-    <span id="count-number">...</span>
+    <span class="label-v">VISITAS</span>
+    <span id="count-number">0</span>
 </div>
 
 <div id="like-container">
     <button class="like-btn" onclick="darLike()">
         <i class="fas fa-heart"></i>
-        <span id="like-number">...</span>
+        <span id="like-number">0</span>
     </button>
 </div>
 
 <script>
-    // Configurações da API
-    const API_URL = "https://api.counterapi.dev/v1/wrs_galeria_oficial_2026";
-    const LIKES_KEY = "key_likes_v3_final";
-    const VISITS_KEY = "key_visits_v3_final";
+    // IDs ÚNICOS PARA SEU SITE (Não altere para não perder a contagem)
+    const SITE_NAMESPACE = "galeria_wrs_2026_oficial"; 
+    const API_URL = "https://api.counterapi.dev/v1";
 
-    // Função para dar Like
-    async function darLike() {
+    // Função para buscar e aumentar visitas (Roda 1x ao abrir a página)
+    async function carregarVisitas() {
         try {
-            const res = await fetch(`${API_URL}/${LIKES_KEY}/up`);
-            const data = await res.json();
-            document.getElementById('like-number').innerText = data.value;
-
-            confetti({
-                particleCount: 100,
-                spread: 70,
-                origin: { x: 0.9, y: 0.9 },
-                colors: ['#ff0055', '#0048FF']
-            });
-        } catch (e) { console.error("Erro ao curtir", e); }
+            const response = await fetch(`${API_URL}/${SITE_NAMESPACE}/visitas/up`);
+            const data = await response.json();
+            document.getElementById('count-number').innerText = data.value || "1";
+        } catch (e) { console.error("Erro visitas"); }
     }
 
-    // Função para carregar os dados ao abrir a página
-    async function carregarDados() {
-        // Carregar Visitas e somar +1
+    // Função para carregar os likes sem aumentar (Roda ao abrir a página)
+    async function carregarLikesIniciais() {
         try {
-            const resV = await fetch(`${API_URL}/${VISITS_KEY}/up`);
-            const dataV = await resV.json();
-            document.getElementById('count-number').innerText = dataV.value;
-        } catch (e) { document.getElementById('count-number').innerText = "1"; }
-
-        // Carregar Likes (Apenas ler valor atual)
-        try {
-            const resL = await fetch(`${API_URL}/${LIKES_KEY}/get`);
-            const dataL = await resL.json();
-            // Se a API responder com sucesso, mostra o valor. Se não (contador novo), mostra 0.
-            document.getElementById('like-number').innerText = dataL.value !== undefined ? dataL.value : "0";
+            const response = await fetch(`${API_URL}/${SITE_NAMESPACE}/curtidas/get`);
+            const data = await response.json();
+            // Se o contador existir, mostra o valor. Se for novo, mostra 0.
+            document.getElementById('like-number').innerText = data.value !== undefined ? data.value : "0";
         } catch (e) { 
-            // Se der erro porque o contador não existe ainda, coloca 0
             document.getElementById('like-number').innerText = "0"; 
         }
     }
 
-    window.onload = () => {
-        carregarDados();
+    // Função para o clique no botão de Like (Aumenta +1 no servidor)
+    async function darLike() {
+        try {
+            const response = await fetch(`${API_URL}/${SITE_NAMESPACE}/curtidas/up`);
+            const data = await response.json();
+            document.getElementById('like-number').innerText = data.value;
 
-        // Gerar estrelas de fundo
+            // Efeito de Confete
+            if (window.confetti) {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { x: 0.9, y: 0.9 },
+                    colors: ['#ff0055', '#0048FF', '#ffffff']
+                });
+            }
+        } catch (e) { console.error("Erro ao curtir"); }
+    }
+
+    // Inicialização ao carregar a página
+    window.onload = () => {
+        carregarVisitas();
+        carregarLikesIniciais();
+
+        // Criar estrelas de fundo
+        const splash = document.getElementById('splash-screen');
         for (let i = 0; i < 80; i++) {
             const star = document.createElement('div');
             star.className = 'star';
-            star.style.width = star.style.height = Math.random() * 3 + 'px';
+            const size = Math.random() * 2 + 'px';
+            star.style.width = size; star.style.height = size;
             star.style.top = Math.random() * 100 + '%';
             star.style.left = Math.random() * 100 + '%';
             star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
