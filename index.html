@@ -86,10 +86,9 @@
             text-align: center; text-decoration: none; font-weight: bold; transition: 0.3s; cursor: pointer;
         }
 
-        /* DIMINUIÇÃO DA LISTA DE AMIGOS AQUI */
         #lista-amigos .friend-item {
-            padding: 6px; /* Reduzi de 12px para 6px */
-            font-size: 14px; /* Fonte levemente menor para caber melhor */
+            padding: 6px;
+            font-size: 14px;
         }
 
         .friend-item:hover { background: #0048FF !important; color: #fff !important; }
@@ -240,9 +239,13 @@
     }
 
     window.onload = () => { 
+        // --- LINHA PARA ZERAR OS LIKES ---
+        localStorage.setItem('wrs_likes', 0); 
+        // --------------------------------
+        
         carregarContador();
         checkDiscordStatus();
-        document.getElementById('like-number').innerText = localStorage.getItem('wrs_likes') || 0;
+        document.getElementById('like-number').innerText = 0;
         setInterval(checkDiscordStatus, 15000);
 
         const screen = document.getElementById('splash-screen');
