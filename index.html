@@ -85,11 +85,7 @@
             text-align: center; text-decoration: none; font-weight: bold; transition: 0.3s; cursor: pointer;
         }
 
-        #lista-amigos .friend-item {
-            padding: 6px;
-            font-size: 14px;
-        }
-
+        #lista-amigos .friend-item { padding: 6px; font-size: 14px; }
         .friend-item:hover { background: #0048FF !important; color: #fff !important; }
 
         /* Contadores */
@@ -101,15 +97,22 @@
 
         #like-container {
             position: fixed; bottom: 20px; right: 20px; z-index: 1000001;
-            display: flex; flex-direction: column; align-items: center; gap: 5px;
         }
+        
         .like-btn {
             background: rgba(0, 0, 0, 0.8); border: 2px solid #ff0055; color: #ff0055;
-            width: 60px; height: 60px; border-radius: 50%; cursor: pointer; font-size: 24px;
-            display: flex; justify-content: center; align-items: center; transition: 0.3s;
-            box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
+            width: 70px; height: 70px; border-radius: 50%; cursor: pointer;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            transition: 0.3s; box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
+            position: relative; overflow: hidden;
+        }
+        .like-btn i { font-size: 20px; margin-bottom: 2px; }
+        #like-number { 
+            font-size: 14px; color: #fff; font-family: 'Courier New', monospace; font-weight: bold; 
+            text-shadow: 0 0 5px #ff0055;
         }
         .like-btn:hover { background: #ff0055; color: #fff; transform: scale(1.1); }
+        .like-btn:hover #like-number { color: #fff; text-shadow: none; }
 
         /* Gotas e Estrelas */
         .drop {
@@ -139,13 +142,11 @@
         
         <div class="menu-wrapper">
             <button class="btn-glow" onclick="entrarNoPerfil()"><i class="fas fa-rocket"></i> ENTRE</button>
-            
             <button class="btn-glow" onclick="toggleMenu('lista-xat')"><i class="fas fa-comments"></i> XAT COMUNIDADE</button>
             <div id="lista-xat" class="custom-list-hidden">
                 <a href="https://xat.com/tuga" target="_blank" class="friend-item">XAT TUGA</a>
                 <a href="https://xat.com/conexaosertanejoo" target="_blank" class="friend-item">XAT CONEXÃO</a>
             </div>
-
             <button class="btn-glow" onclick="toggleMenu('lista-amigos')"><i class="fas fa-user-friends"></i> AMIGOS</button>
             <div id="lista-amigos" class="friends-list-hidden">
                 <div class="friend-item">Mnna (Married) ❤️</div>
@@ -166,15 +167,17 @@
 </div>
 
 <div id="like-container">
-    <button class="like-btn" onclick="darLike()"><i class="fas fa-heart"></i></button>
-    <span id="like-number" style="color: #fff; font-family: 'Courier New', monospace; font-weight: bold; text-shadow: 0 0 5px #ff0055;">...</span>
+    <button class="like-btn" onclick="darLike()">
+        <i class="fas fa-heart"></i>
+        <span id="like-number">...</span>
+    </button>
 </div>
 
 <script>
     const SEU_DISCORD_ID = "454632435054018560";
     const API_NAMESPACE = "wrs-galeria-2026";
     const VISITS_KEY = "visitas_galeria";
-    const LIKES_KEY = "likes_galeria";
+    const LIKES_KEY = "likes_galeria_v2"; // Mudei a key para resetar e alinhar o novo design
 
     function toggleMenu(id) {
         const menu = document.getElementById(id);
@@ -198,7 +201,6 @@
         setTimeout(() => drop.remove(), 800);
     }
 
-    // Função de Dar Like com Sincronização Global
     async function darLike() {
         const likeNum = document.getElementById('like-number');
         try {
@@ -208,11 +210,11 @@
 
             if (typeof confetti === 'function') {
                 confetti({
-                    particleCount: 150,
-                    spread: 70,
+                    particleCount: 100,
+                    spread: 50,
                     origin: { x: 0.9, y: 0.9 }, 
                     zIndex: 1000005,
-                    colors: ['#ff0055', '#0048FF', '#ffffff']
+                    colors: ['#ff0055', '#0048FF']
                 });
             }
         } catch (e) { console.error("Erro ao curtir:", e); }
@@ -233,16 +235,13 @@
         } catch (e) { text.innerText = "OFFLINE"; }
     }
 
-    // Carrega contadores (Visitas e Likes) de forma independente
     async function carregarContadoresIniciais() {
-        // Carregar Visitas e aumentar +1
         try {
             const vRes = await fetch(`https://api.counterapi.dev/v1/${API_NAMESPACE}/${VISITS_KEY}/up`);
             const vData = await vRes.json();
             document.getElementById('count-number').innerText = vData.value || vData.count || "1";
         } catch (e) { document.getElementById('count-number').innerText = "1"; }
 
-        // Carregar Likes (apenas ler o valor atual sem aumentar)
         try {
             const lRes = await fetch(`https://api.counterapi.dev/v1/${API_NAMESPACE}/${LIKES_KEY}/get`);
             const lData = await lRes.json();
@@ -255,7 +254,6 @@
         checkDiscordStatus();
         setInterval(checkDiscordStatus, 15000);
 
-        // Gerador de Estrelas
         const screen = document.getElementById('splash-screen');
         for (let i = 0; i < 100; i++) {
             const star = document.createElement('div');
