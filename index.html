@@ -177,24 +177,22 @@
     const siteID = "galeria_wrs_2026_unique";
     const likeID = "galeria_wrs_likes_v3"; 
 
-    // --- FUNÇÃO DO LIKE CORRIGIDA ---
+    // --- LÓGICA DE LIKES SINCRONIZADA ---
+    const likeID = "galeria_wrs_likes_2026_final"; // Mudei o ID para começar do zero e limpo
+
     async function darLike() {
         const display = document.getElementById('like-number');
         const btn = document.getElementById('like-trigger');
-        
         btn.style.pointerEvents = 'none'; 
 
         try {
-            // Usa a mesma estrutura do contador de visitas
+            // "up" adiciona +1 no servidor global
             const response = await fetch(`https://api.counterapi.dev/v1/wrs-galeria/${likeID}/up`);
             const data = await response.json();
             
-            // Verifica se o valor existe antes de mostrar
-            if (data.value !== undefined) {
-                display.innerText = data.value;
-            } else if (data.count !== undefined) {
-                display.innerText = data.count;
-            }
+            // Atualiza a tela com o valor real do servidor
+            const valorReal = data.value || data.count || 0;
+            display.innerText = valorReal;
 
             if (typeof confetti === 'function') {
                 confetti({
@@ -203,22 +201,27 @@
                 });
             }
         } catch (e) {
-            console.error("Erro ao computar like");
+            console.log("Erro ao subir like");
         }
-        
         setTimeout(() => btn.style.pointerEvents = 'auto', 1000);
     }
 
     async function atualizarLikes() {
+        const display = document.getElementById('like-number');
         try {
+            // Apenas "lê" o valor global sem somar
             const response = await fetch(`https://api.counterapi.dev/v1/wrs-galeria/${likeID}`);
             const data = await response.json();
-            // Se o contador for novo e retornar erro, mostramos 0
-            document.getElementById('like-number').innerText = data.value || data.count || 0;
+            
+            if (data.value !== undefined || data.count !== undefined) {
+                display.innerText = data.value || data.count;
+            } else {
+                display.innerText = "0";
+            }
         } catch (e) {
-            // Se der erro (porque o contador ainda não foi criado com o primeiro like)
-            if(document.getElementById('like-number').innerText === "...") {
-                document.getElementById('like-number').innerText = "0";
+            // Se a API der erro (contador ainda não existe), mostra 0
+            if (display.innerText === "..." || display.innerText === "undefined") {
+                display.innerText = "0";
             }
         }
     }
