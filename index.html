@@ -3,90 +3,271 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Botão de Like com Fogos</title>
+    <title>Galeria WRS - Portal Galáctico</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
-        /* Posicionamento no canto inferior direito */
-        .like-container {
+        body {
+            margin: 0;
+            background-color: #000;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #splash-screen {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle at bottom right, rgba(0, 72, 255, 0.15), transparent 40%),
+                        radial-gradient(circle at top left, rgba(80, 0, 255, 0.1), transparent 30%),
+                        #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999999;
+            transition: all 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+        }
+
+        #splash-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
             display: flex;
             flex-direction: column;
+            justify-content: center;
             align-items: center;
-            font-family: sans-serif;
-            z-index: 1000;
+            z-index: 10;
+            pointer-events: auto;
         }
 
-        .like-btn {
-            background-color: #ff4757;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            font-size: 24px;
-            transition: transform 0.2s ease;
+        /* Status Discord */
+        #status-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
             display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 72, 255, 0.3);
+            z-index: 1000002;
+            backdrop-filter: blur(5px);
         }
 
-        .like-btn:active {
-            transform: scale(0.9);
+        #status-dot { width: 10px; height: 10px; border-radius: 50%; background-color: #555; transition: 0.5s; }
+        #status-text { color: #fff; font-size: 11px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; }
+
+        .dot-online { background-color: #00ff00 !important; box-shadow: 0 0 15px #00ff00; }
+        .dot-idle { background-color: #f1c40f !important; box-shadow: 0 0 15px #f1c40f; }
+        .dot-dnd { background-color: #e74c3c !important; box-shadow: 0 0 15px #e74c3c; }
+
+        .logo-wrs {
+            font-family: 'Arial Black', sans-serif;
+            font-size: 75px;
+            letter-spacing: 15px;
+            text-align: center;
+            margin-bottom: 10px;
+            background: linear-gradient(270deg, #FFFFFF, #0048FF, #FFFFFF, #0048FF, #FFFFFF);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradientMove 4s linear infinite;
         }
 
-        .count-display {
-            margin-top: 5px;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-size: 14px;
+        @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        .menu-wrapper { display: flex; flex-direction: column; gap: 15px; align-items: center; }
+
+        .btn-glow {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid #0048FF;
+            color: #0048FF;
+            padding: 15px 0;
+            font-size: 16px;
+            cursor: pointer;
             font-weight: bold;
+            letter-spacing: 3px;
+            transition: 0.3s all ease;
+            width: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
         }
+
+        .btn-glow:hover { background: #0048FF; color: #fff; box-shadow: 0 0 30px #0048FF; transform: scale(1.05); }
+
+        .friends-list-hidden, .custom-list-hidden { display: none; flex-direction: column; background: rgba(0, 5, 20, 0.95); border: 1px solid #0048FF; width: 300px; margin-top: 2px; }
+        .show-list { display: flex !important; }
+
+        .friend-item { color: #ccc; padding: 12px; border-bottom: 1px solid rgba(0, 72, 255, 0.2); text-align: center; text-decoration: none; font-size: 13px; }
+
+        /* Contadores */
+        #visit-counter { position: fixed; bottom: 20px; left: 20px; z-index: 1000001; background: rgba(0,0,0,0.9); border: 1px solid #0048FF; padding: 8px 15px; border-radius: 4px; display: flex; flex-direction: column; align-items: center; }
+        #like-container { position: fixed; bottom: 20px; right: 20px; z-index: 1000001; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        
+        .like-btn { background: rgba(0,0,0,0.8); border: 2px solid #ff0055; color: #ff0055; width: 55px; height: 55px; border-radius: 50%; cursor: pointer; font-size: 20px; transition: 0.3s; }
+        .like-btn:hover { background: #ff0055; color: #fff; box-shadow: 0 0 20px #ff0055; }
+
+        /* Efeitos visuais */
+        .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; pointer-events: none; animation: twinkle var(--duration) infinite; }
+        @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
+        
+        .drop { position: absolute; background-color: rgba(0, 72, 255, 0.4); border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%); animation: fadeOutDrop 0.8s ease-out forwards; z-index: 99; }
+        @keyframes fadeOutDrop { 0% { width: 0px; height: 0px; opacity: 0.8; } 100% { width: 80px; height: 80px; opacity: 0; } }
+
+        .hidden-splash { opacity: 0; visibility: hidden; transform: translateY(-100%); }
     </style>
 </head>
 <body>
 
-    <div class="like-container">
-        <button class="like-btn" id="likeBtn">❤️</button>
-        <div class="count-display" id="likeCount">0</div>
+<div id="status-indicator">
+    <span id="status-dot"></span>
+    <span id="status-text">CARREGANDO...</span>
+</div>
+
+<div id="splash-screen">
+    <div id="splash-container">
+        <div style="font-size: 50px; color: #0048FF; margin-bottom: 20px;"><i class="fas fa-user-astronaut"></i></div>
+        <h1 class="logo-wrs">GALERIA</h1>
+        <div style="color: #0048FF; letter-spacing: 5px; font-size: 12px; margin-bottom: 40px; font-weight: bold;">PORTAL GALÁCTICO</div>
+        
+        <div class="menu-wrapper">
+            <button class="btn-glow" onclick="entrarNoPerfil()"><i class="fas fa-rocket" style="margin-right:10px"></i> ENTRE</button>
+            
+            <div class="dropdown-wrapper">
+                <button class="btn-glow" onclick="toggleMenu('lista-xat')"><i class="fas fa-comments" style="margin-right:10px"></i> XAT COMUNIDADE</button>
+                <div id="lista-xat" class="custom-list-hidden">
+                    <a href="https://xat.com/tuga" target="_blank" class="friend-item">XAT TUGA</a>
+                    <a href="https://xat.com/conexaosertanejoo" target="_blank" class="friend-item">XAT CONEXÃO</a>
+                </div>
+            </div>
+
+            <div class="dropdown-wrapper">
+                <button class="btn-glow" onclick="toggleMenu('lista-amigos')"><i class="fas fa-user-friends" style="margin-right:10px"></i> AMIGOS</button>
+                <div id="lista-amigos" class="friends-list-hidden">
+                    <div class="friend-item">Mnna (Married) ❤️</div>
+                    <div class="friend-item">Gold</div>
+                    <div class="friend-item">Venon</div>
+                    <div class="friend-item">Gothica</div>
+                    <div class="friend-item">Miel</div>
+                </div>
+            </div>
+        </div>
+        <div style="position: absolute; bottom: 20px; color: rgba(255,255,255,0.3); font-size: 11px;">© GALERIA - 2026</div>
     </div>
+</div>
 
-    <script>
-        const likeBtn = document.getElementById('likeBtn');
-        const likeCountLabel = document.getElementById('likeCount');
+<div id="visit-counter">
+    <span style="color:#0048FF; font-size:9px; letter-spacing:2px">VISITAS</span>
+    <span id="count-number" style="color:#fff; font-family:monospace; font-size:20px">...</span>
+</div>
 
-        // 1. Recuperar o valor salvo no localStorage ao carregar a página
-        let likes = localStorage.getItem('totalLikes') ? parseInt(localStorage.getItem('totalLikes')) : 0;
-        likeCountLabel.innerText = likes;
+<div id="like-container">
+    <button class="like-btn" onclick="darLike()"><i class="fas fa-heart"></i></button>
+    <span id="like-number" style="color:#fff; font-family:monospace; font-weight:bold; text-shadow: 0 0 5px #ff0055;">0</span>
+</div>
 
-        likeBtn.addEventListener('click', () => {
-            // 2. Incrementar o contador
-            likes++;
-            likeCountLabel.innerText = likes;
+<script>
+    const SEU_DISCORD_ID = "454632435054018560";
 
-            // 3. Salvar o novo valor no localStorage (Persistência 100%)
-            localStorage.setItem('totalLikes', likes);
+    // --- FUNÇÕES DE INTERFACE ---
+    function toggleMenu(id) {
+        const menu = document.getElementById(id);
+        const isVisible = menu.classList.contains('show-list');
+        // Fecha todos antes de abrir o novo
+        document.querySelectorAll('.friends-list-hidden, .custom-list-hidden').forEach(m => m.classList.remove('show-list'));
+        if (!isVisible) menu.classList.add('show-list');
+    }
 
-            // 4. Efeito de Fogos (Confetes)
-            lancarFogos();
-        });
+    function entrarNoPerfil() {
+        document.getElementById('splash-screen').classList.add('hidden-splash');
+    }
 
-        function lancarFogos() {
-            // Configuração do efeito vindo do canto inferior direito
-            confetti({
-                particleCount: 100,
-                spread: 70,
-                origin: { x: 0.9, y: 0.9 }, // Coordenadas do botão
-                colors: ['#ff4757', '#ff6b81', '#ffffff']
-            });
+    // --- ESTRELAS E GOTAS ---
+    function initVisuals() {
+        const screen = document.getElementById('splash-screen');
+        // Estrelas
+        for (let i = 0; i < 80; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            const size = Math.random() * 2 + 'px';
+            star.style.width = size; star.style.height = size;
+            star.style.top = Math.random() * 100 + '%';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
+            screen.appendChild(star);
         }
-    </script>
+        // Gotas no Mouse
+        window.addEventListener('mousemove', (e) => {
+            if(document.getElementById('splash-screen').classList.contains('hidden-splash')) return;
+            const drop = document.createElement('div');
+            drop.className = 'drop';
+            drop.style.left = e.clientX + 'px';
+            drop.style.top = e.clientY + 'px';
+            document.body.appendChild(drop);
+            setTimeout(() => drop.remove(), 800);
+        });
+    }
+
+    // --- DISCORD STATUS ---
+    async function checkDiscord() {
+        const dot = document.getElementById('status-dot');
+        const text = document.getElementById('status-text');
+        try {
+            const r = await fetch(`https://api.lanyard.rest/v1/users/${SEU_DISCORD_ID}`);
+            const d = await r.json();
+            const s = d.data.discord_status;
+            dot.className = '';
+            if (s === "online") { dot.classList.add('dot-online'); text.innerText = "ONLINE"; text.style.color = "#00ff00"; }
+            else if (s === "idle") { dot.classList.add('dot-idle'); text.innerText = "AUSENTE"; text.style.color = "#f1c40f"; }
+            else if (s === "dnd") { dot.classList.add('dot-dnd'); text.innerText = "OCUPADO"; text.style.color = "#e74c3c"; }
+            else { text.innerText = "OFFLINE"; text.style.color = "#888"; }
+        } catch (e) { text.innerText = "OFFLINE"; }
+    }
+
+    // --- SISTEMA DE LIKE ---
+    function darLike() {
+        let likes = parseInt(localStorage.getItem('wrs_likes') || 0);
+        likes++;
+        localStorage.setItem('wrs_likes', likes);
+        document.getElementById('like-number').innerText = likes;
+
+        // Efeito de Fogos
+        confetti({
+            particleCount: 150,
+            spread: 70,
+            origin: { x: 0.9, y: 0.9 },
+            colors: ['#ff0055', '#0048FF', '#ffffff']
+        });
+    }
+
+    // --- CONTADOR DE VISITAS ---
+    async function initCounter() {
+        const countEl = document.getElementById('count-number');
+        try {
+            const r = await fetch(`https://api.counterapi.dev/v1/wrs-galeria/site_2026/up`);
+            const d = await r.json();
+            countEl.innerText = d.value || "1";
+        } catch (e) { countEl.innerText = "1"; }
+    }
+
+    // --- INICIALIZAÇÃO GERAL ---
+    window.onload = () => {
+        initVisuals();
+        checkDiscord();
+        initCounter();
+        document.getElementById('like-number').innerText = localStorage.getItem('wrs_likes') || 0;
+        setInterval(checkDiscord, 15000);
+    };
+</script>
+
 </body>
 </html>
 <!DOCTYPE html>
