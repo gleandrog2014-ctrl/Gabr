@@ -107,6 +107,17 @@
         }
         .like-btn:hover { background: #ff0055; color: #fff; transform: scale(1.1); }
 
+        /* Estilo do número de like (escondido por padrão) */
+        #like-number {
+            color: #fff; 
+            font-family: 'Courier New', monospace; 
+            font-weight: bold; 
+            text-shadow: 0 0 5px #ff0055;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+
         /* Gotas e Estrelas */
         .drop {
             position: absolute; background-color: rgba(0, 72, 255, 0.4); border-radius: 50%;
@@ -163,7 +174,7 @@
 
 <div id="like-container">
     <button class="like-btn" onclick="darLike()"><i class="fas fa-heart"></i></button>
-    <span id="like-number" style="color: #fff; font-family: 'Courier New', monospace; font-weight: bold; text-shadow: 0 0 5px #ff0055;">...</span>
+    <span id="like-number">0</span>
 </div>
 
 <script>
@@ -193,12 +204,15 @@
         setTimeout(() => drop.remove(), 800);
     }
 
-    // Função de Like Sincronizada
     async function darLike() {
+        const likeNum = document.getElementById('like-number');
         try {
             const res = await fetch(`https://api.counterapi.dev/v1/wrs-galeria/${ID_LIKES}/up`);
             const data = await res.json();
-            document.getElementById('like-number').innerText = data.count || data.value;
+            
+            // Mostra o número
+            likeNum.innerText = data.count || data.value;
+            likeNum.style.opacity = "1";
 
             if (typeof confetti === 'function') {
                 confetti({
@@ -206,19 +220,23 @@
                     zIndex: 1000005, colors: ['#ff0055', '#0048FF', '#ffffff']
                 });
             }
+
+            // Esconde o número após 3 segundos
+            setTimeout(() => {
+                likeNum.style.opacity = "0";
+            }, 3000);
+
         } catch (e) { console.log("Erro ao dar like"); }
     }
 
-    // Função de Visitas Sincronizada
     async function carregarContadores() {
-        // Carrega Visitas (Soma +1)
         try {
             const resV = await fetch(`https://api.counterapi.dev/v1/wrs-galeria/${ID_VISITAS}/up`);
             const dataV = await resV.json();
             document.getElementById('count-number').innerText = dataV.count || dataV.value;
         } catch(e) { document.getElementById('count-number').innerText = "1"; }
-
-        // Carrega Likes (Apenas lê o valor)
+        
+        // Apenas carrega o valor dos likes internamente, sem mostrar
         try {
             const resL = await fetch(`https://api.counterapi.dev/v1/wrs-galeria/${ID_LIKES}/get`);
             const dataL = await resL.json();
