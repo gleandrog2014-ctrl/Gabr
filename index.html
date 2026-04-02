@@ -38,8 +38,6 @@
             justify-content: center;
             align-items: center;
             z-index: 10;
-            /* Importante para o rastro do mouse */
-            pointer-events: auto; 
         }
 
         /* Status Discord */
@@ -97,7 +95,6 @@
             align-items: center;
             backdrop-filter: blur(5px);
             transition: 0.3s;
-            position: relative;
             z-index: 20;
         }
 
@@ -107,7 +104,6 @@
         .show-list { display: flex !important; }
         .friend-item { color: #ccc; padding: 12px; border-bottom: 1px solid rgba(0, 72, 255, 0.2); text-align: center; text-decoration: none; }
 
-        /* Contadores */
         #visit-counter {
             position: fixed;
             bottom: 20px; left: 20px;
@@ -140,15 +136,15 @@
         }
         .like-btn:hover { background: #ff0055; color: #fff; transform: scale(1.1); }
 
-        /* EFEITO GOTAS (DROP) */
+        /* CORREÇÃO DO EFEITO GOTA */
         .drop {
             position: absolute;
             background-color: rgba(0, 72, 255, 0.4);
             border-radius: 50%;
-            pointer-events: none;
+            pointer-events: none; /* Garante que a gota não bloqueie o clique */
             transform: translate(-50%, -50%);
             animation: fadeOutDrop 0.8s ease-out forwards;
-            z-index: 5; /* Atrás dos botões, mas visível no fundo */
+            z-index: 5;
         }
         @keyframes fadeOutDrop { 
             0% { width: 0px; height: 0px; opacity: 0.8; } 
@@ -160,7 +156,7 @@
         .hidden-splash { opacity: 0; visibility: hidden; transform: translateY(-100%); }
     </style>
 </head>
-<body>
+<body onmousemove="createDrop(event)">
 
 <div id="status-indicator">
     <span id="status-dot"></span>
@@ -168,7 +164,7 @@
 </div>
 
 <div id="splash-screen">
-    <div id="splash-container" onmousemove="createDrop(event)">
+    <div id="splash-container">
         <div style="font-size: 50px; color: #0048FF; margin-bottom: 20px;"><i class="fas fa-user-astronaut"></i></div>
         <h1 class="logo-wrs">GALERIA</h1>
         <div style="color: #0048FF; letter-spacing: 5px; font-size: 12px; margin-bottom: 40px; font-weight: bold;">GALERIA GALÁCTICA</div>
@@ -216,15 +212,13 @@
         document.getElementById('splash-screen').classList.add('hidden-splash');
     }
 
-    // --- FUNÇÃO DAS GOTAS (RESTAURADA) ---
+    // Gotas fixadas para ignorar os botões e funcionar em todo lugar
     function createDrop(e) {
         const splash = document.getElementById('splash-screen');
-        // Só cria gotas se o splash estiver visível
         if(splash.classList.contains('hidden-splash')) return;
 
         const drop = document.createElement('div');
         drop.classList.add('drop');
-        // Ajusta a posição baseada no container
         drop.style.left = e.clientX + 'px'; 
         drop.style.top = e.clientY + 'px';
         
@@ -266,6 +260,7 @@
         localStorage.setItem('wrs_likes', likes);
         document.getElementById('like-number').innerText = likes;
 
+        // Efeito de Fogos
         confetti({
             particleCount: 150,
             spread: 70,
