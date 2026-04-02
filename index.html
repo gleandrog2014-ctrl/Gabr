@@ -215,6 +215,29 @@
 </style>
 
 <script>
+	// --- BLOQUEIO TOTAL DA PÁGINA (SPLASH + GALERIA) ---
+    document.addEventListener('keydown', function(e) {
+        // Bloqueia Ctrl + U
+        if (e.ctrlKey && (e.keyCode === 85 || e.key === 'u')) {
+            e.preventDefault();
+            return false;
+        }
+        // Bloqueia F12 e Ctrl + Shift + I
+        if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.key === 'I'))) {
+            e.preventDefault();
+            return false;
+        }
+    });
+
+    // Bloqueia o Clique Direito em toda a tela
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        // Isso aciona o seu aviso "Copyright Gabr" que já está no seu código
+        if (typeof showToast === "function") { 
+            showToast(); 
+        }
+    });
+    // ---------------------------------------------------
     // Configurações do efeito de gotas
     const splashContainer = document.getElementById('splash-container');
     const dropContainer = document.getElementById('splash-screen');
