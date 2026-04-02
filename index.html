@@ -1332,5 +1332,46 @@ animate();
 
 </body> ```
 
- </body>
+ <script>
+    // Mensagem de alerta
+    const mensagemProtecao = "Acesso Protegido - Cópia Proibida - Propriedade de Gabr (1777777)";
+
+    // Bloquear Botão Direito
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        alert(mensagemProtecao);
+    });
+
+    // Bloquear Atalhos de Teclado
+    document.addEventListener('keydown', function(e) {
+        // Ctrl+U (Código fonte), F12 (DevTools), Ctrl+Shift+I (Inspecionar)
+        if (
+            (e.ctrlKey && (e.key === 'u' || e.key === 'U')) || 
+            e.key === 'F12' || 
+            (e.ctrlKey && e.shiftKey && (e.key === 'i' || e.key === 'I')) ||
+            (e.ctrlKey && e.shiftKey && (e.key === 'j' || e.key === 'J')) ||
+            (e.ctrlKey && (e.key === 's' || e.key === 'S'))
+        ) {
+            e.preventDefault();
+            alert(mensagemProtecao);
+            return false;
+        }
+    });
+
+    // Bloquear Arrastar Imagens (Opcional, útil para galerias)
+    document.addEventListener('dragstart', function(e) {
+        e.preventDefault();
+    });
+</script>
+
+<style>
+    /* Bloquear seleção de texto visualmente */
+    body {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+</style>
+</body>
 </html>
