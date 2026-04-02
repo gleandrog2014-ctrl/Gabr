@@ -100,9 +100,36 @@
 
         .btn-glow:hover { background: #0048FF; color: #fff; box-shadow: 0 0 30px #0048FF; transform: scale(1.05); }
 
-        .friends-list-hidden, .custom-list-hidden { display: none; flex-direction: column; background: rgba(0, 5, 20, 0.95); border: 1px solid #0048FF; width: 300px; margin-top: 2px; }
+        /* LISTAS E EFEITO AZUL AO PASSAR O MOUSE (CORRIGIDO) */
+        .friends-list-hidden, .custom-list-hidden { 
+            display: none; 
+            flex-direction: column; 
+            background: rgba(0, 0, 0, 0.85); 
+            border: 1px solid #0048FF; 
+            width: 300px; 
+            margin-top: 2px;
+            z-index: 30;
+        }
+        
         .show-list { display: flex !important; }
-        .friend-item { color: #ccc; padding: 12px; border-bottom: 1px solid rgba(0, 72, 255, 0.2); text-align: center; text-decoration: none; }
+
+        .friend-item { 
+            color: #0048FF; /* Cor padrão azul */
+            padding: 12px; 
+            border-bottom: 1px solid rgba(0, 72, 255, 0.2); 
+            text-align: center; 
+            text-decoration: none; 
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        /* EFEITO AZUL QUE VOCÊ QUERIA */
+        .friend-item:hover { 
+            background: #0048FF; 
+            color: #fff; 
+            box-shadow: inset 0 0 15px rgba(255,255,255,0.2);
+        }
 
         #visit-counter {
             position: fixed;
@@ -136,12 +163,11 @@
         }
         .like-btn:hover { background: #ff0055; color: #fff; transform: scale(1.1); }
 
-        /* CORREÇÃO DO EFEITO GOTA */
         .drop {
             position: absolute;
             background-color: rgba(0, 72, 255, 0.4);
             border-radius: 50%;
-            pointer-events: none; /* Garante que a gota não bloqueie o clique */
+            pointer-events: none;
             transform: translate(-50%, -50%);
             animation: fadeOutDrop 0.8s ease-out forwards;
             z-index: 5;
@@ -171,11 +197,13 @@
         
         <div class="menu-wrapper">
             <button class="btn-glow" onclick="entrarNoPerfil()"><i class="fas fa-rocket"></i> ENTRE</button>
+            
             <button class="btn-glow" onclick="toggleMenu('lista-xat')"><i class="fas fa-comments"></i> XAT COMUNIDADE</button>
             <div id="lista-xat" class="custom-list-hidden">
                 <a href="https://xat.com/tuga" target="_blank" class="friend-item">XAT TUGA</a>
                 <a href="https://xat.com/conexaosertanejoo" target="_blank" class="friend-item">XAT CONEXÃO</a>
             </div>
+
             <button class="btn-glow" onclick="toggleMenu('lista-amigos')"><i class="fas fa-user-friends"></i> AMIGOS</button>
             <div id="lista-amigos" class="friends-list-hidden">
                 <div class="friend-item">Mnna (Married) ❤️</div>
@@ -212,16 +240,13 @@
         document.getElementById('splash-screen').classList.add('hidden-splash');
     }
 
-    // Gotas fixadas para ignorar os botões e funcionar em todo lugar
     function createDrop(e) {
         const splash = document.getElementById('splash-screen');
         if(splash.classList.contains('hidden-splash')) return;
-
         const drop = document.createElement('div');
         drop.classList.add('drop');
         drop.style.left = e.clientX + 'px'; 
         drop.style.top = e.clientY + 'px';
-        
         splash.appendChild(drop);
         setTimeout(() => drop.remove(), 800);
     }
@@ -260,7 +285,6 @@
         localStorage.setItem('wrs_likes', likes);
         document.getElementById('like-number').innerText = likes;
 
-        // Efeito de Fogos
         confetti({
             particleCount: 150,
             spread: 70,
