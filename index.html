@@ -6,7 +6,6 @@
     <title>Galeria WRS - Portal Galáctico</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Reset e Base */
         body {
             margin: 0;
             background-color: #000;
@@ -14,7 +13,6 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* Tela de Splash com Efeito de Espaço */
         #splash-screen {
             position: fixed;
             top: 0; left: 0;
@@ -41,7 +39,43 @@
             z-index: 10;
         }
 
-        /* Título com Gradiente Animado */
+        /* Status Discord */
+        #status-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 72, 255, 0.3);
+            z-index: 1000002;
+            backdrop-filter: blur(5px);
+        }
+
+        #status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #555;
+            transition: 0.5s;
+        }
+
+        #status-text {
+            color: #fff;
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .dot-online { background-color: #00ff00 !important; box-shadow: 0 0 15px #00ff00; }
+        .dot-idle { background-color: #f1c40f !important; box-shadow: 0 0 15px #f1c40f; }
+        .dot-dnd { background-color: #e74c3c !important; box-shadow: 0 0 15px #e74c3c; }
+
+        /* Estilos de Texto e Botões (Mantidos) */
         .logo-wrs {
             font-family: 'Arial Black', sans-serif;
             font-size: 75px;
@@ -57,29 +91,11 @@
             filter: drop-shadow(0 0 15px rgba(0, 72, 255, 0.5));
         }
 
-        .slogan {
-            color: #0048FF;
-            letter-spacing: 5px;
-            font-size: 12px;
-            margin-bottom: 40px;
-            text-transform: uppercase;
-            font-weight: bold;
-            opacity: 0.8;
-        }
+        .slogan { color: #0048FF; letter-spacing: 5px; font-size: 12px; margin-bottom: 40px; text-transform: uppercase; font-weight: bold; opacity: 0.8; }
 
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+        @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        /* Menu e Botões */
-        .menu-wrapper { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 15px; 
-            align-items: center; 
-        }
+        .menu-wrapper { display: flex; flex-direction: column; gap: 15px; align-items: center; }
 
         .btn-glow {
             background: rgba(0, 0, 0, 0.6);
@@ -100,46 +116,15 @@
             backdrop-filter: blur(5px);
         }
 
-        .btn-glow i {
-            margin-right: 15px;
-            font-size: 18px;
-        }
+        .btn-glow i { margin-right: 15px; font-size: 18px; }
+        .btn-glow:hover { background: #0048FF; color: #fff; box-shadow: 0 0 30px #0048FF; transform: scale(1.05); }
 
-        .btn-glow:hover { 
-            background: #0048FF; 
-            color: #fff; 
-            box-shadow: 0 0 30px #0048FF;
-            transform: scale(1.05);
-        }
-
-        /* Listas Dropdown */
-        .friends-list-hidden, .custom-list-hidden {
-            display: none;
-            flex-direction: column;
-            background: rgba(0, 5, 20, 0.95);
-            border: 1px solid #0048FF;
-            width: 300px;
-            margin-top: 2px;
-        }
-
+        .friends-list-hidden, .custom-list-hidden { display: none; flex-direction: column; background: rgba(0, 5, 20, 0.95); border: 1px solid #0048FF; width: 300px; margin-top: 2px; }
         .show-list { display: flex !important; }
 
-        .friend-item {
-            color: #ccc;
-            padding: 12px;
-            border-bottom: 1px solid rgba(0, 72, 255, 0.2);
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
-            transition: 0.3s;
-        }
+        .friend-item { color: #ccc; padding: 12px; border-bottom: 1px solid rgba(0, 72, 255, 0.2); cursor: pointer; text-align: center; text-decoration: none; transition: 0.3s; }
+        .friend-item:hover { background: rgba(0, 72, 255, 0.2); color: #fff; }
 
-        .friend-item:hover {
-            background: rgba(0, 72, 255, 0.2);
-            color: #fff;
-        }
-
-        /* CONTADOR ORIGINAL RESTAURADO */
         #visit-counter {
             position: fixed;
             bottom: 20px;
@@ -156,189 +141,141 @@
             min-width: 80px;
         }
 
-        .counter-label {
-            color: #0048FF;
-            font-size: 9px;
-            letter-spacing: 2px;
-            margin-bottom: 2px;
-            font-family: 'Arial Black', sans-serif;
-        }
+        .counter-label { color: #0048FF; font-size: 9px; letter-spacing: 2px; margin-bottom: 2px; font-family: 'Arial Black', sans-serif; }
+        #count-number { color: #fff; font-size: 20px; font-family: 'Courier New', monospace; font-weight: bold; text-shadow: 0 0 8px #0048FF; }
 
-        #count-number {
-            color: #fff;
-            font-size: 20px;
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
-            text-shadow: 0 0 8px #0048FF;
-        }
-
-        /* Estrela e Gota Animada */
-        .star {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            opacity: 0.5;
-            animation: twinkle var(--duration) infinite;
-        }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.2); }
-        }
-
-        .drop {
-            position: absolute;
-            background-color: rgba(0, 72, 255, 0.4);
-            border-radius: 50%;
-            pointer-events: none;
-            transform: translate(-50%, -50%);
-            animation: fadeOutDrop 0.8s ease-out forwards;
-            z-index: 5;
-        }
-
-        @keyframes fadeOutDrop {
-            0% { width: 0px; height: 0px; opacity: 0.8; }
-            100% { width: 100px; height: 100px; opacity: 0; }
-        }
+        /* Estrelas e Gotas */
+        .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle var(--duration) infinite; }
+        @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
+        .drop { position: absolute; background-color: rgba(0, 72, 255, 0.4); border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%); animation: fadeOutDrop 0.8s ease-out forwards; z-index: 5; }
+        @keyframes fadeOutDrop { 0% { width: 0px; height: 0px; opacity: 0.8; } 100% { width: 100px; height: 100px; opacity: 0; } }
 
         .hidden-splash { opacity: 0; visibility: hidden; transform: translateY(-100%); }
-
-        .footer-credits {
-            position: absolute;
-            bottom: 20px;
-            color: rgba(255, 255, 255, 0.3);
-            font-size: 11px;
-            letter-spacing: 1px;
-        }
+        .footer-credits { position: absolute; bottom: 20px; color: rgba(255, 255, 255, 0.3); font-size: 11px; letter-spacing: 1px; }
     </style>
 </head>
 <body>
+
+<div id="status-indicator">
+    <span id="status-dot"></span>
+    <span id="status-text">CARREGANDO...</span>
+</div>
 
 <div id="splash-screen">
     <div id="splash-container">
         <div style="font-size: 50px; color: #0048FF; margin-bottom: 20px; filter: drop-shadow(0 0 10px #0048FF);">
             <i class="fas fa-user-astronaut"></i>
         </div>
-
         <h1 class="logo-wrs">GALERIA</h1>
-        <div class="slogan">Galeria Galáctica</div>
-        
+        <div class="slogan">Seu Portal Galáctico</div>
         <div class="menu-wrapper">
-            <button class="btn-glow" onclick="entrarNoPerfil()">
-                <i class="fas fa-rocket"></i> ENTRE
-            </button>
-
+            <button class="btn-glow" onclick="entrarNoPerfil()"><i class="fas fa-rocket"></i> ENTRE</button>
             <div class="dropdown-wrapper">
-                <button class="btn-glow" onclick="toggleXat()">
-                    <i class="fas fa-comments"></i> XAT COMUNIDADE
-                </button>
+                <button class="btn-glow" onclick="toggleXat()"><i class="fas fa-comments"></i> XAT COMUNIDADE</button>
                 <div id="lista-xat" class="custom-list-hidden">
                     <a href="https://xat.com/tuga" target="_blank" class="friend-item">XAT TUGA</a>
                     <a href="https://xat.com/conexaosertanejoo" target="_blank" class="friend-item">XAT CONEXÃO</a>
                 </div>
             </div>
-
             <div class="dropdown-wrapper">
-                <button class="btn-glow" onclick="toggleAmigos()">
-                    <i class="fas fa-user-friends"></i> AMIGOS
-                </button>
+                <button class="btn-glow" onclick="toggleAmigos()"><i class="fas fa-user-friends"></i> AMIGOS E CLANS</button>
                 <div id="lista-amigos" class="friends-list-hidden">
                     <div class="friend-item">Mnna (Married) ❤️</div>
                     <div class="friend-item">Gold</div>
                     <div class="friend-item">Venon</div>
-					<div class="friend-item">Gothica</div>
                     <div class="friend-item">Miel</div>
-					<div class="friend-item">Marbella</div>
                 </div>
             </div>
         </div>
-
-        <div class="footer-credits">
-            © GALERIA - 2026 | Conectando Estrelas
-        </div>
+        <div class="footer-credits">© GALERIA - 2026 | Conectando Estrelas</div>
     </div>
 </div>
 
 <div id="visit-counter">
     <span class="counter-label">VISITAS</span>
-    <div id="count-display">
-        <span id="count-number">...</span>
-    </div>
+    <div id="count-display"><span id="count-number">...</span></div>
 </div>
 
 <script>
-    // Gerador de Estrelas
+    // ========= CONFIGURAÇÃO DO DISCORD =========
+    const SEU_DISCORD_ID = "454632435054018560"; // <--- COLOQUE SEU ID AQUI!
+
+    async function checkDiscordStatus() {
+        const dot = document.getElementById('status-dot');
+        const text = document.getElementById('status-text');
+
+        try {
+            const response = await fetch(`https://api.lanyard.rest/v1/users/${SEU_DISCORD_ID}`);
+            const data = await response.json();
+            const status = data.data.discord_status;
+
+            dot.className = ''; // Limpa classes
+            
+            if (status === "online") {
+                dot.classList.add('dot-online');
+                text.innerText = "ONLINE";
+                text.style.color = "#00ff00";
+            } else if (status === "idle") {
+                dot.classList.add('dot-idle');
+                text.innerText = "AUSENTE";
+                text.style.color = "#f1c40f";
+            } else if (status === "dnd") {
+                dot.classList.add('dot-dnd');
+                text.innerText = "OCUPADO";
+                text.style.color = "#e74c3c";
+            } else {
+                text.innerText = "OFFLINE";
+                text.style.color = "#888";
+            }
+        } catch (e) {
+            text.innerText = "OFFLINE";
+        }
+    }
+    // Atualiza a cada 10 segundos
+    setInterval(checkDiscordStatus, 10000);
+    checkDiscordStatus();
+
+    // ========= RESTO DO SEU CÓDIGO (ESTRELAS, GOTAS, ETC) =========
     function createStars() {
         const screen = document.getElementById('splash-screen');
         for (let i = 0; i < 100; i++) {
             const star = document.createElement('div');
             star.className = 'star';
             const size = Math.random() * 2 + 'px';
-            star.style.width = size;
-            star.style.height = size;
-            star.style.top = Math.random() * 100 + '%';
-            star.style.left = Math.random() * 100 + '%';
+            star.style.width = size; star.style.height = size;
+            star.style.top = Math.random() * 100 + '%'; star.style.left = Math.random() * 100 + '%';
             star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
             screen.appendChild(star);
         }
     }
 
-    // Efeito de Gotas
     const splashContainer = document.getElementById('splash-container');
     const screen = document.getElementById('splash-screen');
 
     function createDrop(e) {
         const drop = document.createElement('div');
         drop.classList.add('drop');
-        drop.style.left = e.clientX + 'px';
-        drop.style.top = e.clientY + 'px';
+        drop.style.left = e.clientX + 'px'; drop.style.top = e.clientY + 'px';
         screen.appendChild(drop);
         setTimeout(() => drop.remove(), 800);
     }
 
     splashContainer.addEventListener('mousemove', createDrop);
+    function toggleAmigos() { document.getElementById('lista-amigos').classList.toggle('show-list'); document.getElementById('lista-xat').classList.remove('show-list'); }
+    function toggleXat() { document.getElementById('lista-xat').classList.toggle('show-list'); document.getElementById('lista-amigos').classList.remove('show-list'); }
+    function entrarNoPerfil() { screen.classList.add('hidden-splash'); }
 
-    // Funções de Interface
-    function toggleAmigos() {
-        document.getElementById('lista-amigos').classList.toggle('show-list');
-        document.getElementById('lista-xat').classList.remove('show-list');
-    }
-
-    function toggleXat() {
-        document.getElementById('lista-xat').classList.toggle('show-list');
-        document.getElementById('lista-amigos').classList.remove('show-list');
-    }
-
-    function entrarNoPerfil() {
-        screen.classList.add('hidden-splash');
-    }
-
-    // Bloqueios de Segurança
-    document.addEventListener('contextmenu', e => e.preventDefault());
-    document.addEventListener('keydown', e => {
-        if (e.ctrlKey && (e.key === 'u' || e.key === 'i')) e.preventDefault();
-        if (e.keyCode === 123) e.preventDefault();
-    });
-
-    // LÓGICA DO CONTADOR RESTAURADA (IDs ORIGINAIS)
     async function carregarContador() {
         const contadorElemento = document.getElementById('count-number');
-        const siteID = "galeria_wrs_2026_unique"; // ID que você estava usando
-
+        const siteID = "galeria_wrs_2026_unique";
         try {
             const response = await fetch(`https://api.counterapi.dev/v1/wrs-galeria/${siteID}/up`);
             const data = await response.json();
-            const total = data.value || data.count;
-            contadorElemento.innerText = total ? total : "1";
-        } catch (error) {
-            contadorElemento.innerText = "1";
-        }
+            contadorElemento.innerText = data.value || data.count || "1";
+        } catch (error) { contadorElemento.innerText = "1"; }
     }
 
-    window.onload = () => {
-        createStars();
-        carregarContador();
-    };
+    window.onload = () => { createStars(); carregarContador(); };
 </script>
 
 </body>
