@@ -38,6 +38,8 @@
             justify-content: center;
             align-items: center;
             z-index: 10;
+            /* Importante para o rastro do mouse */
+            pointer-events: auto; 
         }
 
         /* Status Discord */
@@ -58,7 +60,6 @@
 
         #status-dot { width: 10px; height: 10px; border-radius: 50%; background-color: #555; transition: 0.5s; }
         #status-text { color: #fff; font-size: 11px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; }
-
         .dot-online { background-color: #00ff00 !important; box-shadow: 0 0 15px #00ff00; }
         .dot-idle { background-color: #f1c40f !important; box-shadow: 0 0 15px #f1c40f; }
         .dot-dnd { background-color: #e74c3c !important; box-shadow: 0 0 15px #e74c3c; }
@@ -96,69 +97,66 @@
             align-items: center;
             backdrop-filter: blur(5px);
             transition: 0.3s;
+            position: relative;
+            z-index: 20;
         }
 
         .btn-glow:hover { background: #0048FF; color: #fff; box-shadow: 0 0 30px #0048FF; transform: scale(1.05); }
 
         .friends-list-hidden, .custom-list-hidden { display: none; flex-direction: column; background: rgba(0, 5, 20, 0.95); border: 1px solid #0048FF; width: 300px; margin-top: 2px; }
         .show-list { display: flex !important; }
-
         .friend-item { color: #ccc; padding: 12px; border-bottom: 1px solid rgba(0, 72, 255, 0.2); text-align: center; text-decoration: none; }
 
-        /* SEU CONTADOR ORIGINAL (ESQUERDA) */
+        /* Contadores */
         #visit-counter {
             position: fixed;
-            bottom: 20px;
-            left: 20px;
+            bottom: 20px; left: 20px;
             z-index: 1000001;
             background: rgba(0, 0, 0, 0.9);
             border: 1px solid #0048FF;
-            box-shadow: 0 0 15px rgba(0, 72, 255, 0.6);
             padding: 8px 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             border-radius: 4px;
-            min-width: 80px;
+            display: flex; flex-direction: column; align-items: center;
         }
 
-        /* BOTÃO DE LIKE (DIREITA) */
         #like-container {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 20px; right: 20px;
             z-index: 1000001;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
+            display: flex; flex-direction: column; align-items: center; gap: 5px;
         }
 
         .like-btn {
             background: rgba(0, 0, 0, 0.8);
             border: 2px solid #ff0055;
             color: #ff0055;
-            width: 60px;
-            height: 60px;
+            width: 60px; height: 60px;
             border-radius: 50%;
             cursor: pointer;
             font-size: 24px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            display: flex; justify-content: center; align-items: center;
             box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
             transition: 0.3s;
         }
-
         .like-btn:hover { background: #ff0055; color: #fff; transform: scale(1.1); }
 
-        /* Efeitos */
+        /* EFEITO GOTAS (DROP) */
+        .drop {
+            position: absolute;
+            background-color: rgba(0, 72, 255, 0.4);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            animation: fadeOutDrop 0.8s ease-out forwards;
+            z-index: 5; /* Atrás dos botões, mas visível no fundo */
+        }
+        @keyframes fadeOutDrop { 
+            0% { width: 0px; height: 0px; opacity: 0.8; } 
+            100% { width: 100px; height: 100px; opacity: 0; } 
+        }
+
         .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle var(--duration) infinite; pointer-events: none; }
         @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
-        
-        .drop { position: absolute; background-color: rgba(0, 72, 255, 0.4); border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%); animation: fadeOutDrop 0.8s ease-out forwards; z-index: 5; }
-        @keyframes fadeOutDrop { 0% { width: 0px; height: 0px; opacity: 0.8; } 100% { width: 100px; height: 100px; opacity: 0; } }
-
         .hidden-splash { opacity: 0; visibility: hidden; transform: translateY(-100%); }
     </style>
 </head>
@@ -170,7 +168,7 @@
 </div>
 
 <div id="splash-screen">
-    <div id="splash-container">
+    <div id="splash-container" onmousemove="createDrop(event)">
         <div style="font-size: 50px; color: #0048FF; margin-bottom: 20px;"><i class="fas fa-user-astronaut"></i></div>
         <h1 class="logo-wrs">GALERIA</h1>
         <div style="color: #0048FF; letter-spacing: 5px; font-size: 12px; margin-bottom: 40px; font-weight: bold;">GALERIA GALÁCTICA</div>
@@ -207,7 +205,6 @@
 <script>
     const SEU_DISCORD_ID = "454632435054018560";
 
-    // --- FUNÇÕES DE INTERFACE ---
     function toggleMenu(id) {
         const menu = document.getElementById(id);
         const isVisible = menu.classList.contains('show-list');
@@ -219,7 +216,22 @@
         document.getElementById('splash-screen').classList.add('hidden-splash');
     }
 
-    // --- ESTRELAS E GOTAS ---
+    // --- FUNÇÃO DAS GOTAS (RESTAURADA) ---
+    function createDrop(e) {
+        const splash = document.getElementById('splash-screen');
+        // Só cria gotas se o splash estiver visível
+        if(splash.classList.contains('hidden-splash')) return;
+
+        const drop = document.createElement('div');
+        drop.classList.add('drop');
+        // Ajusta a posição baseada no container
+        drop.style.left = e.clientX + 'px'; 
+        drop.style.top = e.clientY + 'px';
+        
+        splash.appendChild(drop);
+        setTimeout(() => drop.remove(), 800);
+    }
+
     function createStars() {
         const screen = document.getElementById('splash-screen');
         for (let i = 0; i < 100; i++) {
@@ -233,16 +245,6 @@
         }
     }
 
-    window.addEventListener('mousemove', (e) => {
-        if(document.getElementById('splash-screen').classList.contains('hidden-splash')) return;
-        const drop = document.createElement('div');
-        drop.classList.add('drop');
-        drop.style.left = e.clientX + 'px'; drop.style.top = e.clientY + 'px';
-        document.body.appendChild(drop);
-        setTimeout(() => drop.remove(), 800);
-    });
-
-    // --- DISCORD ---
     async function checkDiscordStatus() {
         const dot = document.getElementById('status-dot');
         const text = document.getElementById('status-text');
@@ -258,7 +260,6 @@
         } catch (e) { text.innerText = "OFFLINE"; }
     }
 
-    // --- SISTEMA DE LIKE ---
     function darLike() {
         let likes = parseInt(localStorage.getItem('wrs_likes') || 0);
         likes++;
@@ -273,7 +274,6 @@
         });
     }
 
-    // --- O SEU CONTADOR DE VISITAS ORIGINAL ---
     async function carregarContador() {
         const contadorElemento = document.getElementById('count-number');
         const siteID = "galeria_wrs_2026_unique";
@@ -286,7 +286,7 @@
 
     window.onload = () => { 
         createStars(); 
-        carregarContador(); // Chama o seu contador original
+        carregarContador();
         checkDiscordStatus();
         document.getElementById('like-number').innerText = localStorage.getItem('wrs_likes') || 0;
         setInterval(checkDiscordStatus, 15000);
