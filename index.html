@@ -80,10 +80,18 @@
             border: 1px solid #0048FF; width: 300px; margin-top: 2px;
         }
         .show-list { display: flex !important; }
+        
         .friend-item { 
             color: #0048FF; padding: 12px; border-bottom: 1px solid rgba(0, 72, 255, 0.2); 
             text-align: center; text-decoration: none; font-weight: bold; transition: 0.3s; cursor: pointer;
         }
+
+        /* DIMINUIÇÃO DA LISTA DE AMIGOS AQUI */
+        #lista-amigos .friend-item {
+            padding: 6px; /* Reduzi de 12px para 6px */
+            font-size: 14px; /* Fonte levemente menor para caber melhor */
+        }
+
         .friend-item:hover { background: #0048FF !important; color: #fff !important; }
 
         /* Contadores */
@@ -146,6 +154,8 @@
                 <div class="friend-item">Gold</div>
                 <div class="friend-item">Venon</div>
                 <div class="friend-item">Gothica</div>
+                <div class="friend-item">Marbella</div>
+                <div class="friend-item">Promise</div>
             </div>
         </div>
         <div style="position: absolute; bottom: 20px; color: rgba(255,255,255,0.3); font-size: 11px;">© GALERIA - 2026</div>
@@ -193,7 +203,6 @@
         localStorage.setItem('wrs_likes', likes);
         document.getElementById('like-number').innerText = likes;
 
-        // FOGOS DE ARTIFÍCIO
         if (typeof confetti === 'function') {
             confetti({
                 particleCount: 150,
@@ -236,7 +245,6 @@
         document.getElementById('like-number').innerText = localStorage.getItem('wrs_likes') || 0;
         setInterval(checkDiscordStatus, 15000);
 
-        // Criar estrelas
         const screen = document.getElementById('splash-screen');
         for (let i = 0; i < 100; i++) {
             const star = document.createElement('div');
