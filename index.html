@@ -175,89 +175,64 @@
 
 <script>
     const SEU_DISCORD_ID = "454632435054018560";
-    // IDs únicos para a CounterApi
-    const SITE_ID_VISITAS = "galeria_wrs_2026_unique";
-    const SITE_ID_LIKES = "galeria_wrs_2026_likes_v2"; // Mudei o ID para reiniciar o contador de likes
+    // IDs únicos para a CounterApi (Mantenha os mesmos para não resetar)
+const SITE_ID_VISITAS = "galeria_wrs_2026_unique";
+const SITE_ID_LIKES = "galeria_wrs_2026_likes_v3"; // Mudei para v3 para garantir uma nova contagem limpa e global
 
-    function toggleMenu(id) {
-        const menu = document.getElementById(id);
-        const isVisible = menu.classList.contains('show-list');
-        document.querySelectorAll('.friends-list-hidden, .custom-list-hidden').forEach(m => m.classList.remove('show-list'));
-        if (!isVisible) menu.classList.add('show-list');
-    }
-
-    function entrarNoPerfil() {
-        document.getElementById('splash-screen').classList.add('hidden-splash');
-    }
-
-    function createDrop(e) {
-        const splash = document.getElementById('splash-screen');
-        if(splash.classList.contains('hidden-splash')) return;
-        const drop = document.createElement('div');
-        drop.classList.add('drop');
-        drop.style.left = e.clientX + 'px'; 
-        drop.style.top = e.clientY + 'px';
-        splash.appendChild(drop);
-        setTimeout(() => drop.remove(), 800);
-    }
-
-    // --- NOVA LÓGICA DE LIKE (GLOBAL) ---
-
-    // Função para buscar o número atual de likes sem incrementar
-    async function carregarLikesGlobais() {
-        const likeElemento = document.getElementById('like-number');
-        try {
-            // Usamos 'get' para apenas ler o valor
-            const response = await fetch(`https://api.counterapi.dev/v1/wrs-galeria/${SITE_ID_LIKES}`);
-            const data = await response.json();
-            // Se o contador não existir ainda, a API retorna erro, então tratamos no catch
-            likeElemento.innerText = data.count || "0";
-        } catch (error) { 
-            // Se der erro (ex: contador novo), exibe 0
-            likeElemento.innerText = "0"; 
-        }
-    }
-
-    async function darLike() {
-        const likeElemento = document.getElementById('like-number');
-        const botaoLike = document.getElementById('like-btn');
+// 1. FUNÇÃO QUE BUSCA O VALOR ATUAL (Sincroniza para todo mundo ao abrir a página)
+async function carregarLikesGlobais() {
+    const likeElemento = document.getElementById('like-number');
+    try {
+        // Fazemos uma requisição simples para saber o valor atual no servidor
+        const response = await fetch(`https://api.counterapi.dev/v1/wrs-galeria/${SITE_ID_LIKES}`);
+        const data = await response.json();
         
-        // Verificação simples para evitar que a mesma pessoa clique várias vezes na mesma sessão
-        // (Isso é local, mas ajuda a não "spammar" a API)
-        if (botaoLike.classList.contains('liked')) {
-            alert("Você já deu o seu voto galáctico nesta sessão! ✨");
-            return;
+        // Se a API retornar um valor, mostramos. Se não (contador novo), mostramos 0.
+        if (data && data.count !== undefined) {
+            likeElemento.innerText = data.count;
+        } else {
+            likeElemento.innerText = "0";
         }
-
-        likeElemento.innerText = "..."; // Feedback visual de carregamento
-
-        try {
-            // Usamos 'up' para incrementar o valor na API
-            const response = await fetch(`https://api.counterapi.dev/v1/wrs-galeria/${SITE_ID_LIKES}/up`);
-            const data = await response.json();
-            
-            const novoValor = data.count || data.value;
-            likeElemento.innerText = novoValor;
-            
-            // Marca o botão como clicado localmente
-            botaoLike.classList.add('liked');
-
-            // Efeito de confete
-            if (typeof confetti === 'function') {
-                confetti({
-                    particleCount: 150,
-                    spread: 70,
-                    origin: { x: 0.9, y: 0.9 }, 
-                    zIndex: 1000005,
-                    colors: ['#ff0055', '#0048FF', '#ffffff']
-                });
-            }
-        } catch (error) {
-            console.error("Erro ao computar like:", error);
-            alert("Houve uma interferência na rede galáctica. Tente novamente mais tarde.");
-            carregarLikesGlobais(); // Tenta recarregar o valor atual
-        }
+    } catch (error) {
+        // Em caso de erro de rede ou contador inexistente, define como 0
+        console.log("Sincronizando contador...");
+        likeElemento.innerText = "0";
     }
+}
+
+// 2. FUNÇÃO QUE AUMENTA O VALOR (Quando alguém clica)
+async function darLike() {
+    const likeElemento = document.getElementById('like-number');
+    const botaoLike = document.getElementById('like-btn');
+    
+    // Bloqueia clique duplo na mesma sessão para não inflar artificialmente
+    if (botaoLike.classList.contains('liked')) return;
+
+    try {
+        // O "/up" é o comando que avisa ao servidor: "SOMA +1 PARA TODO MUNDO"
+        const response = await fetch(`https://api.counterapi.dev/v1/wrs-galeria/${SITE_ID_LIKES}/up`);
+        const data = await response.json();
+        
+        // Atualiza o número na tela com o dado que veio do servidor
+        likeElemento.innerText = data.count || data.value;
+        
+        // Estiliza o botão para mostrar que o usuário já votou
+        botaoLike.classList.add('liked');
+
+        // Efeito visual de celebração
+        if (typeof confetti === 'function') {
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { x: 0.9, y: 0.9 }, 
+                zIndex: 1000005,
+                colors: ['#ff0055', '#0048FF', '#ffffff']
+            });
+        }
+    } catch (error) {
+        console.error("Erro ao registrar like global:", error);
+    }
+}
 
     // --- FIM DA NOVA LÓGICA ---
 
