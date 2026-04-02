@@ -100,37 +100,28 @@
 
         .btn-glow:hover { background: #0048FF; color: #fff; box-shadow: 0 0 30px #0048FF; transform: scale(1.05); }
 
-        /* LISTAS E EFEITO AZUL AO PASSAR O MOUSE (CORRIGIDO) */
+        /* Listas e Efeito de Hover Azul */
         .friends-list-hidden, .custom-list-hidden { 
             display: none; 
             flex-direction: column; 
-            background: rgba(0, 0, 0, 0.85); 
+            background: rgba(0, 0, 0, 0.9); 
             border: 1px solid #0048FF; 
             width: 300px; 
             margin-top: 2px;
-            z-index: 30;
         }
-        
         .show-list { display: flex !important; }
-
         .friend-item { 
-            color: #0048FF; /* Cor padrão azul */
+            color: #0048FF; 
             padding: 12px; 
             border-bottom: 1px solid rgba(0, 72, 255, 0.2); 
             text-align: center; 
             text-decoration: none; 
             font-weight: bold;
             transition: 0.3s;
-            cursor: pointer;
         }
+        .friend-item:hover { background: #0048FF; color: #fff; }
 
-        /* EFEITO AZUL QUE VOCÊ QUERIA */
-        .friend-item:hover { 
-            background: #0048FF; 
-            color: #fff; 
-            box-shadow: inset 0 0 15px rgba(255,255,255,0.2);
-        }
-
+        /* Contadores */
         #visit-counter {
             position: fixed;
             bottom: 20px; left: 20px;
@@ -197,13 +188,11 @@
         
         <div class="menu-wrapper">
             <button class="btn-glow" onclick="entrarNoPerfil()"><i class="fas fa-rocket"></i> ENTRE</button>
-            
             <button class="btn-glow" onclick="toggleMenu('lista-xat')"><i class="fas fa-comments"></i> XAT COMUNIDADE</button>
             <div id="lista-xat" class="custom-list-hidden">
                 <a href="https://xat.com/tuga" target="_blank" class="friend-item">XAT TUGA</a>
                 <a href="https://xat.com/conexaosertanejoo" target="_blank" class="friend-item">XAT CONEXÃO</a>
             </div>
-
             <button class="btn-glow" onclick="toggleMenu('lista-amigos')"><i class="fas fa-user-friends"></i> AMIGOS</button>
             <div id="lista-amigos" class="friends-list-hidden">
                 <div class="friend-item">Mnna (Married) ❤️</div>
@@ -285,11 +274,13 @@
         localStorage.setItem('wrs_likes', likes);
         document.getElementById('like-number').innerText = likes;
 
+        // Disparar fogos de artifício ao clicar
         confetti({
             particleCount: 150,
             spread: 70,
-            origin: { x: 0.9, y: 0.9 },
-            colors: ['#ff0055', '#0048FF', '#ffffff']
+            origin: { x: 0.92, y: 0.9 }, // Origem próxima ao botão de like
+            colors: ['#ff0055', '#0048FF', '#ffffff'],
+            ticks: 200
         });
     }
 
