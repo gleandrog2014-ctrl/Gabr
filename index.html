@@ -190,7 +190,7 @@
 
 <div id="splash-screen">
     <div class="astronauta-container">
-        <img src="https://img.freepik.com/fotos-premium/desenho-azul-de-astronauta_1136343-18956.jpg" alt="Astronauta" class="astronauta-novo">
+        <img src="https://xatimg.com/image/Jc2ln5g13Ccp.png" alt="Astronauta" class="astronauta-novo">
     </div>
     
     <h1 class="logo-wrs">GALERIA</h1>
@@ -244,6 +244,7 @@
     const ID_VISITAS = "galeria_wrs_2026_main"; 
     const ID_LIKES = "galeria_wrs_likes_2026_main"; 
 
+    // PLAYLIST ATUALIZADA COM SEUS LINKS MP3
     const playlist = [
         { url: 'https://cdn.discordapp.com/attachments/1489682267264520284/1489684333672403135/sound-of-silence.mp3.mp3?ex=69d15026&is=69cffea6&hm=c4c3109d5baa2f5061e9eddf9e35fccd5f629d5340d963ec5a02f320928ab105&', name: 'The Sound of Silence' },
         { url: 'https://cdn.discordapp.com/attachments/1489682267264520284/1489682358335569920/4-Non-Blondes-whats-up.mp3.mp3?ex=69d14e4f&is=69cffccf&hm=80284e95d90307d6de8428368b56d5435ed1150cec5a6238b8a744855f683751&', name: '4 Non Blondes - Whats Up' },
@@ -258,8 +259,10 @@
     function loadTrack(index) {
         currentTrack = index;
         audio.src = playlist[currentTrack].url;
-        document.getElementById('track-display').innerText = playlist[currentTrack].name;
+        updateTrackDisplay();
     }
+
+    function updateTrackDisplay() { document.getElementById('track-display').innerText = playlist[currentTrack].name; }
     
     function changeTrack(dir) {
         currentTrack = (currentTrack + dir + playlist.length) % playlist.length;
