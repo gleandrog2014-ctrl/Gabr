@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Galeria WRS - Portal Galáctico</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
@@ -69,7 +68,7 @@
             flex-direction: column; 
             gap: 15px; 
             align-items: center; 
-            margin-bottom: 40px; /* Garante espaço para o rodapé */
+            margin-bottom: 40px;
         }
 
         .btn-glow {
@@ -80,22 +79,46 @@
         }
         .btn-glow:hover { background: #0048FF; color: #fff; box-shadow: 0 0 30px #0048FF; transform: scale(1.05); }
 
-        .friends-list-hidden, .custom-list-hidden { 
-            display: none; flex-direction: column; background: rgba(0, 0, 0, 0.9); 
-            border: 1px solid #0048FF; width: 300px; margin-top: -10px;
-            margin-bottom: 5px;
-        }
-        .show-list { display: flex !important; }
-        
-        .friend-item { 
-            color: #0048FF; padding: 12px; border-bottom: 1px solid rgba(0, 72, 255, 0.2); 
-            text-align: center; text-decoration: none; font-weight: bold; transition: 0.3s; cursor: pointer;
+        /* Estilo do Player de Música */
+        #music-player-ui {
+            position: fixed;
+            bottom: 85px; 
+            left: 20px;
+            z-index: 1000001;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #0048FF;
+            padding: 8px 12px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 0 10px rgba(0, 72, 255, 0.3);
         }
 
-        #lista-amigos .friend-item { padding: 8px; font-size: 14px; }
-        .friend-item:hover { background: #0048FF !important; color: #fff !important; }
+        .play-toggle {
+            background: none;
+            border: 1px solid #0048FF;
+            color: #0048FF;
+            cursor: pointer;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: 0.3s;
+        }
+        .play-toggle:hover { background: #0048FF; color: #fff; box-shadow: 0 0 10px #0048FF; }
 
-        /* Rodapé Ajustado */
+        .track-label {
+            color: #fff;
+            font-size: 9px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Rodapé */
         .footer-wrs {
             margin-top: 20px;
             color: rgba(255,255,255,0.3);
@@ -124,16 +147,11 @@
         .like-btn:hover { background: #ff0055; color: #fff; transform: scale(1.1); }
 
         #like-number {
-            color: #fff; 
-            font-family: 'Courier New', monospace; 
-            font-weight: bold; 
-            text-shadow: 0 0 5px #ff0055;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            pointer-events: none;
+            color: #fff; font-family: 'Courier New', monospace; font-weight: bold; 
+            text-shadow: 0 0 5px #ff0055; opacity: 0; transition: opacity 0.5s ease; pointer-events: none;
         }
 
-        /* Gotas e Estrelas */
+        /* Efeitos Visuais */
         .drop {
             position: absolute; background-color: rgba(0, 72, 255, 0.4); border-radius: 50%;
             pointer-events: none; transform: translate(-50%, -50%);
@@ -182,6 +200,17 @@
     </div>
 </div>
 
+<div id="music-player-ui">
+    <button class="play-toggle" onclick="controlMusic()" id="music-btn">
+        <i class="fas fa-pause"></i>
+    </button>
+    <span class="track-label">System Music</span>
+</div>
+
+<div id="yt-player-container" style="display:none">
+    <div id="player"></div>
+</div>
+
 <div id="visit-counter">
     <span style="color: #0048FF; font-size: 9px; letter-spacing: 2px; font-family: 'Arial Black', sans-serif;">VISITAS</span>
     <span id="count-number" style="color: #fff; font-size: 20px; font-family: 'Courier New', monospace; font-weight: bold; text-shadow: 0 0 8px #0048FF;">...</span>
@@ -197,6 +226,44 @@
     const ID_VISITAS = "galeria_wrs_2026_main";
     const ID_LIKES = "galeria_wrs_likes_2026_main";
 
+    // YouTube Iframe API setup
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    var player;
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+            height: '0',
+            width: '0',
+            videoId: 'uxX0Qvr_eYo',
+            playerVars: {
+                'autoplay': 1,
+                'loop': 1,
+                'playlist': 'uxX0Qvr_eYo'
+            },
+            events: {
+                'onReady': onPlayerReady
+            }
+        });
+    }
+
+    function onPlayerReady(event) {
+        // Player pronto
+    }
+
+    function controlMusic() {
+        const btn = document.getElementById('music-btn');
+        if (player.getPlayerState() === YT.PlayerState.PLAYING) {
+            player.pauseVideo();
+            btn.innerHTML = '<i class="fas fa-play"></i>';
+        } else {
+            player.playVideo();
+            btn.innerHTML = '<i class="fas fa-pause"></i>';
+        }
+    }
+
     function toggleMenu(id) {
         const menu = document.getElementById(id);
         const isVisible = menu.classList.contains('show-list');
@@ -206,6 +273,9 @@
 
     function entrarNoPerfil() {
         document.getElementById('splash-screen').classList.add('hidden-splash');
+        if (player && player.playVideo) {
+            player.playVideo(); // Ativa o som ao clicar
+        }
     }
 
     function createDrop(e) {
