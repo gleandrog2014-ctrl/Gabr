@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Galeria WRS - Portal Galáctico</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         body { margin: 0; background-color: #000; overflow-x: hidden; overflow-y: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at bottom right, rgba(0, 72, 255, 0.15), transparent 40%), radial-gradient(circle at top left, rgba(80, 0, 255, 0.1), transparent 30%), #000; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 999999; transition: opacity 0.6s ease; }
@@ -35,7 +34,6 @@
         #footer-branding { position: absolute; bottom: 20px; width: 100%; text-align: center; color: rgba(255, 255, 255, 0.5); font-size: 11px; letter-spacing: 4px; font-weight: bold; text-transform: uppercase; text-shadow: 0 0 10px #0048FF; }
         .logo-wrs { font-family: 'Arial Black', sans-serif; font-size: 75px; letter-spacing: 15px; text-align: center; background: linear-gradient(270deg, #FFFFFF, #0048FF, #FFFFFF, #0048FF, #FFFFFF); background-size: 400% 400%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: gradientMove 4s linear infinite; margin-bottom: 30px; }
         @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        #visit-counter { position: fixed; bottom: 20px; left: 20px; z-index: 1000001; background: rgba(0, 0, 0, 0.9); border: 1px solid #0048FF; padding: 6px 12px; border-radius: 4px; display: flex; flex-direction: column; align-items: center; }
         .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle var(--duration) infinite; pointer-events: none; }
     </style>
 </head>
@@ -52,7 +50,7 @@
     <button class="music-nav-btn" onclick="changeTrack(-1)"><i class="fas fa-chevron-down"></i></button>
     <input type="range" class="volume-control" id="volume-slider" min="0" max="1" step="0.1" value="0.5" oninput="changeVolume(this.value)">
     <div class="music-info">
-        <span class="track-name" id="track-display">AGUARDANDO...</span>
+        <span class="track-name" id="track-display">CARREGANDO...</span>
     </div>
 </div>
 
@@ -79,19 +77,15 @@
     <div id="footer-branding">GALERIA DE GIFS - 2026</div>
 </div>
 
-<audio id="audio-element" preload="auto"></audio>
+<audio id="audio-element" crossOrigin="anonymous"></audio>
 
 <script>
     const SEU_DISCORD_ID = "454632435054018560";
     
-    // IMPORTANTE: Renomeie seus arquivos no GitHub para estes nomes abaixo!
+    // Agora usando os links externos que você mandou
     const playlist = [
-        {file: "sound-of-silence.mp3", name: "The Sound of Silence"},
-        {file: "whats-up.mp3", name: "4 Non Blondes - What's Up"},
-        {file: "livin-on-a-prayer.mp3", name: "Bon Jovi - Livin' On A Prayer"},
-        {file: "voyage-voyage.mp3", name: "Desireless - Voyage Voyage"},
-        {file: "you-dont-know.mp3", name: "Eminem - You Don't Know"},
-        {file: "we-are-the-world.mp3", name: "USA For Africa - We Are The World"}
+        {url: "https://open.spotify.com/intl-pt/track/6ZGd4ygnoSk8VDvLUWiuU9?si=7a7dc9a09bb44f9b", name: "MÚSICA 01"},
+        {url: "https://open.spotify.com/intl-pt/track/37ZJ0p5Jm13JPevGcx4SkF?si=d106addfd5494112", name: "MÚSICA 02"}
     ];
 
     let currentTrack = 0;
@@ -99,7 +93,7 @@
 
     function loadTrack(index) {
         currentTrack = index;
-        audio.src = playlist[currentTrack].file;
+        audio.src = playlist[currentTrack].url;
         audio.load();
         document.getElementById('track-display').innerText = playlist[currentTrack].name;
     }
@@ -107,25 +101,17 @@
     function changeTrack(dir) {
         currentTrack = (currentTrack + dir + playlist.length) % playlist.length;
         loadTrack(currentTrack);
-        const playPromise = audio.play();
-        if (playPromise !== undefined) {
-            playPromise.then(() => {
-                document.getElementById('music-btn').innerHTML = '<i class="fas fa-pause"></i>';
-            }).catch(e => console.log("Erro ao trocar faixa: ", e));
-        }
+        audio.play().then(() => {
+            document.getElementById('music-btn').innerHTML = '<i class="fas fa-pause"></i>';
+        }).catch(err => console.log("Erro ao mudar: ", err));
     }
 
     function changeVolume(val) { audio.volume = val; }
 
     function controlMusic() {
         const btn = document.getElementById('music-btn');
-        if (audio.paused) { 
-            audio.play(); 
-            btn.innerHTML = '<i class="fas fa-pause"></i>'; 
-        } else { 
-            audio.pause(); 
-            btn.innerHTML = '<i class="fas fa-play"></i>'; 
-        }
+        if (audio.paused) { audio.play(); btn.innerHTML = '<i class="fas fa-pause"></i>'; }
+        else { audio.pause(); btn.innerHTML = '<i class="fas fa-play"></i>'; }
     }
 
     function entrarNoPerfil() { 
@@ -133,17 +119,13 @@
         splash.style.opacity = "0";
         document.body.style.overflowY = "auto";
         
-        // Ativa o áudio no clique (obrigatório para navegadores)
         audio.play().then(() => {
             document.getElementById('music-btn').innerHTML = '<i class="fas fa-pause"></i>';
-        }).catch(error => {
-            console.log("Autoplay bloqueado, mas o áudio foi 'acordado'.");
-        });
+        }).catch(e => console.log("Play automático aguardando..."));
 
         setTimeout(() => { splash.style.display = "none"; }, 600);
     }
 
-    // Funções de Menu e Discord
     function toggleSimpleMenu(id) { document.getElementById('price-grid').classList.remove('show-grid'); document.getElementById(id).classList.toggle('show-list'); }
     function togglePriceGrid() { document.getElementById('lista-xat').classList.remove('show-list'); document.getElementById('price-grid').classList.toggle('show-grid'); }
 
@@ -183,9 +165,8 @@
             screen.appendChild(star);
         }
     };
-    
-    // Próxima música automática
-    audio.onended = function() { changeTrack(1); };
+
+    audio.onended = () => changeTrack(1);
 </script>
 </body>
 </html>
