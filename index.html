@@ -52,7 +52,7 @@
     <button class="music-nav-btn" onclick="changeTrack(-1)"><i class="fas fa-chevron-down"></i></button>
     <input type="range" class="volume-control" id="volume-slider" min="0" max="1" step="0.1" value="0.5" oninput="changeVolume(this.value)">
     <div class="music-info">
-        <span class="track-name" id="track-display">PLAYLIST WRS</span>
+        <span class="track-name" id="track-display">AGUARDANDO...</span>
     </div>
 </div>
 
@@ -79,20 +79,19 @@
     <div id="footer-branding">GALERIA DE GIFS - 2026</div>
 </div>
 
-<audio id="audio-element" onended="changeTrack(1)"></audio>
+<audio id="audio-element" preload="auto"></audio>
 
 <script>
     const SEU_DISCORD_ID = "454632435054018560";
-    const ID_VISITAS = "galeria_wrs_2026_main"; 
     
-    // Lista de arquivos locais (devem estar na mesma pasta do HTML)
+    // IMPORTANTE: Renomeie seus arquivos no GitHub para estes nomes abaixo!
     const playlist = [
-        {file: "The Sound of Silence – Rising to the Night 2k26 Remix Cover ( DJ Monster Edit ).mp3", name: "The Sound of Silence - Remix"},
-        {file: "4 Non Blondes - What's Up.mp3", name: "4 Non Blondes - What's Up"},
-        {file: "Bon Jovi - Livin' On A Prayer.mp3", name: "Bon Jovi - Livin' On A Prayer"},
-        {file: "Desireless - Voyage Voyage (80's Redrum).mp3", name: "Desireless - Voyage Voyage"},
-        {file: "Eminem - You Don't Know Closed Captioned (feat. 50 Cent, Cashis & Lloyd Banks).mp3", name: "Eminem - You Don't Know"},
-        {file: "USA For Africa - We Are The World feat. Michael Jackson.mp3", name: "USA For Africa - We Are The World"}
+        {file: "sound-of-silence.mp3", name: "The Sound of Silence"},
+        {file: "whats-up.mp3", name: "4 Non Blondes - What's Up"},
+        {file: "livin-on-a-prayer.mp3", name: "Bon Jovi - Livin' On A Prayer"},
+        {file: "voyage-voyage.mp3", name: "Desireless - Voyage Voyage"},
+        {file: "you-dont-know.mp3", name: "Eminem - You Don't Know"},
+        {file: "we-are-the-world.mp3", name: "USA For Africa - We Are The World"}
     ];
 
     let currentTrack = 0;
@@ -101,32 +100,50 @@
     function loadTrack(index) {
         currentTrack = index;
         audio.src = playlist[currentTrack].file;
+        audio.load();
         document.getElementById('track-display').innerText = playlist[currentTrack].name;
     }
 
     function changeTrack(dir) {
         currentTrack = (currentTrack + dir + playlist.length) % playlist.length;
         loadTrack(currentTrack);
-        audio.play();
-        document.getElementById('music-btn').innerHTML = '<i class="fas fa-pause"></i>';
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                document.getElementById('music-btn').innerHTML = '<i class="fas fa-pause"></i>';
+            }).catch(e => console.log("Erro ao trocar faixa: ", e));
+        }
     }
 
     function changeVolume(val) { audio.volume = val; }
 
     function controlMusic() {
         const btn = document.getElementById('music-btn');
-        if (audio.paused) { audio.play(); btn.innerHTML = '<i class="fas fa-pause"></i>'; }
-        else { audio.pause(); btn.innerHTML = '<i class="fas fa-play"></i>'; }
+        if (audio.paused) { 
+            audio.play(); 
+            btn.innerHTML = '<i class="fas fa-pause"></i>'; 
+        } else { 
+            audio.pause(); 
+            btn.innerHTML = '<i class="fas fa-play"></i>'; 
+        }
     }
 
     function entrarNoPerfil() { 
         const splash = document.getElementById('splash-screen');
         splash.style.opacity = "0";
         document.body.style.overflowY = "auto";
-        audio.play().catch(e => console.log("Aguardando interação"));
+        
+        // Ativa o áudio no clique (obrigatório para navegadores)
+        audio.play().then(() => {
+            document.getElementById('music-btn').innerHTML = '<i class="fas fa-pause"></i>';
+        }).catch(error => {
+            console.log("Autoplay bloqueado, mas o áudio foi 'acordado'.");
+        });
+
         setTimeout(() => { splash.style.display = "none"; }, 600);
     }
 
+    // Funções de Menu e Discord
     function toggleSimpleMenu(id) { document.getElementById('price-grid').classList.remove('show-grid'); document.getElementById(id).classList.toggle('show-list'); }
     function togglePriceGrid() { document.getElementById('lista-xat').classList.remove('show-list'); document.getElementById('price-grid').classList.toggle('show-grid'); }
 
@@ -166,6 +183,9 @@
             screen.appendChild(star);
         }
     };
+    
+    // Próxima música automática
+    audio.onended = function() { changeTrack(1); };
 </script>
 </body>
 </html>
