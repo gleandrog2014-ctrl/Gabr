@@ -67,62 +67,64 @@
         .menu-wrapper { 
             display: flex; 
             flex-direction: column; 
-            gap: 15px; 
+            gap: 12px; 
             align-items: center; 
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
 
         .btn-glow {
             background: rgba(0, 0, 0, 0.6); border: 2px solid #0048FF; color: #0048FF;
-            padding: 15px 0; font-size: 16px; cursor: pointer; font-weight: bold; letter-spacing: 3px;
-            width: 300px; display: flex; justify-content: center; align-items: center;
+            padding: 12px 0; font-size: 15px; cursor: pointer; font-weight: bold; letter-spacing: 3px;
+            width: 280px; display: flex; justify-content: center; align-items: center;
             backdrop-filter: blur(5px); transition: 0.3s; z-index: 20;
         }
-        .btn-glow:hover { background: #0048FF; color: #fff; box-shadow: 0 0 30px #0048FF; transform: scale(1.05); }
+        .btn-glow:hover { background: #0048FF; color: #fff; box-shadow: 0 0 25px #0048FF; transform: scale(1.03); }
 
-        /* Nova Grade de Preços Estilizada */
+        /* Grade de Preços Compacta */
         .price-grid-container {
             display: none;
             grid-template-columns: repeat(1, 1fr);
-            gap: 12px;
-            width: 340px;
-            max-height: 380px;
+            gap: 8px;
+            width: 300px;
+            max-height: 320px; /* Reduzido para caber melhor */
             overflow-y: auto;
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(0, 0, 0, 0.9);
             border: 1px solid #0048FF;
-            padding: 15px;
+            padding: 12px;
             margin-top: -10px;
             margin-bottom: 10px;
             scrollbar-width: thin;
             scrollbar-color: #0048FF #000;
         }
-        .price-grid-container::-webkit-scrollbar { width: 5px; }
-        .price-grid-container::-webkit-scrollbar-thumb { background: #0048FF; }
+        /* Scrollbar Neon para Chrome/Edge */
+        .price-grid-container::-webkit-scrollbar { width: 4px; }
+        .price-grid-container::-webkit-scrollbar-track { background: #000; }
+        .price-grid-container::-webkit-scrollbar-thumb { background: #0048FF; border-radius: 10px; }
 
         .show-grid { display: grid !important; }
 
         .price-card {
-            background: rgba(0, 72, 255, 0.05);
-            border: 1px solid rgba(0, 72, 255, 0.3);
-            padding: 12px;
+            background: rgba(0, 72, 255, 0.03);
+            border: 1px solid rgba(0, 72, 255, 0.2);
+            padding: 10px;
             text-align: center;
-            transition: 0.3s;
+            transition: 0.2s;
         }
-        .price-card:hover { border-color: #0048FF; background: rgba(0, 72, 255, 0.1); }
+        .price-card:hover { border-color: #0048FF; background: rgba(0, 72, 255, 0.08); }
 
-        .price-card i { font-size: 20px; color: #0048FF; margin-bottom: 8px; }
-        .price-card h4 { color: #fff; margin: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
-        .price-card p { color: rgba(255,255,255,0.5); font-size: 10px; margin: 4px 0 10px 0; line-height: 1.2; }
-        .price-card .value { color: #00ffcc; font-family: monospace; font-weight: bold; display: block; margin-bottom: 10px; font-size: 16px; }
+        .price-card i { font-size: 16px; color: #0048FF; margin-bottom: 5px; }
+        .price-card h4 { color: #fff; margin: 0; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
+        .price-card p { color: rgba(255,255,255,0.5); font-size: 9px; margin: 3px 0 8px 0; line-height: 1.1; }
+        .price-card .value { color: #00ffcc; font-family: monospace; font-weight: bold; display: block; margin-bottom: 8px; font-size: 14px; }
 
         .btn-comprar {
             display: block;
             background: #ff0055;
             color: #fff;
             text-decoration: none;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: bold;
-            padding: 6px;
+            padding: 5px;
             border-radius: 2px;
             transition: 0.3s;
         }
@@ -130,19 +132,19 @@
 
         .custom-list-hidden { 
             display: none; flex-direction: column; background: rgba(0, 0, 0, 0.9); 
-            border: 1px solid #0048FF; width: 300px; margin-top: -10px; margin-bottom: 5px;
+            border: 1px solid #0048FF; width: 280px; margin-top: -10px; margin-bottom: 5px;
         }
         
         .friend-item { 
-            color: #0048FF; padding: 12px; border-bottom: 1px solid rgba(0, 72, 255, 0.2); 
-            text-align: center; text-decoration: none; font-weight: bold; transition: 0.3s; cursor: pointer;
+            color: #0048FF; padding: 10px; border-bottom: 1px solid rgba(0, 72, 255, 0.1); 
+            text-align: center; text-decoration: none; font-weight: bold; transition: 0.3s; cursor: pointer; font-size: 14px;
         }
         .friend-item:hover { background: #0048FF !important; color: #fff !important; }
 
         .footer-wrs {
-            margin-top: 20px;
+            margin-top: 15px;
             color: rgba(255,255,255,0.3);
-            font-size: 11px;
+            font-size: 10px;
             letter-spacing: 2px;
             text-align: center;
         }
@@ -151,7 +153,7 @@
         #visit-counter {
             position: fixed; bottom: 20px; left: 20px; z-index: 1000001;
             background: rgba(0, 0, 0, 0.9); border: 1px solid #0048FF;
-            padding: 8px 15px; border-radius: 4px; display: flex; flex-direction: column; align-items: center;
+            padding: 6px 12px; border-radius: 4px; display: flex; flex-direction: column; align-items: center;
         }
 
         #like-container {
@@ -160,7 +162,7 @@
         }
         .like-btn {
             background: rgba(0, 0, 0, 0.8); border: 2px solid #ff0055; color: #ff0055;
-            width: 60px; height: 60px; border-radius: 50%; cursor: pointer; font-size: 24px;
+            width: 50px; height: 50px; border-radius: 50%; cursor: pointer; font-size: 20px;
             display: flex; justify-content: center; align-items: center; transition: 0.3s;
             box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
         }
@@ -187,14 +189,14 @@
 
 <div id="status-indicator">
     <span id="status-dot"></span>
-    <span id="status-text">CARREGANDO...</span>
+    <span id="status-text">...</span>
 </div>
 
 <div id="splash-screen">
     <div id="splash-container">
-        <div style="font-size: 50px; color: #0048FF; margin-bottom: 20px;"><i class="fas fa-user-astronaut"></i></div>
+        <div style="font-size: 40px; color: #0048FF; margin-bottom: 15px;"><i class="fas fa-user-astronaut"></i></div>
         <h1 class="logo-wrs">GALERIA</h1>
-        <div style="color: #0048FF; letter-spacing: 5px; font-size: 12px; margin-bottom: 40px; font-weight: bold;">GALERIA GALÁCTICA</div>
+        <div style="color: #0048FF; letter-spacing: 5px; font-size: 11px; margin-bottom: 30px; font-weight: bold;">GALERIA GALÁCTICA</div>
         
         <div class="menu-wrapper">
             <button class="btn-glow" onclick="entrarNoPerfil()"><i class="fas fa-rocket"></i> ENTRE</button>
@@ -211,7 +213,7 @@
                 <div class="price-card">
                     <i class="fas fa-file-video"></i>
                     <h4>Gifs</h4>
-                    <p>Foto e animação em movimento (Gifs Personalizados)</p>
+                    <p>Foto e animação em movimento</p>
                     <span class="value">400 xats</span>
                     <a href="https://xat.com/tuga" target="_blank" class="btn-comprar">COMPRAR</a>
                 </div>
@@ -219,7 +221,7 @@
                 <div class="price-card">
                     <i class="fas fa-bolt"></i>
                     <h4>Pcback Gif</h4>
-                    <p>Aba de conversa privada (PV) COM Efeito Animado</p>
+                    <p>Aba de conversa privada COM Efeito</p>
                     <span class="value">450 xats</span>
                     <a href="https://xat.com/tuga" target="_blank" class="btn-comprar">COMPRAR</a>
                 </div>
@@ -227,7 +229,7 @@
                 <div class="price-card">
                     <i class="fas fa-ghost"></i>
                     <h4>Pcback Estático</h4>
-                    <p>Aba de conversa privada (PV) SEM Efeito</p>
+                    <p>Aba de conversa privada SEM Efeito</p>
                     <span class="value">300 xats</span>
                     <a href="https://xat.com/tuga" target="_blank" class="btn-comprar">COMPRAR</a>
                 </div>
@@ -235,7 +237,7 @@
                 <div class="price-card">
                     <i class="fas fa-wand-magic-sparkles"></i>
                     <h4>Pstyle Gif</h4>
-                    <p>Banner de perfil COM Efeito e Animação</p>
+                    <p>Banner de perfil COM Efeito</p>
                     <span class="value">350 xats</span>
                     <a href="https://xat.com/tuga" target="_blank" class="btn-comprar">COMPRAR</a>
                 </div>
@@ -243,7 +245,7 @@
                 <div class="price-card">
                     <i class="fas fa-image"></i>
                     <h4>Pstyle Estático</h4>
-                    <p>Banner de perfil SEM Efeito (Imagem Fixa)</p>
+                    <p>Banner de perfil SEM Efeito</p>
                     <span class="value">250 xats</span>
                     <a href="https://xat.com/tuga" target="_blank" class="btn-comprar">COMPRAR</a>
                 </div>
@@ -255,8 +257,8 @@
 </div>
 
 <div id="visit-counter">
-    <span style="color: #0048FF; font-size: 9px; letter-spacing: 2px; font-family: 'Arial Black', sans-serif;">VISITAS</span>
-    <span id="count-number" style="color: #fff; font-size: 20px; font-family: 'Courier New', monospace; font-weight: bold; text-shadow: 0 0 8px #0048FF;">...</span>
+    <span style="color: #0048FF; font-size: 8px; letter-spacing: 2px; font-family: 'Arial Black', sans-serif;">VISITAS</span>
+    <span id="count-number" style="color: #fff; font-size: 18px; font-family: monospace; font-weight: bold;">...</span>
 </div>
 
 <div id="like-container">
@@ -350,7 +352,7 @@
         setInterval(checkDiscordStatus, 15000);
 
         const screen = document.getElementById('splash-screen');
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 80; i++) {
             const star = document.createElement('div');
             star.className = 'star';
             const size = Math.random() * 2 + 'px';
