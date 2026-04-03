@@ -13,12 +13,12 @@
         /* Player de Música Compacto */
         #music-player-container {
             position: fixed; top: 20px; left: 20px; z-index: 1000005;
-            background: rgba(0, 0, 0, 0.7); border: 1px solid #0048FF;
-            padding: 5px 10px; border-radius: 30px; backdrop-filter: blur(5px);
-            display: flex; align-items: center; gap: 8px;
+            background: rgba(0, 0, 0, 0.8); border: 1px solid #0048FF;
+            padding: 8px 12px; border-radius: 30px; backdrop-filter: blur(5px);
+            display: flex; align-items: center; gap: 10px; box-shadow: 0 0 15px rgba(0, 72, 255, 0.2);
         }
-        #music-player-container audio { height: 25px; width: 180px; filter: invert(100%) hue-rotate(180deg) brightness(1.5); }
-        #music-label { color: #0048FF; font-size: 9px; font-weight: bold; letter-spacing: 1px; }
+        #music-player-container audio { height: 28px; width: 200px; filter: invert(100%) hue-rotate(180deg) brightness(1.5); }
+        #music-label { color: #0048FF; font-size: 10px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; }
 
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -60,30 +60,31 @@
 
         .price-grid-container {
             display: none; grid-template-columns: repeat(1, 1fr); gap: 8px; width: 300px;
-            max-height: 300px; overflow-y: auto; background: rgba(0, 0, 0, 0.9);
+            max-height: 280px; overflow-y: auto; background: rgba(0, 0, 0, 0.95);
             border: 1px solid #0048FF; padding: 12px; margin-top: -10px; margin-bottom: 10px;
         }
         .price-grid-container::-webkit-scrollbar { width: 4px; }
         .price-grid-container::-webkit-scrollbar-thumb { background: #0048FF; border-radius: 10px; }
         .show-grid { display: grid !important; }
 
-        .price-card { background: rgba(0, 72, 255, 0.03); border: 1px solid rgba(0, 72, 255, 0.2); padding: 10px; text-align: center; }
+        .price-card { background: rgba(0, 72, 255, 0.05); border: 1px solid rgba(0, 72, 255, 0.2); padding: 10px; text-align: center; margin-bottom: 5px; }
         .price-card i { font-size: 16px; color: #0048FF; margin-bottom: 5px; }
         .price-card h4 { color: #fff; margin: 0; font-size: 13px; text-transform: uppercase; }
         .price-card p { color: rgba(255,255,255,0.5); font-size: 9px; margin: 3px 0 8px 0; }
         .price-card .value { color: #00ffcc; font-weight: bold; display: block; margin-bottom: 8px; font-size: 14px; }
 
-        .btn-comprar { background: #ff0055; color: #fff; text-decoration: none; font-size: 10px; font-weight: bold; padding: 5px; border-radius: 2px; display: block; }
+        .btn-comprar { background: #ff0055; color: #fff; text-decoration: none; font-size: 10px; font-weight: bold; padding: 6px; border-radius: 2px; display: block; transition: 0.3s; }
+        .btn-comprar:hover { background: #fff; color: #ff0055; }
 
         .custom-list-hidden { display: none; flex-direction: column; background: rgba(0, 0, 0, 0.9); border: 1px solid #0048FF; width: 280px; margin-top: -10px; margin-bottom: 5px; }
-        .friend-item { color: #0048FF; padding: 10px; border-bottom: 1px solid rgba(0, 72, 255, 0.1); text-align: center; text-decoration: none; font-weight: bold; font-size: 14px; }
+        .friend-item { color: #0048FF; padding: 10px; border-bottom: 1px solid rgba(0, 72, 255, 0.1); text-align: center; text-decoration: none; font-weight: bold; font-size: 14px; transition: 0.3s; }
+        .friend-item:hover { background: #0048FF; color: #fff; }
         .show-list { display: flex !important; }
-
-        .footer-wrs { margin-top: 15px; color: rgba(255,255,255,0.3); font-size: 10px; letter-spacing: 2px; }
 
         #visit-counter { position: fixed; bottom: 20px; left: 20px; z-index: 1000001; background: rgba(0, 0, 0, 0.9); border: 1px solid #0048FF; padding: 6px 12px; border-radius: 4px; text-align: center; }
         #like-container { position: fixed; bottom: 20px; right: 20px; z-index: 1000001; display: flex; flex-direction: column; align-items: center; }
-        .like-btn { background: rgba(0, 0, 0, 0.8); border: 2px solid #ff0055; color: #ff0055; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; font-size: 20px; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 15px rgba(255, 0, 85, 0.4); }
+        .like-btn { background: rgba(0, 0, 0, 0.8); border: 2px solid #ff0055; color: #ff0055; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; font-size: 20px; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 15px rgba(255, 0, 85, 0.4); transition: 0.3s; }
+        .like-btn:hover { transform: scale(1.1); }
 
         .drop { position: absolute; background-color: rgba(0, 72, 255, 0.4); border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%); animation: fadeOutDrop 0.8s ease-out forwards; }
         @keyframes fadeOutDrop { 0% { width: 0px; height: 0px; opacity: 0.8; } 100% { width: 100px; height: 100px; opacity: 0; } }
@@ -93,18 +94,18 @@
         .hidden-splash { opacity: 0; visibility: hidden; transform: translateY(-100%); }
     </style>
 </head>
-<body onmousemove="createDrop(event)">
+<body onmousemove="createDrop(event)" onclick="iniciarSom()">
 
 <div id="music-player-container">
-    <span id="music-label"><i class="fas fa-music"></i> WRS RADIO</span>
-    <audio id="bg-music" controls loop>
+    <span id="music-label"><i class="fas fa-compact-disc fa-spin"></i> WRS RADIO</span>
+    <audio id="bg-music" controls loop preload="auto">
         <source src="The Sound of Silence – Rising to the Night 2k26 Remix Cover ( DJ Monster Edit ).mp3" type="audio/mpeg">
     </audio>
 </div>
 
 <div id="status-indicator">
     <span id="status-dot"></span>
-    <span id="status-text">...</span>
+    <span id="status-text">CARREGANDO...</span>
 </div>
 
 <div id="splash-screen">
@@ -115,7 +116,6 @@
         
         <div class="menu-wrapper">
             <button class="btn-glow" onclick="entrarNoPerfil()"><i class="fas fa-rocket"></i> ENTRE</button>
-            
             <button class="btn-glow" onclick="toggleSimpleMenu('lista-xat')"><i class="fas fa-comments"></i> XAT COMUNIDADE</button>
             <div id="lista-xat" class="custom-list-hidden">
                 <a href="https://xat.com/tuga" target="_blank" class="friend-item">XAT TUGA</a>
@@ -123,7 +123,6 @@
             </div>
 
             <button class="btn-glow" onclick="togglePriceGrid()"><i class="fas fa-tags"></i> TABELA DE PREÇOS</button>
-            
             <div id="price-grid" class="price-grid-container">
                 <div class="price-card">
                     <i class="fas fa-file-video"></i>
@@ -161,36 +160,28 @@
                     <a href="https://xat.com/tuga" target="_blank" class="btn-comprar">COMPRAR</a>
                 </div>
             </div>
-
-            <div class="footer-wrs">© GALERIA - 2026</div>
+            <div style="margin-top:15px; color:rgba(255,255,255,0.3); font-size:10px; letter-spacing:2px;">© GALERIA - 2026</div>
         </div>
     </div>
 </div>
 
 <div id="visit-counter">
     <span style="color: #0048FF; font-size: 8px; letter-spacing: 2px;">VISITAS</span>
-    <div id="count-number" style="color: #fff; font-size: 18px; font-family: monospace; font-weight: bold;">...</div>
+    <div id="count-number" style="color: #fff; font-size: 18px; font-family: monospace; font-weight: bold;">0</div>
 </div>
 
 <div id="like-container">
     <button class="like-btn" onclick="darLike()"><i class="fas fa-heart"></i></button>
-    <span id="like-number" style="color:#fff; font-family:monospace; opacity:0;">0</span>
 </div>
 
 <script>
     const SEU_DISCORD_ID = "454632435054018560";
-    const bgMusic = document.getElementById('bg-music');
-    bgMusic.volume = 0.4;
+    const audio = document.getElementById('bg-music');
+    audio.volume = 0.4;
 
-    function playMusic() {
-        bgMusic.play().then(() => {
-            document.removeEventListener('click', playMusic);
-            document.removeEventListener('mousemove', playMusic);
-        }).catch(() => {});
+    function iniciarSom() {
+        audio.play().catch(() => { console.log("Clique para tocar"); });
     }
-
-    document.addEventListener('click', playMusic);
-    document.addEventListener('mousemove', playMusic);
 
     function toggleSimpleMenu(id) {
         document.getElementById('price-grid').classList.remove('show-grid');
@@ -207,6 +198,7 @@
 
     function entrarNoPerfil() {
         document.getElementById('splash-screen').classList.add('hidden-splash');
+        iniciarSom();
     }
 
     function createDrop(e) {
@@ -219,11 +211,8 @@
         setTimeout(() => drop.remove(), 800);
     }
 
-    async function darLike() {
-        const likeNum = document.getElementById('like-number');
-        likeNum.style.opacity = "1";
+    function darLike() {
         confetti({ particleCount: 150, spread: 70, origin: { x: 0.9, y: 0.9 }, colors: ['#ff0055', '#0048FF', '#ffffff'] });
-        setTimeout(() => { likeNum.style.opacity = "0"; }, 3000);
     }
 
     async function checkDiscordStatus() {
@@ -232,18 +221,29 @@
         try {
             const response = await fetch(`https://api.lanyard.rest/v1/users/${SEU_DISCORD_ID}`);
             const data = await response.json();
-            const status = data.data.discord_status;
-            dot.className = ''; 
-            if (status === "online") { dot.classList.add('dot-online'); text.innerText = "ONLINE"; }
-            else { text.innerText = "OFFLINE"; }
+            if (data.data.discord_status === "online") {
+                dot.classList.add('dot-online');
+                text.innerText = "ONLINE";
+            } else if (data.data.discord_status === "dnd") {
+                dot.style.backgroundColor = "#e74c3c";
+                text.innerText = "OCUPADO";
+            } else {
+                dot.style.backgroundColor = "#555";
+                text.innerText = "OFFLINE";
+            }
         } catch (e) { text.innerText = "OFFLINE"; }
     }
 
     window.onload = () => { 
         checkDiscordStatus();
-        document.getElementById('count-number').innerText = Math.floor(Math.random() * 5000);
+        // Contador Simples
+        let visitas = localStorage.getItem('wrs_visitas') || 0;
+        visitas++;
+        localStorage.setItem('wrs_visitas', visitas);
+        document.getElementById('count-number').innerText = visitas;
+
         const screen = document.getElementById('splash-screen');
-        for (let i = 0; i < 80; i++) {
+        for (let i = 0; i < 60; i++) {
             const star = document.createElement('div');
             star.className = 'star';
             const size = Math.random() * 2 + 'px';
