@@ -1363,15 +1363,14 @@ window.addEventListener('resize', resize);
 resize();
 
 window.addEventListener('mousemove', (e) => {
-    // Adiciona 2 gotas por vez para um efeito mais cheio
-    for(let i = 0; i < 2; i++) {
-        points.push({
-            x: e.clientX + (Math.random() * 6 - 3), // Espalha um pouco as gotas
-            y: e.clientY,
-            alpha: 1,
-            size: Math.random() * 2 + 1
-        });
-    }
+    // Cria uma nova gota na posição do mouse
+    points.push({
+        x: e.clientX,
+        y: e.clientY,
+        size: 0,          // Começa pequena
+        alpha: 0.8,       // Opacidade inicial
+        maxSize: 80       // Tamanho máximo que a gota atinge (igual ao efeito da entrada)
+    });
 });
 
 function animate() {
@@ -1379,25 +1378,27 @@ function animate() {
     
     for (let i = 0; i < points.length; i++) {
         let p = points[i];
-        p.y += 2; 
-        p.alpha -= 0.02; 
         
-        // EFEITO DE BRILHO
-        ctx.shadowBlur = 12; // Intensidade do brilho
-        ctx.shadowColor = `rgba(255, 255, 255, ${p.alpha})`; // Cor do brilho segue a transparência
-        ctx.fillStyle = `rgba(0, 21, 255, ${p.alpha})`; // Cor da gota
+        // Aumenta o tamanho da gota e diminui a opacidade (efeito de expansão)
+        p.size += 3;       // Velocidade da expansão
+        p.alpha -= 0.02;   // Velocidade do sumiço
+        
+        // EFEITO DE BRILHO NEON (Igual ao seu estilo)
+        ctx.shadowBlur = 15; 
+        ctx.shadowColor = `rgba(0, 72, 255, ${p.alpha})`; // Brilho azul neon
+        ctx.fillStyle = `rgba(0, 72, 255, ${p.alpha * 0.4})`; // Cor da gota com transparência
         
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fill();
         
+        // Remove a gota quando ela sumir completamente
         if (p.alpha <= 0) {
             points.splice(i, 1);
             i--;
         }
     }
-    // Reseta o brilho para não afetar outras coisas se houver
-    ctx.shadowBlur = 0;
+    
     requestAnimationFrame(animate);
 }
 animate();
