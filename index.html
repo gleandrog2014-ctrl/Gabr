@@ -9,36 +9,94 @@
     
     <style>
         body { margin: 0; background-color: #000; overflow-x: hidden; overflow-y: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at bottom right, rgba(0, 72, 255, 0.15), transparent 40%), radial-gradient(circle at top left, rgba(80, 0, 255, 0.1), transparent 30%), #000; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 999999; transition: opacity 0.6s ease; }
-        #status-indicator { position: fixed; top: 20px; right: 20px; display: flex; align-items: center; gap: 10px; background: rgba(0, 0, 0, 0.6); padding: 8px 15px; border-radius: 20px; border: 1px solid rgba(0, 72, 255, 0.3); z-index: 1000002; backdrop-filter: blur(5px); }
+        
+        #splash-screen { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: radial-gradient(circle at bottom right, rgba(0, 72, 255, 0.15), transparent 40%), 
+                        radial-gradient(circle at top left, rgba(80, 0, 255, 0.1), transparent 30%), #000; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            z-index: 999999; transition: opacity 0.6s ease; 
+        }
+
+        #status-indicator { 
+            position: fixed; top: 20px; right: 20px; display: flex; align-items: center; gap: 10px; 
+            background: rgba(0, 0, 0, 0.6); padding: 8px 15px; border-radius: 20px; 
+            border: 1px solid rgba(0, 72, 255, 0.3); z-index: 1000002; backdrop-filter: blur(5px); 
+        }
         #status-dot { width: 10px; height: 10px; border-radius: 50%; background-color: #555; transition: 0.5s; }
         #status-text { color: #fff; font-size: 11px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; }
         .dot-online { background-color: #00ff00 !important; box-shadow: 0 0 15px #00ff00; }
         .dot-idle { background-color: #f1c40f !important; box-shadow: 0 0 15px #f1c40f; }
         .dot-dnd { background-color: #e74c3c !important; box-shadow: 0 0 15px #e74c3c; }
-        #music-player-ui { position: fixed; top: 250px; left: 20px; z-index: 1000002; background: rgba(0, 0, 0, 0.85); border: 1px solid #0048FF; padding: 15px 5px; border-radius: 30px; display: flex; flex-direction: column; align-items: center; gap: 10px; box-shadow: 0 0 15px rgba(0, 72, 255, 0.4); backdrop-filter: blur(5px); opacity: 0.5; transition: 0.4s; width: 40px; }
+
+        #music-player-ui { 
+            position: fixed; top: 250px; left: 20px; z-index: 1000002; 
+            background: rgba(0, 0, 0, 0.85); border: 1px solid #0048FF; 
+            padding: 15px 5px; border-radius: 30px; display: flex; 
+            flex-direction: column; align-items: center; gap: 10px; 
+            box-shadow: 0 0 15px rgba(0, 72, 255, 0.4); backdrop-filter: blur(5px); 
+            opacity: 0.5; transition: 0.4s; width: 40px; 
+        }
         #music-player-ui:hover { opacity: 1; box-shadow: 0 0 25px rgba(0, 72, 255, 0.7); }
-        .volume-control { width: 45px; height: 4px; -webkit-appearance: none; background: rgba(0, 72, 255, 0.3); outline: none; border-radius: 2px; cursor: pointer; transform: rotate(-90deg); margin: 20px 0; }
+
+        .volume-control { 
+            width: 45px; height: 4px; -webkit-appearance: none; 
+            background: rgba(0, 72, 255, 0.3); outline: none; border-radius: 2px; 
+            cursor: pointer; transform: rotate(-90deg); margin: 20px 0; 
+        }
         .volume-control::-webkit-slider-thumb { -webkit-appearance: none; width: 10px; height: 10px; background: #0048FF; border-radius: 50%; box-shadow: 0 0 5px #0048FF; }
-        .music-info { width: 100%; height: 100px; overflow: hidden; position: relative; border-top: 1px solid rgba(0, 72, 255, 0.3); padding-top: 5px; display: flex; justify-content: center; }
-        .track-name { display: block; color: #fff; font-size: 8px; font-weight: bold; text-transform: uppercase; writing-mode: vertical-rl; white-space: nowrap; position: absolute; animation: marqueeVertical 10s linear infinite; }
+
+        .music-info { 
+            width: 100%; height: 100px; overflow: hidden; position: relative; 
+            border-top: 1px solid rgba(0, 72, 255, 0.3); padding-top: 5px; 
+            display: flex; justify-content: center; 
+        }
+        .track-name { 
+            display: block; color: #fff; font-size: 8px; font-weight: bold; 
+            text-transform: uppercase; writing-mode: vertical-rl; white-space: nowrap; 
+            position: absolute; animation: marqueeVertical 10s linear infinite; 
+        }
         @keyframes marqueeVertical { 0% { transform: translateY(100px); } 100% { transform: translateY(-150%); } }
-        .play-toggle { background: none; border: 1px solid #0048FF; color: #0048FF; cursor: pointer; width: 30px; height: 30px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 12px; transition: 0.3s; }
+
+        .play-toggle { 
+            background: none; border: 1px solid #0048FF; color: #0048FF; cursor: pointer; 
+            width: 30px; height: 30px; border-radius: 50%; display: flex; 
+            justify-content: center; align-items: center; font-size: 12px; transition: 0.3s; 
+        }
         .play-toggle:hover { background: #0048FF; color: #fff; }
-        .btn-glow { background: rgba(0, 0, 0, 0.6); border: 2px solid #0048FF; color: #0048FF; padding: 12px 0; font-size: 15px; cursor: pointer; font-weight: bold; letter-spacing: 3px; width: 280px; backdrop-filter: blur(5px); transition: 0.3s; margin-bottom: 10px;}
+
+        .btn-glow { 
+            background: rgba(0, 0, 0, 0.6); border: 2px solid #0048FF; color: #0048FF; 
+            padding: 12px 0; font-size: 15px; cursor: pointer; font-weight: bold; 
+            letter-spacing: 3px; width: 280px; backdrop-filter: blur(5px); 
+            transition: 0.3s; margin-bottom: 10px; 
+        }
         .btn-glow:hover { background: #0048FF; color: #fff; box-shadow: 0 0 25px #0048FF; transform: scale(1.03); }
-        .logo-wrs { font-family: 'Arial Black', sans-serif; font-size: 75px; letter-spacing: 15px; text-align: center; background: linear-gradient(270deg, #FFFFFF, #0048FF, #FFFFFF, #0048FF, #FFFFFF); background-size: 400% 400%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: gradientMove 4s linear infinite; margin-bottom: 30px; }
+
+        .logo-wrs { 
+            font-family: 'Arial Black', sans-serif; font-size: 75px; letter-spacing: 15px; 
+            text-align: center; background: linear-gradient(270deg, #FFFFFF, #0048FF, #FFFFFF, #0048FF, #FFFFFF); 
+            background-size: 400% 400%; -webkit-background-clip: text; background-clip: text; 
+            color: transparent; animation: gradientMove 4s linear infinite; margin-bottom: 30px; 
+        }
         @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
         #visit-counter { position: fixed; bottom: 20px; left: 20px; z-index: 1000001; background: rgba(0, 0, 0, 0.9); border: 1px solid #0048FF; padding: 6px 12px; border-radius: 4px; display: flex; flex-direction: column; align-items: center; }
         #like-container { position: fixed; bottom: 20px; right: 20px; z-index: 1000001; display: flex; flex-direction: column; align-items: center; gap: 5px; }
-        .like-btn { background: rgba(0, 0, 0, 0.8); border: 2px solid #ff0055; color: #ff0055; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 20px; transition: 0.3s; }
+        
+        .like-btn { 
+            background: rgba(0, 0, 0, 0.8); border: 2px solid #ff0055; color: #ff0055; 
+            width: 50px; height: 50px; border-radius: 50%; cursor: pointer; 
+            display: flex; justify-content: center; align-items: center; font-size: 20px; transition: 0.3s; 
+        }
         .like-btn:hover { background: #ff0055; color: #fff; transform: scale(1.1); }
+        
         .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle var(--duration) infinite; pointer-events: none; }
     </style>
 </head>
 <body onmousemove="createDrop(event)">
 
-<audio id="meuAudio" loop>
+<audio id="meuAudio" loop preload="auto">
     <source src="https://docs.google.com/uc?export=download&id=1YwrtWC04EI1Nbh_b1OhEoXs_WxWKEzwf" type="audio/mpeg">
 </audio>
 
@@ -78,10 +136,12 @@
     const audio = document.getElementById('meuAudio');
     const btn = document.getElementById('music-btn');
 
+    // Função Manual de Play/Pause
     function controlMusic() {
         if (audio.paused) {
-            audio.play();
-            btn.innerHTML = '<i class="fas fa-pause"></i>';
+            audio.play().then(() => {
+                btn.innerHTML = '<i class="fas fa-pause"></i>';
+            });
         } else {
             audio.pause();
             btn.innerHTML = '<i class="fas fa-play"></i>';
@@ -90,21 +150,29 @@
 
     function changeVolume(val) { audio.volume = val / 100; }
 
+    // Função que libera o som ao clicar no botão
     function entrarNoPerfil() { 
         const splash = document.getElementById('splash-screen');
-        splash.style.opacity = "0";
-        document.body.style.overflowY = "auto";
         
+        // Garante que o áudio não comece mudo
+        audio.muted = false;
+        audio.volume = 0.5;
+
+        // Tenta tocar imediatamente após o clique
         audio.play().then(() => {
             btn.innerHTML = '<i class="fas fa-pause"></i>';
             document.getElementById('track-display').innerText = "TOCANDO AGORA";
         }).catch(e => {
-            console.log("Autoplay bloqueado pelo navegador.");
+            console.log("O navegador exigiu clique manual no player.");
+            btn.innerHTML = '<i class="fas fa-play"></i>';
         });
 
+        splash.style.opacity = "0";
+        document.body.style.overflowY = "auto";
         setTimeout(() => { splash.style.display = "none"; }, 600);
     }
 
+    // Sistema de Curtidas
     async function darLike() {
         const likeNum = document.getElementById('like-number');
         try {
@@ -117,6 +185,7 @@
         } catch (e) {}
     }
 
+    // Sistema de Visitas
     async function carregarContadores() {
         try {
             const resV = await fetch(`https://api.counterapi.dev/v1/wrs-galeria/visitas_main/up`);
@@ -125,6 +194,7 @@
         } catch(e) { document.getElementById('count-number').innerText = "1"; }
     }
 
+    // Status do Discord via Lanyard
     async function checkDiscordStatus() {
         const dot = document.getElementById('status-dot');
         const text = document.getElementById('status-text');
@@ -140,6 +210,7 @@
         } catch (e) { text.innerText = "OFFLINE"; }
     }
 
+    // Efeito Visual de Gotas/Clique
     function createDrop(e) {
         if(document.getElementById('splash-screen').style.display === "none") return;
         const drop = document.createElement('div');
@@ -153,6 +224,8 @@
         carregarContadores();
         checkDiscordStatus();
         setInterval(checkDiscordStatus, 15000);
+        
+        // Gerar estrelas de fundo
         const screen = document.getElementById('splash-screen');
         for (let i = 0; i < 40; i++) {
             const star = document.createElement('div');
