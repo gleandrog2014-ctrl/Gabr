@@ -210,7 +210,6 @@
     const ID_VISITAS = "galeria_wrs_2026_main"; 
     const ID_LIKES = "galeria_wrs_likes_2026_main"; 
 
-    // PLAYLIST ATUALIZADA COM SEUS LINKS MP3
     const playlist = [
         { url: 'https://cdn.discordapp.com/attachments/1489682267264520284/1489684333672403135/sound-of-silence.mp3.mp3?ex=69d15026&is=69cffea6&hm=c4c3109d5baa2f5061e9eddf9e35fccd5f629d5340d963ec5a02f320928ab105&', name: 'The Sound of Silence' },
         { url: 'https://cdn.discordapp.com/attachments/1489682267264520284/1489682358335569920/4-Non-Blondes-whats-up.mp3.mp3?ex=69d14e4f&is=69cffccf&hm=80284e95d90307d6de8428368b56d5435ed1150cec5a6238b8a744855f683751&', name: '4 Non Blondes - Whats Up' },
@@ -266,14 +265,27 @@
 
     async function darLike() {
         const likeNum = document.getElementById('like-number');
+        
+        // CORREÇÃO: Forçando os confetes para a frente com zIndex: 1000005
+        confetti({
+            particleCount: 150,
+            spread: 70,
+            origin: { x: 0.9, y: 0.9 },
+            colors: ['#0048FF', '#ffffff', '#00ffff'],
+            zIndex: 1000005
+        });
+
         try {
             const res = await fetch(`https://api.counterapi.dev/v1/wrs-galeria/${ID_LIKES}/up`);
             const data = await res.json();
             likeNum.innerText = data.count || data.value;
             likeNum.style.opacity = "1";
-            confetti({ particleCount: 150, spread: 70, origin: { x: 0.9, y: 0.9 } });
             setTimeout(() => likeNum.style.opacity = "0", 3000);
-        } catch (e) {}
+        } catch (e) {
+            likeNum.innerText = "1";
+            likeNum.style.opacity = "1";
+            setTimeout(() => likeNum.style.opacity = "0", 3000);
+        }
     }
 
     async function carregarContadores() {
@@ -309,7 +321,7 @@
     }
 
     window.onload = () => {
-        loadTrack(0); // Carrega a primeira música
+        loadTrack(0);
         carregarContadores();
         checkDiscordStatus();
         setInterval(checkDiscordStatus, 15000);
