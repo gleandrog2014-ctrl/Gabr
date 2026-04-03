@@ -32,6 +32,25 @@
             transition: opacity 0.6s ease;
         }
 
+        /* Astronauta Azul Novo */
+        .astronauta-novo {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 10px;
+            border-radius: 50%; /* Opcional: deixa a imagem redonda */
+            /* Efeito Neon Azul */
+            box-shadow: 0 0 20px #0048FF, 0 0 40px #0048FF, 0 0 60px #0048FF;
+            z-index: 1000000;
+            /* Efeito se movendo (Flutuando) */
+            animation: flutuar 3s ease-in-out infinite;
+            object-fit: cover; /* Garante que a imagem preencha o espaço sem distorcer */
+        }
+
+        @keyframes flutuar {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
         /* Status Discord */
         #status-indicator {
             position: fixed; top: 20px; right: 20px;
@@ -154,11 +173,13 @@
     <input type="range" class="volume-control" id="volume-slider" min="0" max="1" step="0.01" value="0.5" oninput="changeVolume(this.value)">
     
     <div class="music-info">
-        <span class="track-name" id="track-display">PLAYLIST WRS</span>
+        <span class="track-name" id="track-display">WRS PLAYLIST</span>
     </div>
 </div>
 
 <div id="splash-screen">
+    <img src="https://img.freepik.com/fotos-premium/desenho-azul-de-astronauta_1136343-18956.jpg" alt="Astronauta" class="astronauta-novo">
+    
     <h1 class="logo-wrs">GALERIA</h1>
     <div class="menu-wrapper">
         <button class="btn-glow" onclick="entrarNoPerfil()"><i class="fas fa-rocket"></i> ENTRE</button>
@@ -211,7 +232,7 @@
     const ID_LIKES = "galeria_wrs_likes_2026_main"; 
 
     const playlist = [
-        { url: 'https://cdn.discordapp.com/attachments/1489682267264520284/1489684333672403135/sound-of-silence.mp3.mp3?ex=69d15026&is=69cffea6&hm=c4c3109d5baa2f5061e9eddf9e35fccd5f629d5340d963ec5a02f320928ab105&', name: 'The Sound of Silence' },
+        { url: 'https://cdn.discordapp.com/attachments/1489682267264520284/1489684333672403135/sound-of-silence.mp3.mp3?ex=69d15026&is=69cffea6&hm=c4c3109d5baa2f5061e9eddf9e35fccd5f629d5340d963ec5a02f320928ab105&', name: 'Sound of Silence' },
         { url: 'https://cdn.discordapp.com/attachments/1489682267264520284/1489682358335569920/4-Non-Blondes-whats-up.mp3.mp3?ex=69d14e4f&is=69cffccf&hm=80284e95d90307d6de8428368b56d5435ed1150cec5a6238b8a744855f683751&', name: '4 Non Blondes - Whats Up' },
         { url: 'https://cdn.discordapp.com/attachments/1489682267264520284/1489684239355084870/Bon-Jovi-livin-on-a-prayer.mp3.mp3?ex=69d1500f&is=69cffe8f&hm=7a699fae3c8607b10b9429d3ab198c82dab83b1366056e876093a251fac0013f&', name: 'Bon Jovi - Livin on a Prayer' },
         { url: 'https://cdn.discordapp.com/attachments/1489682267264520284/1489684282887639140/Eminem-you-dont-know.mp3.mp3?ex=69d1501a&is=69cffe9a&hm=b890326d27955502a4e2f65384b12d63f62b51dc8eaa2d9d6f5b8100e95e8d26&', name: 'Eminem - You Dont Know' },
@@ -224,10 +245,8 @@
     function loadTrack(index) {
         currentTrack = index;
         audio.src = playlist[currentTrack].url;
-        updateTrackDisplay();
+        document.getElementById('track-display').innerText = playlist[currentTrack].name;
     }
-
-    function updateTrackDisplay() { document.getElementById('track-display').innerText = playlist[currentTrack].name; }
     
     function changeTrack(dir) {
         currentTrack = (currentTrack + dir + playlist.length) % playlist.length;
@@ -266,7 +285,7 @@
     async function darLike() {
         const likeNum = document.getElementById('like-number');
         
-        // CORREÇÃO: Forçando os confetes para a frente com zIndex: 1000005
+        // Efeito de Fogos Corrigido zIndex: 1000005
         confetti({
             particleCount: 150,
             spread: 70,
