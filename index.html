@@ -30,14 +30,6 @@
             transition: all 0.8s cubic-bezier(0.65, 0, 0.35, 1);
         }
 
-        #splash-container {
-            position: relative;
-            width: 100%; height: 100%;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            z-index: 10;
-        }
-
         /* Status Discord */
         #status-indicator {
             position: fixed; top: 20px; right: 20px;
@@ -53,36 +45,39 @@
         .dot-idle { background-color: #f1c40f !important; box-shadow: 0 0 15px #f1c40f; }
         .dot-dnd { background-color: #e74c3c !important; box-shadow: 0 0 15px #e74c3c; }
 
-        /* Player de Música - AJUSTADO PARA 130PX */
+        /* Player de Música - AJUSTADO PARA 200PX */
         #music-player-ui {
             position: fixed;
             top: 20px; left: 20px;
             z-index: 1000002;
             background: rgba(0, 0, 0, 0.85);
             border: 1px solid #0048FF;
-            padding: 6px 10px;
-            border-radius: 4px;
+            padding: 8px 12px;
+            border-radius: 6px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 10px;
             box-shadow: 0 0 15px rgba(0, 72, 255, 0.4);
             backdrop-filter: blur(5px);
-            opacity: 0.4;
+            opacity: 0.5;
             transition: all 0.4s ease;
-            width: 130px; /* Definido em 130px */
+            width: 200px; /* Definido em 200px */
             overflow: hidden;
         }
         #music-player-ui:hover { opacity: 1; box-shadow: 0 0 25px rgba(0, 72, 255, 0.7); }
 
-        .volume-control { width: 25px; height: 3px; -webkit-appearance: none; background: rgba(0, 72, 255, 0.3); outline: none; border-radius: 2px; }
-        .volume-control::-webkit-slider-thumb { -webkit-appearance: none; width: 6px; height: 6px; background: #0048FF; border-radius: 50%; }
+        .volume-control { width: 35px; height: 4px; -webkit-appearance: none; background: rgba(0, 72, 255, 0.3); outline: none; border-radius: 2px; cursor: pointer; }
+        .volume-control::-webkit-slider-thumb { -webkit-appearance: none; width: 8px; height: 8px; background: #0048FF; border-radius: 50%; }
 
-        .music-info { flex: 1; overflow: hidden; white-space: nowrap; position: relative; border-left: 1px solid rgba(0, 72, 255, 0.2); padding-left: 4px; }
-        .track-name { display: inline-block; color: #fff; font-size: 8px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; animation: marquee 25s linear infinite; padding-left: 100%; }
+        .music-info { flex: 1; overflow: hidden; white-space: nowrap; position: relative; border-left: 1px solid rgba(0, 72, 255, 0.3); padding-left: 8px; }
+        .track-name { display: inline-block; color: #fff; font-size: 9px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; animation: marquee 25s linear infinite; padding-left: 100%; }
         @keyframes marquee { 0% { transform: translateX(0%); } 100% { transform: translateX(-100%); } }
 
-        .music-nav-btn { background: none; border: 1px solid rgba(0, 72, 255, 0.3); color: #0048FF; cursor: pointer; width: 18px; height: 18px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 7px; }
-        .play-toggle { background: none; border: 1px solid #0048FF; color: #0048FF; cursor: pointer; width: 22px; height: 22px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 9px; }
+        .music-nav-btn { background: none; border: 1px solid rgba(0, 72, 255, 0.4); color: #0048FF; cursor: pointer; width: 22px; height: 22px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 8px; transition: 0.3s; }
+        .music-nav-btn:hover { background: rgba(0, 72, 255, 0.2); border-color: #0048FF; color: #fff; }
+        
+        .play-toggle { background: none; border: 1px solid #0048FF; color: #0048FF; cursor: pointer; width: 28px; height: 28px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 11px; transition: 0.3s; }
+        .play-toggle:hover { background: #0048FF; color: #fff; box-shadow: 0 0 10px #0048FF; }
 
         /* Tabela de Preços */
         .price-grid-container { display: none; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 320px; max-height: 250px; overflow-y: auto; background: rgba(0, 0, 0, 0.95); border: 1px solid #0048FF; padding: 15px; margin-top: -10px; margin-bottom: 10px; }
@@ -94,7 +89,7 @@
         .price-card .value { color: #00ffcc; font-family: monospace; font-weight: bold; display: block; font-size: 11px; margin: 4px 0; }
         .btn-comprar { display: block; background: #ff0055; color: #fff; text-decoration: none; font-size: 9px; font-weight: bold; padding: 4px; border-radius: 2px; }
 
-        /* Logo e Botões */
+        /* Logo e Menu Central */
         .logo-wrs { font-family: 'Arial Black', sans-serif; font-size: 75px; letter-spacing: 15px; text-align: center; background: linear-gradient(270deg, #FFFFFF, #0048FF, #FFFFFF, #0048FF, #FFFFFF); background-size: 400% 400%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: gradientMove 4s linear infinite; margin-bottom: 10px; }
         @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         .btn-glow { background: rgba(0, 0, 0, 0.6); border: 2px solid #0048FF; color: #0048FF; padding: 12px 0; font-size: 15px; cursor: pointer; font-weight: bold; letter-spacing: 3px; width: 280px; backdrop-filter: blur(5px); transition: 0.3s; margin-bottom: 12px; }
@@ -105,7 +100,7 @@
         .friend-item { color: #0048FF; padding: 10px; border-bottom: 1px solid rgba(0, 72, 255, 0.1); text-align: center; text-decoration: none; font-weight: bold; font-size: 14px; }
         .friend-item:hover { background: #0048FF; color: #fff; }
 
-        /* Contadores */
+        /* Contadores Originais */
         #visit-counter { position: fixed; bottom: 20px; left: 20px; z-index: 1000001; background: rgba(0, 0, 0, 0.9); border: 1px solid #0048FF; padding: 6px 12px; border-radius: 4px; display: flex; flex-direction: column; align-items: center; }
         #like-container { position: fixed; bottom: 20px; right: 20px; z-index: 1000001; display: flex; flex-direction: column; align-items: center; gap: 5px; }
         .like-btn { background: rgba(0, 0, 0, 0.8); border: 2px solid #ff0055; color: #ff0055; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; font-size: 20px; display: flex; justify-content: center; align-items: center; transition: 0.3s; }
