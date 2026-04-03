@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrossel WRS - Integrado</title>
+    <title>Carrossel WRS - Portal Galáctico</title>
     <style>
         /* --- PADRÃO DE COR DA SUA GALERIA (#0048FF) --- */
         :root {
             --azul-wrs: #0048FF; 
+            --azul-claro: #00d4ff;
             --azul-glow: rgba(0, 72, 255, 0.5);
             --azul-fundo: rgba(0, 72, 255, 0.1);
         }
@@ -23,19 +24,18 @@
         }
 
         .carrossel-wrs-container {
-            width: 90%;
+            width: 95%;
             max-width: 500px;
             height: 320px;
             position: relative;
             overflow: hidden;
             background: #000;
-            /* Borda idêntica aos seus botões (btn-glow) */
             border: 2px solid var(--azul-wrs);
-            border-radius: 5px; /* Bordas mais retas como seus botões */
+            border-radius: 5px;
             box-shadow: 0 0 20px var(--azul-glow);
         }
 
-        /* --- PREENCHIMENTO DO ESPAÇO PRETO: GRADE E SCANNER --- */
+        /* --- GRADE E SCANNER --- */
         .grid-bg {
             position: absolute;
             width: 100%;
@@ -86,19 +86,31 @@
             z-index: 3;
         }
 
+        /* --- TEXTO COM GRADIENTE ANIMADO --- */
         .legenda-wrs {
             margin-top: 20px;
-            color: #fff; /* Texto branco como seus botões */
-            background: var(--azul-wrs); /* Fundo azul como hover do botão */
-            font-weight: bold;
+            font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 3px;
-            font-size: 12px;
+            font-size: 14px;
             padding: 8px 20px;
-            box-shadow: 0 0 10px var(--azul-wrs);
+            text-align: center;
+            
+            /* Efeito Gradiente */
+            background: linear-gradient(to right, var(--azul-wrs), var(--azul-claro), #fff, var(--azul-claro), var(--azul-wrs));
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-text 3s linear infinite;
+            text-shadow: 0 0 10px rgba(0, 72, 255, 0.3);
         }
 
-        /* Botões de Navegação Estilo Galeria */
+        @keyframes gradient-text {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        /* Botões de Navegação */
         .nav-wrs {
             position: absolute;
             top: 50%;
@@ -178,7 +190,7 @@
         function startTimer() {
             timer = setInterval(() => {
                 mostrar(index + 1);
-            }, 4000); // 4 segundos automático
+            }, 4000);
         }
 
         function resetTimer() {
