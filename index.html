@@ -32,11 +32,11 @@
             transition: opacity 0.6s ease;
         }
 
-        /* Boneco Astronauta Azul */
+        /* Astronauta Azul Corrigido */
         .astronauta-azul {
-            width: 120px;
-            margin-bottom: 10px;
-            filter: drop-shadow(0 0 20px #0048FF);
+            width: 160px;
+            margin-bottom: 5px;
+            filter: drop-shadow(0 0 15px #0048FF);
             z-index: 1000000;
             animation: flutuar 3s ease-in-out infinite;
         }
@@ -46,7 +46,6 @@
             50% { transform: translateY(-15px); }
         }
 
-        /* Status Discord */
         #status-indicator {
             position: fixed; top: 20px; right: 20px;
             display: flex; align-items: center; gap: 10px;
@@ -61,81 +60,33 @@
         .dot-idle { background-color: #f1c40f !important; box-shadow: 0 0 15px #f1c40f; }
         .dot-dnd { background-color: #e74c3c !important; box-shadow: 0 0 15px #e74c3c; }
 
-        /* PLAYER VERTICAL */
         #music-player-ui {
-            position: fixed; 
-            top: 250px; 
-            left: 20px; 
-            z-index: 1000002;
-            background: rgba(0, 0, 0, 0.85); 
-            border: 1px solid #0048FF;
-            padding: 15px 5px; 
-            border-radius: 30px; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center;
-            gap: 10px; 
-            box-shadow: 0 0 15px rgba(0, 72, 255, 0.4);
-            backdrop-filter: blur(5px); 
-            opacity: 0.5; 
-            transition: 0.4s; 
-            width: 40px; 
+            position: fixed; top: 250px; left: 20px; z-index: 1000002;
+            background: rgba(0, 0, 0, 0.85); border: 1px solid #0048FF;
+            padding: 15px 5px; border-radius: 30px; display: flex; 
+            flex-direction: column; align-items: center; gap: 10px; 
+            box-shadow: 0 0 15px rgba(0, 72, 255, 0.4); backdrop-filter: blur(5px); 
+            opacity: 0.5; transition: 0.4s; width: 40px; 
         }
-        #music-player-ui:hover { opacity: 1; box-shadow: 0 0 25px rgba(0, 72, 255, 0.7); }
+        #music-player-ui:hover { opacity: 1; }
 
-        .volume-control { 
-            width: 45px; 
-            height: 4px; 
-            -webkit-appearance: none; 
-            background: rgba(0, 72, 255, 0.3); 
-            outline: none; 
-            border-radius: 2px; 
-            cursor: pointer;
-            transform: rotate(-90deg); 
-            margin: 20px 0;
-        }
-        .volume-control::-webkit-slider-thumb { -webkit-appearance: none; width: 10px; height: 10px; background: #0048FF; border-radius: 50%; box-shadow: 0 0 5px #0048FF; }
+        .volume-control { width: 45px; height: 4px; -webkit-appearance: none; background: rgba(0, 72, 255, 0.3); outline: none; border-radius: 2px; cursor: pointer; transform: rotate(-90deg); margin: 20px 0; }
+        .volume-control::-webkit-slider-thumb { -webkit-appearance: none; width: 10px; height: 10px; background: #0048FF; border-radius: 50%; }
 
-        .track-name { 
-            display: block; 
-            color: #fff; 
-            font-size: 8px; 
-            font-weight: bold; 
-            text-transform: uppercase; 
-            writing-mode: vertical-rl; 
-            white-space: nowrap;
-            position: absolute;
-            animation: marqueeVertical 10s linear infinite;
-        }
+        .track-name { display: block; color: #fff; font-size: 8px; font-weight: bold; text-transform: uppercase; writing-mode: vertical-rl; white-space: nowrap; position: absolute; animation: marqueeVertical 10s linear infinite; }
+        @keyframes marqueeVertical { 0% { transform: translateY(100px); } 100% { transform: translateY(-150%); } }
 
-        @keyframes marqueeVertical {
-            0% { transform: translateY(100px); }
-            100% { transform: translateY(-150%); }
-        }
-
-        .music-nav-btn { background: none; border: 1px solid rgba(0, 72, 255, 0.4); color: #0048FF; cursor: pointer; width: 25px; height: 25px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 10px; transition: 0.3s; }
-        .play-toggle { background: none; border: 1px solid #0048FF; color: #0048FF; cursor: pointer; width: 30px; height: 30px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 12px; transition: 0.3s; }
-
-        .menu-wrapper { display: flex; flex-direction: column; align-items: center; gap: 15px; }
-        .btn-glow { background: rgba(0, 0, 0, 0.6); border: 2px solid #0048FF; color: #0048FF; padding: 12px 0; font-size: 15px; cursor: pointer; font-weight: bold; letter-spacing: 3px; width: 280px; backdrop-filter: blur(5px); transition: 0.3s; }
+        .btn-glow { background: rgba(0, 0, 0, 0.6); border: 2px solid #0048FF; color: #0048FF; padding: 12px 0; font-size: 15px; cursor: pointer; font-weight: bold; letter-spacing: 3px; width: 280px; backdrop-filter: blur(5px); transition: 0.3s; margin-bottom: 10px; }
         .btn-glow:hover { background: #0048FF; color: #fff; box-shadow: 0 0 25px #0048FF; transform: scale(1.03); }
 
-        .custom-list-hidden { display: none; flex-direction: column; background: rgba(0, 0, 0, 0.9); border: 1px solid #0048FF; width: 280px; }
-        .show-list { display: flex !important; }
-        .friend-item { color: #0048FF; padding: 10px; border-bottom: 1px solid rgba(0, 72, 255, 0.1); text-align: center; text-decoration: none; font-weight: bold; font-size: 14px; }
-        .friend-item:hover { background: #0048FF; color: #fff; }
-
-        .price-grid-container { display: none; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 320px; max-height: 200px; overflow-y: auto; background: rgba(0, 0, 0, 0.95); border: 1px solid #0048FF; padding: 15px; }
-        .show-grid { display: grid !important; }
-
-        #footer-branding { position: absolute; bottom: 20px; width: 100%; text-align: center; color: rgba(255, 255, 255, 0.5); font-size: 11px; letter-spacing: 4px; font-weight: bold; text-transform: uppercase; text-shadow: 0 0 10px #0048FF; }
-        .logo-wrs { font-family: 'Arial Black', sans-serif; font-size: 75px; letter-spacing: 15px; text-align: center; background: linear-gradient(270deg, #FFFFFF, #0048FF, #FFFFFF, #0048FF, #FFFFFF); background-size: 400% 400%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: gradientMove 4s linear infinite; margin-bottom: 30px; }
+        .logo-wrs { font-family: 'Arial Black', sans-serif; font-size: 75px; letter-spacing: 15px; text-align: center; background: linear-gradient(270deg, #FFFFFF, #0048FF, #FFFFFF, #0048FF, #FFFFFF); background-size: 400% 400%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: gradientMove 4s linear infinite; margin-bottom: 30px; margin-top: 0; }
         @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
         #visit-counter { position: fixed; bottom: 20px; left: 20px; z-index: 1000001; background: rgba(0, 0, 0, 0.9); border: 1px solid #0048FF; padding: 6px 12px; border-radius: 4px; display: flex; flex-direction: column; align-items: center; }
         #like-container { position: fixed; bottom: 20px; right: 20px; z-index: 1000001; display: flex; flex-direction: column; align-items: center; gap: 5px; }
         .like-btn { background: rgba(0, 0, 0, 0.8); border: 2px solid #ff0055; color: #ff0055; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 20px; transition: 0.3s; }
         .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle var(--duration) infinite; pointer-events: none; }
+        @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
     </style>
 </head>
 <body onmousemove="createDrop(event)">
@@ -148,11 +99,11 @@
 </div>
 
 <div id="music-player-ui">
-    <button class="music-nav-btn" onclick="changeTrack(-1)"><i class="fas fa-chevron-up"></i></button>
-    <button class="play-toggle" onclick="controlMusic()" id="music-btn"><i class="fas fa-play"></i></button>
-    <button class="music-nav-btn" onclick="changeTrack(1)"><i class="fas fa-chevron-down"></i></button>
+    <button style="background:none; border:none; color:#0048FF; cursor:pointer;" onclick="changeTrack(-1)"><i class="fas fa-chevron-up"></i></button>
+    <button style="background:none; border:1px solid #0048FF; color:#0048FF; width:30px; height:30px; border-radius:50%; cursor:pointer;" onclick="controlMusic()" id="music-btn"><i class="fas fa-play"></i></button>
+    <button style="background:none; border:none; color:#0048FF; cursor:pointer;" onclick="changeTrack(1)"><i class="fas fa-chevron-down"></i></button>
     <input type="range" class="volume-control" id="volume-slider" min="0" max="1" step="0.01" value="0.5" oninput="changeVolume(this.value)">
-    <div class="music-info" style="width:100%; height:100px; overflow:hidden; position:relative; border-top:1px solid rgba(0,72,255,0.3); padding-top:5px; display:flex; justify-content:center;">
+    <div style="width:100%; height:80px; overflow:hidden; position:relative; margin-top:10px;">
         <span class="track-name" id="track-display">PLAYLIST WRS</span>
     </div>
 </div>
@@ -161,28 +112,12 @@
     <img src="https://i.ibb.co/6P0S9N7/astronauta-azul.gif" alt="Astronauta" class="astronauta-azul">
     
     <h1 class="logo-wrs">GALERIA</h1>
-    <div class="menu-wrapper">
+    
+    <div style="display:flex; flex-direction:column; align-items:center;">
         <button class="btn-glow" onclick="entrarNoPerfil()"><i class="fas fa-rocket"></i> ENTRE</button>
-        <button class="btn-glow" onclick="toggleSimpleMenu('lista-xat')"><i class="fas fa-comments"></i> XAT COMUNIDADE</button>
-        <div id="lista-xat" class="custom-list-hidden">
-            <a href="https://xat.com/tuga" target="_blank" class="friend-item">XAT TUGA</a>
-            <a href="https://xat.com/conexaosertanejoo" target="_blank" class="friend-item">XAT CONEXÃO</a>
-        </div>
-        <button class="btn-glow" onclick="togglePriceGrid()"><i class="fas fa-tags"></i> TABELA DE PREÇOS</button>
-        <div id="price-grid" class="price-grid-container">
-            <div style="color:#fff; font-size:10px; text-align:center; grid-column: span 2; margin-bottom:5px;">PREÇOS EM XATS</div>
-            <div style="background:rgba(0,72,255,0.1); padding:5px; border:1px solid #0048FF; text-align:center;">
-                <span style="color:#fff; font-size:9px;">GIF 4D</span><br><b style="color:#00ffcc;">400</b>
-            </div>
-            <div style="background:rgba(0,72,255,0.1); padding:5px; border:1px solid #0048FF; text-align:center;">
-                <span style="color:#fff; font-size:9px;">PCBACK GIF</span><br><b style="color:#00ffcc;">450</b>
-            </div>
-             <div style="background:rgba(0,72,255,0.1); padding:5px; border:1px solid #0048FF; text-align:center;">
-                <span style="color:#fff; font-size:9px;">FUNDOS</span><br><b style="color:#00ffcc;">500</b>
-            </div>
-        </div>
     </div>
-    <div id="footer-branding">GALERIA DE GIFS - 2026</div>
+    
+    <div style="position:absolute; bottom:20px; color:rgba(255,255,255,0.5); font-size:11px; letter-spacing:4px;">GALERIA DE GIFS - 2026</div>
 </div>
 
 <div id="visit-counter">
@@ -201,8 +136,8 @@
     const ID_LIKES = "galeria_wrs_likes_2026_main"; 
 
     const playlist = [
-        { url: 'https://cdn.discordapp.com/attachments/1489682267264520284/1489684333672403135/sound-of-silence.mp3.mp3?ex=69d15026&is=69cffea6&hm=c4c3109d5baa2f5061e9eddf9e35fccd5f629d5340d963ec5a02f320928ab105&', name: 'The Sound of Silence' },
-        { url: 'https://cdn.discordapp.com/attachments/1489682267264520284/1489682358335569920/4-Non-Blondes-whats-up.mp3.mp3?ex=69d14e4f&is=69cffccf&hm=80284e95d90307d6de8428368b56d5435ed1150cec5a6238b8a744855f683751&', name: '4 Non Blondes - Whats Up' }
+        { url: 'https://cdn.discordapp.com/attachments/1489682267264520284/1489684333672403135/sound-of-silence.mp3.mp3?ex=69d15026&is=69cffea6&hm=c4c3109d5baa2f5061e9eddf9e35fccd5f629d5340d963ec5a02f320928ab105&', name: 'Sound of Silence' },
+        { url: 'https://cdn.discordapp.com/attachments/1489682267264520284/1489682358335569920/4-Non-Blondes-whats-up.mp3.mp3?ex=69d14e4f&is=69cffccf&hm=80284e95d90307d6de8428368b56d5435ed1150cec5a6238b8a744855f683751&', name: 'Whats Up' }
     ];
     
     let currentTrack = 0;
