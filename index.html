@@ -69,7 +69,7 @@
             flex-direction: column; 
             gap: 15px; 
             align-items: center; 
-            margin-bottom: 40px; /* Garante espaço para o rodapé */
+            margin-bottom: 40px;
         }
 
         .btn-glow {
@@ -80,22 +80,65 @@
         }
         .btn-glow:hover { background: #0048FF; color: #fff; box-shadow: 0 0 30px #0048FF; transform: scale(1.05); }
 
-        .friends-list-hidden, .custom-list-hidden { 
-            display: none; flex-direction: column; background: rgba(0, 0, 0, 0.9); 
-            border: 1px solid #0048FF; width: 300px; margin-top: -10px;
-            margin-bottom: 5px;
+        /* Nova Grade de Preços Estilizada */
+        .price-grid-container {
+            display: none;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 12px;
+            width: 340px;
+            max-height: 380px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid #0048FF;
+            padding: 15px;
+            margin-top: -10px;
+            margin-bottom: 10px;
+            scrollbar-width: thin;
+            scrollbar-color: #0048FF #000;
         }
-        .show-list { display: flex !important; }
+        .price-grid-container::-webkit-scrollbar { width: 5px; }
+        .price-grid-container::-webkit-scrollbar-thumb { background: #0048FF; }
+
+        .show-grid { display: grid !important; }
+
+        .price-card {
+            background: rgba(0, 72, 255, 0.05);
+            border: 1px solid rgba(0, 72, 255, 0.3);
+            padding: 12px;
+            text-align: center;
+            transition: 0.3s;
+        }
+        .price-card:hover { border-color: #0048FF; background: rgba(0, 72, 255, 0.1); }
+
+        .price-card i { font-size: 20px; color: #0048FF; margin-bottom: 8px; }
+        .price-card h4 { color: #fff; margin: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+        .price-card p { color: rgba(255,255,255,0.5); font-size: 10px; margin: 4px 0 10px 0; line-height: 1.2; }
+        .price-card .value { color: #00ffcc; font-family: monospace; font-weight: bold; display: block; margin-bottom: 10px; font-size: 16px; }
+
+        .btn-comprar {
+            display: block;
+            background: #ff0055;
+            color: #fff;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 6px;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+        .btn-comprar:hover { background: #fff; color: #ff0055; box-shadow: 0 0 10px #ff0055; }
+
+        .custom-list-hidden { 
+            display: none; flex-direction: column; background: rgba(0, 0, 0, 0.9); 
+            border: 1px solid #0048FF; width: 300px; margin-top: -10px; margin-bottom: 5px;
+        }
         
         .friend-item { 
             color: #0048FF; padding: 12px; border-bottom: 1px solid rgba(0, 72, 255, 0.2); 
             text-align: center; text-decoration: none; font-weight: bold; transition: 0.3s; cursor: pointer;
         }
-
-        #lista-amigos .friend-item { padding: 8px; font-size: 14px; }
         .friend-item:hover { background: #0048FF !important; color: #fff !important; }
 
-        /* Rodapé Ajustado */
         .footer-wrs {
             margin-top: 20px;
             color: rgba(255,255,255,0.3);
@@ -104,7 +147,7 @@
             text-align: center;
         }
 
-        /* Contadores */
+        /* Contadores e efeitos */
         #visit-counter {
             position: fixed; bottom: 20px; left: 20px; z-index: 1000001;
             background: rgba(0, 0, 0, 0.9); border: 1px solid #0048FF;
@@ -124,16 +167,10 @@
         .like-btn:hover { background: #ff0055; color: #fff; transform: scale(1.1); }
 
         #like-number {
-            color: #fff; 
-            font-family: 'Courier New', monospace; 
-            font-weight: bold; 
-            text-shadow: 0 0 5px #ff0055;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            pointer-events: none;
+            color: #fff; font-family: 'Courier New', monospace; font-weight: bold; 
+            text-shadow: 0 0 5px #ff0055; opacity: 0; transition: opacity 0.5s ease; pointer-events: none;
         }
 
-        /* Gotas e Estrelas */
         .drop {
             position: absolute; background-color: rgba(0, 72, 255, 0.4); border-radius: 50%;
             pointer-events: none; transform: translate(-50%, -50%);
@@ -162,19 +199,54 @@
         <div class="menu-wrapper">
             <button class="btn-glow" onclick="entrarNoPerfil()"><i class="fas fa-rocket"></i> ENTRE</button>
             
-            <button class="btn-glow" onclick="toggleMenu('lista-xat')"><i class="fas fa-comments"></i> XAT COMUNIDADE</button>
+            <button class="btn-glow" onclick="toggleSimpleMenu('lista-xat')"><i class="fas fa-comments"></i> XAT COMUNIDADE</button>
             <div id="lista-xat" class="custom-list-hidden">
                 <a href="https://xat.com/tuga" target="_blank" class="friend-item">XAT TUGA</a>
                 <a href="https://xat.com/conexaosertanejoo" target="_blank" class="friend-item">XAT CONEXÃO</a>
             </div>
 
-            <button class="btn-glow" onclick="toggleMenu('lista-amigos')"><i class="fas fa-user-friends"></i> PREÇOS</button>
-            <div id="lista-amigos" class="friends-list-hidden">
-                <div class="friend-item">Gifs - 400 xats </div>
-                <div class="friend-item">Pcback Gif - 450 xats</div>
-                <div class="friend-item">Pcback Estático - 300 xats</div>
-                <div class="friend-item">Pstyle Gif - 350 xats </div>
-                <div class="friend-item">Pstyle Estático - 250 xats </div>
+            <button class="btn-glow" onclick="togglePriceGrid()"><i class="fas fa-tags"></i> TABELA DE PREÇOS</button>
+            
+            <div id="price-grid" class="price-grid-container">
+                <div class="price-card">
+                    <i class="fas fa-file-video"></i>
+                    <h4>Gifs</h4>
+                    <p>Foto e animação em movimento (Gifs Personalizados)</p>
+                    <span class="value">400 xats</span>
+                    <a href="https://xat.com/tuga" target="_blank" class="btn-comprar">COMPRAR</a>
+                </div>
+
+                <div class="price-card">
+                    <i class="fas fa-bolt"></i>
+                    <h4>Pcback Gif</h4>
+                    <p>Aba de conversa privada (PV) COM Efeito Animado</p>
+                    <span class="value">450 xats</span>
+                    <a href="https://xat.com/tuga" target="_blank" class="btn-comprar">COMPRAR</a>
+                </div>
+
+                <div class="price-card">
+                    <i class="fas fa-ghost"></i>
+                    <h4>Pcback Estático</h4>
+                    <p>Aba de conversa privada (PV) SEM Efeito</p>
+                    <span class="value">300 xats</span>
+                    <a href="https://xat.com/tuga" target="_blank" class="btn-comprar">COMPRAR</a>
+                </div>
+
+                <div class="price-card">
+                    <i class="fas fa-wand-magic-sparkles"></i>
+                    <h4>Pstyle Gif</h4>
+                    <p>Banner de perfil COM Efeito e Animação</p>
+                    <span class="value">350 xats</span>
+                    <a href="https://xat.com/tuga" target="_blank" class="btn-comprar">COMPRAR</a>
+                </div>
+
+                <div class="price-card">
+                    <i class="fas fa-image"></i>
+                    <h4>Pstyle Estático</h4>
+                    <p>Banner de perfil SEM Efeito (Imagem Fixa)</p>
+                    <span class="value">250 xats</span>
+                    <a href="https://xat.com/tuga" target="_blank" class="btn-comprar">COMPRAR</a>
+                </div>
             </div>
 
             <div class="footer-wrs">© GALERIA - 2026</div>
@@ -197,11 +269,18 @@
     const ID_VISITAS = "galeria_wrs_2026_main";
     const ID_LIKES = "galeria_wrs_likes_2026_main";
 
-    function toggleMenu(id) {
+    function toggleSimpleMenu(id) {
+        document.getElementById('price-grid').classList.remove('show-grid');
         const menu = document.getElementById(id);
         const isVisible = menu.classList.contains('show-list');
-        document.querySelectorAll('.friends-list-hidden, .custom-list-hidden').forEach(m => m.classList.remove('show-list'));
+        document.querySelectorAll('.custom-list-hidden').forEach(m => m.classList.remove('show-list'));
         if (!isVisible) menu.classList.add('show-list');
+    }
+
+    function togglePriceGrid() {
+        document.querySelectorAll('.custom-list-hidden').forEach(m => m.classList.remove('show-list'));
+        const grid = document.getElementById('price-grid');
+        grid.classList.toggle('show-grid');
     }
 
     function entrarNoPerfil() {
