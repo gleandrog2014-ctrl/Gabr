@@ -703,7 +703,7 @@
         position: relative;
         overflow: hidden;
         background: #000;
-        border: 2px solid #0048FF; /* Azul da sua galeria */
+        border: 2px solid #0048FF;
         border-radius: 5px;
         box-shadow: 0 0 20px rgba(0, 72, 255, 0.5);
         margin: 10px auto;
@@ -719,68 +719,79 @@
     .scan-line {
         position: absolute; width: 100%; height: 4px;
         background: #0048FF; box-shadow: 0 0 15px #0048FF;
-        opacity: 0.4; z-index: 5; animation: moveScanWRS 5s linear infinite;
+        opacity: 0.4; z-index: 5; animation: moveScanGabr 5s linear infinite;
     }
 
-    @keyframes moveScanWRS { 0% { top: -5%; } 100% { top: 105%; } }
+    @keyframes moveScanGabr { 0% { top: -5%; } 100% { top: 105%; } }
 
-    .slide-wrs {
+    .slide-gabr {
         position: absolute; width: 100%; height: 100%;
         opacity: 0; transition: opacity 0.8s ease-in-out;
         display: flex; flex-direction: column;
         justify-content: center; align-items: center; z-index: 2;
     }
 
-    .slide-wrs.active { opacity: 1; }
+    .slide-gabr.active { opacity: 1; }
 
-    .slide-wrs img {
+    .slide-gabr img {
         max-width: 85%; max-height: 60%;
         object-fit: contain; filter: drop-shadow(0 0 10px #0048FF);
     }
 
-    .legenda-wrs-animada {
+    .legenda-gabr-animada {
         margin-top: 20px; font-weight: 900; text-transform: uppercase;
         letter-spacing: 3px; font-size: 13px; text-align: center;
-        background: linear-gradient(to right, #0048FF, #00d4ff, #fff, #00d4ff, #0048FF);
+        background: linear-gradient(to right, #0048FF, #fff, #0048FF);
         background-size: 200% auto; -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent; animation: gradTextWRS 3s linear infinite;
+        -webkit-text-fill-color: transparent; animation: gradTextGabr 3s linear infinite;
     }
 
-    @keyframes gradTextWRS { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
+    @keyframes gradTextGabr { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
 
-    .btn-nav-wrs {
+    .btn-nav-gabr {
         position: absolute; top: 50%; transform: translateY(-50%);
         background: rgba(0, 0, 0, 0.7); color: #0048FF;
         border: 1px solid #0048FF; width: 35px; height: 35px;
         cursor: pointer; z-index: 10; border-radius: 5px;
     }
-    .btn-nav-wrs:hover { background: #0048FF; color: #fff; box-shadow: 0 0 15px #0048FF; }
-    .prev-wrs { left: 10px; } .next-wrs { right: 10px; }
+    .btn-nav-gabr:hover { background: #0048FF; color: #fff; box-shadow: 0 0 15px #0048FF; }
+    .prev-gabr { left: 10px; } .next-gabr { right: 10px; }
 </style>
 
 <div class="carrossel-wrs-container">
     <div class="grid-bg"></div>
     <div class="scan-line"></div>
     
-    <div class="slide-wrs active"><img src="https://i.imgur.com/SFnk7A6.gif"><div class="legenda-wrs-animada">PROJETO 01</div></div>
-    <div class="slide-wrs"><img src="https://i.imgur.com/KKY2zqU.gif"><div class="legenda-wrs-animada">PROJETO 02</div></div>
-    <div class="slide-wrs"><img src="https://i.imgur.com/28xDTg0.gif"><div class="legenda-wrs-animada">PROJETO 03</div></div>
-    <div class="slide-wrs"><img src="https://i.imgur.com/kSK0E1f.gif"><div class="legenda-wrs-animada">PROJETO 04</div></div>
+    <div class="slide-gabr active"><img src="https://i.imgur.com/SFnk7A6.gif"><div class="legenda-gabr-animada">PROJETO 01- Gabr </div></div>
+    <div class="slide-gabr"><img src="https://i.imgur.com/KKY2zqU.gif"><div class="legenda-gabr-animada">PROJETO 02 - Mnna </div></div>
+    <div class="slide-gabr"><img src="https://i.imgur.com/28xDTg0.gif"><div class="legenda-gabr-animada">PROJETO 03 - Marbella </div></div>
+    <div class="slide-gabr"><img src="https://i.imgur.com/kSK0E1f.gif"><div class="legenda-gabr-animada">PROJETO 04 - Armando </div></div>
 
-    <button class="btn-nav-wrs prev-wrs" onclick="moveWRS(-1)">&#10094;</button>
-    <button class="btn-nav-wrs next-wrs" onclick="moveWRS(1)">&#10095;</button>
+    <button class="btn-nav-gabr prev-gabr" onclick="moveSliderGabr(-1)">&#10094;</button>
+    <button class="btn-nav-gabr next-gabr" onclick="moveSliderGabr(1)">&#10095;</button>
 </div>
 
 <script>
-    let idxWRS = 0;
-    const sldWRS = document.querySelectorAll('.slide-wrs');
-    function showWRS(n) {
-        sldWRS[idxWRS].classList.remove('active');
-        idxWRS = (n + sldWRS.length) % sldWRS.length;
-        sldWRS[idxWRS].classList.add('active');
-    }
-    function moveWRS(n) { showWRS(idxWRS + n); clearInterval(timerWRS); timerWRS = setInterval(() => showWRS(idxWRS + 1), 4000); }
-    let timerWRS = setInterval(() => showWRS(idxWRS + 1), 4000);
+    // Escopo isolado para não dar conflito com o efeito de gotas
+    (function() {
+        let idxGabr = 0;
+        const slidesGabr = document.querySelectorAll('.slide-gabr');
+        let timerGabr;
+
+        function showSliderGabr(n) {
+            slidesGabr[idxGabr].classList.remove('active');
+            idxGabr = (n + slidesGabr.length) % slidesGabr.length;
+            slidesGabr[idxGabr].classList.add('active');
+        }
+
+        window.moveSliderGabr = function(n) {
+            showSliderGabr(idxGabr + n);
+            clearInterval(timerGabr);
+            timerGabr = setInterval(() => showSliderGabr(idxGabr + 1), 4000);
+        }
+
+        timerGabr = setInterval(() => showSliderGabr(idxGabr + 1), 4000);
+    })();
 </script>
       </div><!-- ================= VISTA DE GIFS ================= -->
       <div id="view-gifs">
