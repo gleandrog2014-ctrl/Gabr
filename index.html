@@ -9,90 +9,38 @@
     
     <style>
         body { margin: 0; background-color: #000; overflow-x: hidden; overflow-y: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        
-        /* Splash Screen */
-        #splash-screen { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: radial-gradient(circle at bottom right, rgba(0, 72, 255, 0.15), transparent 40%), 
-                        radial-gradient(circle at top left, rgba(80, 0, 255, 0.1), transparent 30%), #000; 
-            display: flex; flex-direction: column; justify-content: center; align-items: center; 
-            z-index: 999999; transition: opacity 0.6s ease; 
-        }
-
-        /* Status Discord */
-        #status-indicator { 
-            position: fixed; top: 20px; right: 20px; display: flex; align-items: center; gap: 10px; 
-            background: rgba(0, 0, 0, 0.6); padding: 8px 15px; border-radius: 20px; 
-            border: 1px solid rgba(0, 72, 255, 0.3); z-index: 1000002; backdrop-filter: blur(5px); 
-        }
+        #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at bottom right, rgba(0, 72, 255, 0.15), transparent 40%), radial-gradient(circle at top left, rgba(80, 0, 255, 0.1), transparent 30%), #000; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 999999; transition: opacity 0.6s ease; }
+        #status-indicator { position: fixed; top: 20px; right: 20px; display: flex; align-items: center; gap: 10px; background: rgba(0, 0, 0, 0.6); padding: 8px 15px; border-radius: 20px; border: 1px solid rgba(0, 72, 255, 0.3); z-index: 1000002; backdrop-filter: blur(5px); }
         #status-dot { width: 10px; height: 10px; border-radius: 50%; background-color: #555; transition: 0.5s; }
         #status-text { color: #fff; font-size: 11px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; }
         .dot-online { background-color: #00ff00 !important; box-shadow: 0 0 15px #00ff00; }
         .dot-idle { background-color: #f1c40f !important; box-shadow: 0 0 15px #f1c40f; }
         .dot-dnd { background-color: #e74c3c !important; box-shadow: 0 0 15px #e74c3c; }
 
-        /* Player Lateral */
-        #music-player-ui { 
-            position: fixed; top: 250px; left: 20px; z-index: 1000002; 
-            background: rgba(0, 0, 0, 0.85); border: 1px solid #0048FF; 
-            padding: 15px 5px; border-radius: 30px; display: flex; 
-            flex-direction: column; align-items: center; gap: 10px; 
-            box-shadow: 0 0 15px rgba(0, 72, 255, 0.4); backdrop-filter: blur(5px); 
-            opacity: 0.5; transition: 0.4s; width: 40px; 
-        }
+        #music-player-ui { position: fixed; top: 250px; left: 20px; z-index: 1000002; background: rgba(0, 0, 0, 0.85); border: 1px solid #0048FF; padding: 15px 5px; border-radius: 30px; display: flex; flex-direction: column; align-items: center; gap: 10px; box-shadow: 0 0 15px rgba(0, 72, 255, 0.4); backdrop-filter: blur(5px); opacity: 0.5; transition: 0.4s; width: 40px; }
         #music-player-ui:hover { opacity: 1; box-shadow: 0 0 25px rgba(0, 72, 255, 0.7); }
-
-        .volume-control { 
-            width: 45px; height: 4px; -webkit-appearance: none; 
-            background: rgba(0, 72, 255, 0.3); outline: none; border-radius: 2px; 
-            cursor: pointer; transform: rotate(-90deg); margin: 20px 0; 
-        }
-        .volume-control::-webkit-slider-thumb { -webkit-appearance: none; width: 10px; height: 10px; background: #0048FF; border-radius: 50%; }
-
-        .music-info { 
-            width: 100%; height: 100px; overflow: hidden; position: relative; 
-            border-top: 1px solid rgba(0, 72, 255, 0.3); padding-top: 5px; 
-            display: flex; justify-content: center; 
-        }
-        .track-name { 
-            display: block; color: #fff; font-size: 8px; font-weight: bold; 
-            text-transform: uppercase; writing-mode: vertical-rl; white-space: nowrap; 
-            position: absolute; animation: marqueeVertical 10s linear infinite; 
-        }
+        .volume-control { width: 45px; height: 4px; -webkit-appearance: none; background: rgba(0, 72, 255, 0.3); outline: none; border-radius: 2px; cursor: pointer; transform: rotate(-90deg); margin: 20px 0; }
+        .volume-control::-webkit-slider-thumb { -webkit-appearance: none; width: 10px; height: 10px; background: #0048FF; border-radius: 50%; box-shadow: 0 0 5px #0048FF; }
+        
+        .music-info { width: 100%; height: 100px; overflow: hidden; position: relative; border-top: 1px solid rgba(0, 72, 255, 0.3); padding-top: 5px; display: flex; justify-content: center; }
+        .track-name { display: block; color: #fff; font-size: 8px; font-weight: bold; text-transform: uppercase; writing-mode: vertical-rl; white-space: nowrap; position: absolute; animation: marqueeVertical 10s linear infinite; }
         @keyframes marqueeVertical { 0% { transform: translateY(100px); } 100% { transform: translateY(-150%); } }
 
-        .play-toggle { 
-            background: none; border: 1px solid #0048FF; color: #0048FF; cursor: pointer; 
-            width: 30px; height: 30px; border-radius: 50%; display: flex; 
-            justify-content: center; align-items: center; font-size: 12px; transition: 0.3s; 
-        }
+        .music-nav-btn { background: none; border: 1px solid rgba(0, 72, 255, 0.4); color: #0048FF; cursor: pointer; width: 25px; height: 25px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 10px; transition: 0.3s; }
+        .music-nav-btn:hover { background: rgba(0, 72, 255, 0.2); border-color: #0048FF; }
+        .play-toggle { background: none; border: 1px solid #0048FF; color: #0048FF; cursor: pointer; width: 30px; height: 30px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 12px; transition: 0.3s; }
         .play-toggle:hover { background: #0048FF; color: #fff; }
 
-        /* Botão Entre */
-        .btn-glow { 
-            background: rgba(0, 0, 0, 0.6); border: 2px solid #0048FF; color: #0048FF; 
-            padding: 12px 0; font-size: 15px; cursor: pointer; font-weight: bold; 
-            letter-spacing: 3px; width: 280px; backdrop-filter: blur(5px); 
-            transition: 0.3s; margin-bottom: 10px; 
-        }
+        .btn-glow { background: rgba(0, 0, 0, 0.6); border: 2px solid #0048FF; color: #0048FF; padding: 12px 0; font-size: 15px; cursor: pointer; font-weight: bold; letter-spacing: 3px; width: 280px; backdrop-filter: blur(5px); transition: 0.3s; margin-bottom: 10px; }
         .btn-glow:hover { background: #0048FF; color: #fff; box-shadow: 0 0 25px #0048FF; transform: scale(1.03); }
-
-        .logo-wrs { 
-            font-family: 'Arial Black', sans-serif; font-size: 75px; letter-spacing: 15px; 
-            text-align: center; background: linear-gradient(270deg, #FFFFFF, #0048FF, #FFFFFF, #0048FF, #FFFFFF); 
-            background-size: 400% 400%; -webkit-background-clip: text; background-clip: text; 
-            color: transparent; animation: gradientMove 4s linear infinite; margin-bottom: 30px; 
-        }
+        .logo-wrs { font-family: 'Arial Black', sans-serif; font-size: 75px; letter-spacing: 15px; text-align: center; background: linear-gradient(270deg, #FFFFFF, #0048FF, #FFFFFF, #0048FF, #FFFFFF); background-size: 400% 400%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: gradientMove 4s linear infinite; margin-bottom: 30px; }
         @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-
         .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle var(--duration) infinite; pointer-events: none; }
     </style>
 </head>
 <body onmousemove="createDrop(event)">
 
-<audio id="meuAudio" loop preload="auto">
-    <source src="https://cdn.discordapp.com/attachments/1489682267264520284/1489682358335569920/4-Non-Blondes-whats-up.mp3.mp3?ex=69d14e4f&is=69cffccf&hm=80284e95d90307d6de8428368b56d5435ed1150cec5a6238b8a744855f683751&" type="audio/mpeg">
-</audio>
+<audio id="audioPlayer" preload="auto"></audio>
 
 <div id="status-indicator">
     <span id="status-dot"></span>
@@ -100,10 +48,14 @@
 </div>
 
 <div id="music-player-ui">
+    <button class="music-nav-btn" onclick="changeTrack(-1)"><i class="fas fa-chevron-up"></i></button>
     <button class="play-toggle" onclick="controlMusic()" id="music-btn"><i class="fas fa-play"></i></button>
-    <input type="range" class="volume-control" id="volume-slider" min="0" max="100" value="50" oninput="changeVolume(this.value)">
+    <button class="music-nav-btn" onclick="changeTrack(1)"><i class="fas fa-chevron-down"></i></button>
+    
+    <input type="range" class="volume-control" id="volume-slider" min="0" max="1" step="0.1" value="0.5" oninput="changeVolume(this.value)">
+    
     <div class="music-info">
-        <span class="track-name" id="track-display">WRS - WHAT'S UP</span>
+        <span class="track-name" id="track-display">WRS PLAYLIST</span>
     </div>
 </div>
 
@@ -117,33 +69,56 @@
 
 <script>
     const SEU_DISCORD_ID = "454632435054018560";
-    const audio = document.getElementById('meuAudio');
+    const audio = document.getElementById('audioPlayer');
     const btn = document.getElementById('music-btn');
+    const trackDisplay = document.getElementById('track-display');
+
+    const playlist = [
+        { name: "Sound of Silence", url: "https://cdn.discordapp.com/attachments/1489682267264520284/1489684333672403135/sound-of-silence.mp3.mp3?ex=69d15026&is=69cffea6&hm=c4c3109d5baa2f5061e9eddf9e35fccd5f629d5340d963ec5a02f320928ab105&" },
+        { name: "What's Up", url: "https://cdn.discordapp.com/attachments/1489682267264520284/1489682358335569920/4-Non-Blondes-whats-up.mp3.mp3?ex=69d14e4f&is=69cffccf&hm=80284e95d90307d6de8428368b56d5435ed1150cec5a6238b8a744855f683751&" },
+        { name: "Livin on a Prayer", url: "https://cdn.discordapp.com/attachments/1489682267264520284/1489684239355084870/Bon-Jovi-livin-on-a-prayer.mp3.mp3?ex=69d1500f&is=69cffe8f&hm=7a699fae3c8607b10b9429d3ab198c82dab83b1366056e876093a251fac0013f&" },
+        { name: "You Don't Know", url: "https://cdn.discordapp.com/attachments/1489682267264520284/1489684282887639140/Eminem-you-dont-know.mp3.mp3?ex=69d1501a&is=69cffe9a&hm=b890326d27955502a4e2f65384b12d63f62b51dc8eaa2d9d6f5b8100e95e8d26&" },
+        { name: "Voyage Voyage", url: "https://cdn.discordapp.com/attachments/1489682267264520284/1489684260460822640/Desireless-voyage-voyage.mp3.mp3?ex=69d15014&is=69cffe94&hm=77f4578f14e16d9ab396259321e724b16bdf4fd624150a05c34248d0972c3f8e&" }
+    ];
+
+    let currentTrack = 0;
+
+    function loadTrack(index) {
+        currentTrack = index;
+        audio.src = playlist[currentTrack].url;
+        trackDisplay.innerText = playlist[currentTrack].name;
+    }
 
     function controlMusic() {
-        if (audio.paused) { 
-            audio.play(); 
-            btn.innerHTML = '<i class="fas fa-pause"></i>'; 
-        } else { 
-            audio.pause(); 
-            btn.innerHTML = '<i class="fas fa-play"></i>'; 
+        if (audio.paused) {
+            audio.play();
+            btn.innerHTML = '<i class="fas fa-pause"></i>';
+        } else {
+            audio.pause();
+            btn.innerHTML = '<i class="fas fa-play"></i>';
         }
     }
 
-    function changeVolume(val) { audio.volume = val / 100; }
+    function changeTrack(dir) {
+        currentTrack = (currentTrack + dir + playlist.length) % playlist.length;
+        loadTrack(currentTrack);
+        audio.play();
+        btn.innerHTML = '<i class="fas fa-pause"></i>';
+    }
+
+    function changeVolume(val) {
+        audio.volume = val;
+    }
+
+    audio.onended = () => changeTrack(1);
 
     function entrarNoPerfil() { 
         const splash = document.getElementById('splash-screen');
-        
-        // Ativa o áudio
-        audio.muted = false;
-        audio.play().then(() => {
-            btn.innerHTML = '<i class="fas fa-pause"></i>';
-            document.getElementById('track-display').innerText = "TOCANDO AGORA";
-        }).catch(e => console.log("O navegador bloqueou o autoplay."));
-
         splash.style.opacity = "0";
         document.body.style.overflowY = "auto";
+        loadTrack(0);
+        audio.play();
+        btn.innerHTML = '<i class="fas fa-pause"></i>';
         setTimeout(() => { splash.style.display = "none"; }, 600);
     }
 
