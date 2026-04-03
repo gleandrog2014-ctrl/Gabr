@@ -1445,61 +1445,7 @@
                 e.preventDefault();
             }
         });
-    </script>
- <canvas id="cursor-canvas" style="position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999;"></canvas>
-
-<script>
-const canvas = document.getElementById('cursor-canvas');
-const ctx = canvas.getContext('2d');
-let points = [];
-
-function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
-window.addEventListener('resize', resize);
-resize();
-
-window.addEventListener('mousemove', (e) => {
-    // Adiciona uma gota menor e mais suave
-    points.push({
-        x: e.clientX,
-        y: e.clientY,
-        size: 0,
-        alpha: 0.5,       // Opacidade inicial reduzida (mais transparente)
-        maxSize: 40       // Tamanho máximo reduzido pela metade
-    });
-});
-
-function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    for (let i = 0; i < points.length; i++) {
-        let p = points[i];
-        
-        // Expansão mais lenta e sutil
-        p.size += 1.5;     
-        p.alpha -= 0.02;   
-        
-        // EFEITO DE BRILHO SUAVE
-        ctx.shadowBlur = 8; 
-        ctx.shadowColor = `rgba(0, 72, 255, ${p.alpha})`; 
-        ctx.fillStyle = `rgba(0, 72, 255, ${p.alpha * 0.3})`; 
-        
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fill();
-        
-        if (p.alpha <= 0 || p.size >= p.maxSize) {
-            points.splice(i, 1);
-            i--;
-        }
-    }
-    
-    requestAnimationFrame(animate);
-}
-animate();
-</script>
+   
 
 </body> ```
 
