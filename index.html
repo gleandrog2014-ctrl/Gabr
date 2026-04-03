@@ -1510,6 +1510,36 @@
 
 </body> ```
 
+<script>
+    (function() {
+        // Função que cria a gota
+        function createDrop(e) {
+            const drop = document.createElement('div');
+            drop.className = 'cursor-drop';
+            
+            // Posiciona a gota exatamente na ponta do mouse
+            drop.style.left = e.clientX + 'px';
+            drop.style.top = e.clientY + 'px';
+            
+            document.body.appendChild(drop);
+
+            // Animação de expansão e sumiço
+            const anim = drop.animate([
+                { width: '0px', height: '0px', opacity: 0.8 },
+                { width: '100px', height: '100px', opacity: 0 }
+            ], {
+                duration: 800,
+                easing: 'ease-out'
+            });
+
+            // Remove o elemento após a animação para não pesar o site
+            anim.onfinish = () => drop.remove();
+        }
+
+        // Ativa o efeito no movimento do mouse
+        document.addEventListener('mousemove', createDrop);
+    })();
+</script>
  <script>
     // Mensagem de alerta
     const mensagemProtecao = "Acesso Protegido - Cópia Proibida - Propriedade de Gabr (1777777)";
@@ -1561,36 +1591,5 @@
         transform: translate(-50%, -50%);
     }
 </style>
-
-<script>
-    (function() {
-        // Função que cria a gota
-        function createDrop(e) {
-            const drop = document.createElement('div');
-            drop.className = 'cursor-drop';
-            
-            // Posiciona a gota exatamente na ponta do mouse
-            drop.style.left = e.clientX + 'px';
-            drop.style.top = e.clientY + 'px';
-            
-            document.body.appendChild(drop);
-
-            // Animação de expansão e sumiço
-            const anim = drop.animate([
-                { width: '0px', height: '0px', opacity: 0.8 },
-                { width: '100px', height: '100px', opacity: 0 }
-            ], {
-                duration: 800,
-                easing: 'ease-out'
-            });
-
-            // Remove o elemento após a animação para não pesar o site
-            anim.onfinish = () => drop.remove();
-        }
-
-        // Ativa o efeito no movimento do mouse
-        document.addEventListener('mousemove', createDrop);
-    })();
-</script>
-</body>
+  </body>
 </html>
