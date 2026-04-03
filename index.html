@@ -695,10 +695,93 @@
 				1553350022, 1553350080, 1553358001 1553358004, 1549200788, 1549200822, 1549200844, 1557799002, 1553366005, 1549200844, 1553347776 
             </p>
           </div>
-        </div>
-        <div class="spotify-container">
-          <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/6brl7bwOHmGFkNw3MBqssT?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-        </div>
+        <style>
+    .carrossel-wrs-container {
+        width: 100%;
+        max-width: 500px;
+        height: 320px;
+        position: relative;
+        overflow: hidden;
+        background: #000;
+        border: 2px solid #0048FF; /* Azul da sua galeria */
+        border-radius: 5px;
+        box-shadow: 0 0 20px rgba(0, 72, 255, 0.5);
+        margin: 10px auto;
+    }
+
+    .grid-bg {
+        position: absolute; width: 100%; height: 100%;
+        background-image: linear-gradient(rgba(0, 72, 255, 0.1) 1px, transparent 1px),
+                          linear-gradient(90deg, rgba(0, 72, 255, 0.1) 1px, transparent 1px);
+        background-size: 25px 25px; z-index: 1;
+    }
+
+    .scan-line {
+        position: absolute; width: 100%; height: 4px;
+        background: #0048FF; box-shadow: 0 0 15px #0048FF;
+        opacity: 0.4; z-index: 5; animation: moveScanWRS 5s linear infinite;
+    }
+
+    @keyframes moveScanWRS { 0% { top: -5%; } 100% { top: 105%; } }
+
+    .slide-wrs {
+        position: absolute; width: 100%; height: 100%;
+        opacity: 0; transition: opacity 0.8s ease-in-out;
+        display: flex; flex-direction: column;
+        justify-content: center; align-items: center; z-index: 2;
+    }
+
+    .slide-wrs.active { opacity: 1; }
+
+    .slide-wrs img {
+        max-width: 85%; max-height: 60%;
+        object-fit: contain; filter: drop-shadow(0 0 10px #0048FF);
+    }
+
+    .legenda-wrs-animada {
+        margin-top: 20px; font-weight: 900; text-transform: uppercase;
+        letter-spacing: 3px; font-size: 13px; text-align: center;
+        background: linear-gradient(to right, #0048FF, #00d4ff, #fff, #00d4ff, #0048FF);
+        background-size: 200% auto; -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent; animation: gradTextWRS 3s linear infinite;
+    }
+
+    @keyframes gradTextWRS { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
+
+    .btn-nav-wrs {
+        position: absolute; top: 50%; transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.7); color: #0048FF;
+        border: 1px solid #0048FF; width: 35px; height: 35px;
+        cursor: pointer; z-index: 10; border-radius: 5px;
+    }
+    .btn-nav-wrs:hover { background: #0048FF; color: #fff; box-shadow: 0 0 15px #0048FF; }
+    .prev-wrs { left: 10px; } .next-wrs { right: 10px; }
+</style>
+
+<div class="carrossel-wrs-container">
+    <div class="grid-bg"></div>
+    <div class="scan-line"></div>
+    
+    <div class="slide-wrs active"><img src="https://i.imgur.com/SFnk7A6.gif"><div class="legenda-wrs-animada">PROJETO 01</div></div>
+    <div class="slide-wrs"><img src="https://i.imgur.com/KKY2zqU.gif"><div class="legenda-wrs-animada">PROJETO 02</div></div>
+    <div class="slide-wrs"><img src="https://i.imgur.com/28xDTg0.gif"><div class="legenda-wrs-animada">PROJETO 03</div></div>
+    <div class="slide-wrs"><img src="https://i.imgur.com/kSK0E1f.gif"><div class="legenda-wrs-animada">PROJETO 04</div></div>
+
+    <button class="btn-nav-wrs prev-wrs" onclick="moveWRS(-1)">&#10094;</button>
+    <button class="btn-nav-wrs next-wrs" onclick="moveWRS(1)">&#10095;</button>
+</div>
+
+<script>
+    let idxWRS = 0;
+    const sldWRS = document.querySelectorAll('.slide-wrs');
+    function showWRS(n) {
+        sldWRS[idxWRS].classList.remove('active');
+        idxWRS = (n + sldWRS.length) % sldWRS.length;
+        sldWRS[idxWRS].classList.add('active');
+    }
+    function moveWRS(n) { showWRS(idxWRS + n); clearInterval(timerWRS); timerWRS = setInterval(() => showWRS(idxWRS + 1), 4000); }
+    let timerWRS = setInterval(() => showWRS(idxWRS + 1), 4000);
+</script>
       </div><!-- ================= VISTA DE GIFS ================= -->
       <div id="view-gifs">
         <div class="gifs-header">
