@@ -3,70 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrossel Neon WRS - Oficial</title>
+    <title>Carrossel WRS - Integrado</title>
     <style>
-        /* --- PADRÃO DE COR DA SUA GALERIA (AZUL CIANO NEON) --- */
+        /* --- PADRÃO DE COR DA SUA GALERIA (#0048FF) --- */
         :root {
-            --neon-azul: #00ffff; /* O azul exato dos seus botões e tabelas */
-            --neon-glow: rgba(0, 255, 255, 0.5);
-            --bg-preto: #000000;
+            --azul-wrs: #0048FF; 
+            --azul-glow: rgba(0, 72, 255, 0.5);
+            --azul-fundo: rgba(0, 72, 255, 0.1);
         }
 
         body {
-            background-color: var(--bg-preto);
+            background-color: #000;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            font-family: 'Segoe UI', Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
         }
 
         .carrossel-wrs-container {
             width: 90%;
-            max-width: 550px;
+            max-width: 500px;
             height: 320px;
             position: relative;
             overflow: hidden;
-            background: var(--bg-preto);
-            /* Borda idêntica à sua tabela de preços */
-            border: 2px solid var(--neon-azul);
-            border-radius: 10px;
-            box-shadow: 0 0 15px var(--neon-glow), inset 0 0 10px var(--neon-glow);
+            background: #000;
+            /* Borda idêntica aos seus botões (btn-glow) */
+            border: 2px solid var(--azul-wrs);
+            border-radius: 5px; /* Bordas mais retas como seus botões */
+            box-shadow: 0 0 20px var(--azul-glow);
         }
 
-        /* --- EFEITO PARA PREENCHER O ESPAÇO PRETO (LINHA DE SCANNER) --- */
-        .carrossel-wrs-container::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: var(--neon-azul);
-            box-shadow: 0 0 15px var(--neon-azul);
-            opacity: 0.3;
-            z-index: 5;
-            animation: scanline 4s linear infinite;
-        }
-
-        @keyframes scanline {
-            0% { top: 0%; }
-            100% { top: 100%; }
-        }
-
-        /* --- FUNDO DE GRADE SUTIL --- */
+        /* --- PREENCHIMENTO DO ESPAÇO PRETO: GRADE E SCANNER --- */
         .grid-bg {
             position: absolute;
             width: 100%;
             height: 100%;
-            background-image: linear-gradient(var(--neon-glow) 1px, transparent 1px),
-                              linear-gradient(90deg, var(--neon-glow) 1px, transparent 1px);
-            background-size: 30px 30px;
-            opacity: 0.1;
+            background-image: linear-gradient(var(--azul-fundo) 1px, transparent 1px),
+                              linear-gradient(90deg, var(--azul-fundo) 1px, transparent 1px);
+            background-size: 25px 25px;
             z-index: 1;
         }
 
+        .scan-line {
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            background: var(--azul-wrs);
+            box-shadow: 0 0 15px var(--azul-wrs);
+            opacity: 0.4;
+            z-index: 5;
+            animation: moveScan 5s linear infinite;
+        }
+
+        @keyframes moveScan {
+            0% { top: -5%; }
+            100% { top: 105%; }
+        }
+
+        /* --- ITENS DO CARROSSEL --- */
         .slide-item {
             position: absolute;
             width: 100%;
@@ -83,49 +79,52 @@
         .slide-item.active { opacity: 1; }
 
         .slide-item img {
-            max-width: 80%;
-            max-height: 65%;
+            max-width: 85%;
+            max-height: 60%;
             object-fit: contain;
-            filter: drop-shadow(0 0 10px var(--neon-azul));
+            filter: drop-shadow(0 0 10px var(--azul-wrs));
             z-index: 3;
         }
 
-        .legenda-neon {
+        .legenda-wrs {
             margin-top: 20px;
-            color: var(--neon-azul);
+            color: #fff; /* Texto branco como seus botões */
+            background: var(--azul-wrs); /* Fundo azul como hover do botão */
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 3px;
-            font-size: 13px;
-            text-shadow: 0 0 10px var(--neon-azul);
-            border-top: 1px solid var(--neon-azul);
-            padding-top: 5px;
+            font-size: 12px;
+            padding: 8px 20px;
+            box-shadow: 0 0 10px var(--azul-wrs);
         }
 
-        /* Botões Estilo Galeria */
-        .btn-wrs {
+        /* Botões de Navegação Estilo Galeria */
+        .nav-wrs {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: var(--neon-azul);
-            border: 1px solid var(--neon-azul);
-            padding: 10px 14px;
+            background: rgba(0, 0, 0, 0.7);
+            color: var(--azul-wrs);
+            border: 1px solid var(--azul-wrs);
+            width: 40px;
+            height: 40px;
             cursor: pointer;
             z-index: 10;
-            border-radius: 5px;
             font-weight: bold;
             transition: 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        .btn-wrs:hover {
-            background: var(--neon-azul);
-            color: #000;
-            box-shadow: 0 0 20px var(--neon-azul);
+        .nav-wrs:hover {
+            background: var(--azul-wrs);
+            color: #fff;
+            box-shadow: 0 0 20px var(--azul-wrs);
         }
 
-        .prev { left: 15px; }
-        .next { right: 15px; }
+        .prev { left: 10px; }
+        .next { right: 10px; }
 
     </style>
 </head>
@@ -133,29 +132,30 @@
 
     <div class="carrossel-wrs-container">
         <div class="grid-bg"></div>
+        <div class="scan-line"></div>
         
         <div class="slide-item active">
             <img src="https://i.imgur.com/SFnk7A6.gif" alt="Destaque 1">
-            <div class="legenda-neon">Destaque WRS 01</div>
+            <div class="legenda-wrs">PROJETO GALÁCTICO 01</div>
         </div>
 
         <div class="slide-item">
             <img src="https://i.imgur.com/KKY2zqU.gif" alt="Destaque 2">
-            <div class="legenda-neon">Destaque WRS 02</div>
+            <div class="legenda-wrs">PROJETO GALÁCTICO 02</div>
         </div>
 
         <div class="slide-item">
             <img src="https://i.imgur.com/28xDTg0.gif" alt="Destaque 3">
-            <div class="legenda-neon">Destaque WRS 03</div>
+            <div class="legenda-wrs">PROJETO GALÁCTICO 03</div>
         </div>
          
         <div class="slide-item">
             <img src="https://i.imgur.com/kSK0E1f.gif" alt="Destaque 4">
-            <div class="legenda-neon">Destaque WRS 04</div>
+            <div class="legenda-wrs">PROJETO GALÁCTICO 04</div>
         </div>
 
-        <button class="btn-wrs prev" onclick="mudarSlide(-1)">&#10094;</button>
-        <button class="btn-wrs next" onclick="mudarSlide(1)">&#10095;</button>
+        <button class="nav-wrs prev" onclick="mudarSlide(-1)">&#10094;</button>
+        <button class="nav-wrs next" onclick="mudarSlide(1)">&#10095;</button>
 
     </div>
 
@@ -178,7 +178,7 @@
         function startTimer() {
             timer = setInterval(() => {
                 mostrar(index + 1);
-            }, 4000); // 4 segundos
+            }, 4000); // 4 segundos automático
         }
 
         function resetTimer() {
