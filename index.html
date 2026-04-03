@@ -3,162 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galeria de Música Neon</title>
+    <title>Galeria WRS - Portal Galáctico</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
     <style>
-        body {
-            background-color: #050505;
-            color: white;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
+        body { margin: 0; background-color: #000; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
+
+        #splash-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at bottom right, rgba(0, 72, 255, 0.15), transparent 40%), #000;
+            display: flex; justify-content: center; align-items: center; z-index: 999999;
+            transition: all 0.8s cubic-bezier(0.65, 0, 0.35, 1);
         }
 
-        .player-container {
-            background: linear-gradient(145deg, #0a0a0a, #1a1a1a);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 0 20px rgba(0, 72, 255, 0.3), inset 0 0 10px rgba(255, 255, 255, 0.1);
-            text-align: center;
-            border: 1px solid #0048FF;
-            width: 320px;
+        /* Player de Música Reconstruído */
+        #music-player-ui {
+            position: fixed; top: 20px; left: 20px; z-index: 1000002;
+            background: rgba(0, 0, 0, 0.85); border: 1px solid #0048FF;
+            padding: 8px 12px; border-radius: 4px; display: flex; align-items: center;
+            gap: 8px; box-shadow: 0 0 15px rgba(0, 72, 255, 0.4);
+            backdrop-filter: blur(5px); opacity: 0.6; transition: 0.4s; width: 220px;
         }
+        #music-player-ui:hover { opacity: 1; width: 240px; }
 
-        h2 {
-            color: #0048FF;
-            text-shadow: 0 0 10px #0048FF;
-            font-size: 1.5em;
-            margin-bottom: 20px;
-        }
-
-        .controls {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        button {
-            background: transparent;
-            border: 2px solid #0048FF;
-            color: #0048FF;
-            padding: 10px 20px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 5px #0048FF;
-        }
-
-        button:hover {
-            background: #0048FF;
-            color: white;
-            box-shadow: 0 0 20px #0048FF;
-            transform: scale(1.05);
-        }
-
-        #video-container {
-            display: none; /* Mantém o player de vídeo oculto */
-        }
+        .play-controls { display: flex; gap: 5px; align-items: center; }
         
-        .status {
-            font-size: 0.9em;
-            margin-top: 15px;
-            color: #888;
+        .music-btn {
+            background: none; border: 1px solid #0048FF; color: #0048FF;
+            cursor: pointer; width: 26px; height: 26px; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center; transition: 0.3s;
+            font-size: 10px;
         }
+        .music-btn:hover { background: #0048FF; color: #fff; box-shadow: 0 0 10px #0048FF; }
+
+        .volume-control {
+            width: 40px; height: 4px; -webkit-appearance: none;
+            background: rgba(0, 72, 255, 0.3); border-radius: 2px; cursor: pointer;
+        }
+        .volume-control::-webkit-slider-thumb {
+            -webkit-appearance: none; width: 10px; height: 10px;
+            background: #0048FF; border-radius: 50%;
+        }
+
+        .music-info { flex: 1; overflow: hidden; white-space: nowrap; }
+        .track-name {
+            display: inline-block; color: #fff; font-size: 9px; font-weight: bold;
+            text-transform: uppercase; animation: marquee 12s linear infinite; padding-left: 100%;
+        }
+        @keyframes marquee { 0% { transform: translateX(0%); } 100% { transform: translateX(-350%); } }
+
+        /* Elementos da Interface */
+        .logo-wrs {
+            font-family: 'Arial Black', sans-serif; font-size: 75px; letter-spacing: 15px;
+            text-align: center; background: linear-gradient(270deg, #FFFFFF, #0048FF, #FFFFFF);
+            background-size: 400%; -webkit-background-clip: text; background-clip: text;
+            color: transparent; animation: gradientMove 4s linear infinite;
+        }
+        @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        .btn-glow {
+            background: rgba(0, 0, 0, 0.6); border: 2px solid #0048FF; color: #0048FF;
+            padding: 12px 0; font-size: 15px; cursor: pointer; font-weight: bold;
+            width: 280px; margin-bottom: 12px; transition: 0.3s;
+        }
+        .btn-glow:hover { background: #0048FF; color: #fff; box-shadow: 0 0 25px #0048FF; transform: scale(1.03); }
+
+        #status-indicator {
+            position: fixed; top: 20px; right: 20px; display: flex; align-items: center; gap: 10px;
+            background: rgba(0, 0, 0, 0.6); padding: 8px 15px; border-radius: 20px;
+            border: 1px solid rgba(0, 72, 255, 0.3); z-index: 1000002;
+        }
+        #status-dot { width: 10px; height: 10px; border-radius: 50%; background: #555; }
+        .dot-online { background: #00ff00 !important; box-shadow: 0 0 10px #00ff00; }
+
+        .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle var(--duration) infinite; }
+        @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+        .hidden-splash { opacity: 0; visibility: hidden; transform: translateY(-100%); }
     </style>
 </head>
-<body>
+<body onmousemove="createDrop(event)">
 
-    <div class="player-container">
-        <h2>Minha Playlist</h2>
-        <div id="song-title">Carregando...</div>
-        
-        <div class="controls">
-            <button onclick="changeTrack(-1)">❮ Ant</button>
-            <button onclick="togglePlay()" id="play-btn">Play</button>
-            <button onclick="changeTrack(1)">Próx ❯</button>
+<div id="status-indicator">
+    <span id="status-dot"></span>
+    <span id="status-text" style="color:white; font-size:11px;">CARREGANDO...</span>
+</div>
+
+<div id="music-player-ui">
+    <div class="play-controls">
+        <button class="music-btn" onclick="changeTrack(-1)"><i class="fas fa-step-backward"></i></button>
+        <button class="music-btn" onclick="controlMusic()" id="music-btn"><i class="fas fa-play"></i></button>
+        <button class="music-btn" onclick="changeTrack(1)"><i class="fas fa-step-forward"></i></button>
+    </div>
+    <input type="range" class="volume-control" min="0" max="100" value="50" oninput="changeVolume(this.value)">
+    <div class="music-info">
+        <span class="track-name" id="track-display">Sua Playlist Neon - Carregando...</span>
+    </div>
+</div>
+
+<div id="splash-screen">
+    <div id="splash-container">
+        <h1 class="logo-wrs">GALERIA</h1>
+        <div style="text-align:center;">
+            <button class="btn-glow" onclick="entrarNoPerfil()"><i class="fas fa-rocket"></i> ENTRE</button>
         </div>
-
-        <div class="status" id="track-info">Música 1 de 5</div>
     </div>
+</div>
 
-    <div id="video-container">
-        <div id="player"></div>
-    </div>
+<div id="yt-player" style="position: absolute; top: -9999px;"><div id="player"></div></div>
 
-    <script>
-        // Lista das URLs fornecidas
-        const playlist = [
-            '6NXnxTNIWkc',
-            '0f8Uz-UHSuw',
-            'wp43OdtAAkM',
-            'tCVkdWXIglk',
-            '9SfbvR2we8U'
-        ];
+<script>
+    const SEU_DISCORD_ID = "454632435054018560";
+    const playlist = ['6NXnxTNIWkc', '0f8Uz-UHSuw', 'wp43OdtAAkM', 'tCVkdWXIglk', '9SfbvR2we8U'];
+    let currentTrack = 0;
+    let player;
 
-        let currentTrack = 0;
-        let player;
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-        // Carrega a API do YouTube
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('player', {
-                height: '0',
-                width: '0',
-                videoId: playlist[currentTrack],
-                events: {
-                    'onReady': onPlayerReady,
-                    'onStateChange': onPlayerStateChange
-                }
-            });
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+            height: '0', width: '0',
+            videoId: playlist[currentTrack],
+            playerVars: { 'autoplay': 0, 'controls': 0 },
+            events: { 'onReady': (e) => e.target.setVolume(50), 'onStateChange': onPlayerStateChange }
+        });
+    }
+
+    function onPlayerStateChange(event) {
+        if (event.data === YT.PlayerState.ENDED) changeTrack(1);
+    }
+
+    function controlMusic() {
+        const btn = document.getElementById('music-btn');
+        if (player.getPlayerState() === 1) {
+            player.pauseVideo();
+            btn.innerHTML = '<i class="fas fa-play"></i>';
+        } else {
+            player.playVideo();
+            btn.innerHTML = '<i class="fas fa-pause"></i>';
         }
+    }
 
-        function onPlayerReady(event) {
-            updateUI();
+    function changeTrack(dir) {
+        currentTrack = (currentTrack + dir + playlist.length) % playlist.length;
+        player.loadVideoById(playlist[currentTrack]);
+        document.getElementById('music-btn').innerHTML = '<i class="fas fa-pause"></i>';
+        document.getElementById('track-display').innerText = `Tocando música ${currentTrack + 1} de ${playlist.length}...`;
+    }
+
+    function changeVolume(val) { if(player) player.setVolume(val); }
+
+    function entrarNoPerfil() {
+        document.getElementById('splash-screen').classList.add('hidden-splash');
+        player.playVideo();
+        document.getElementById('music-btn').innerHTML = '<i class="fas fa-pause"></i>';
+    }
+
+    function createDrop(e) {
+        const splash = document.getElementById('splash-screen');
+        if(splash.classList.contains('hidden-splash')) return;
+        const drop = document.createElement('div');
+        drop.style.cssText = `position:absolute; background:rgba(0,72,255,0.4); border-radius:50%; pointer-events:none; left:${e.clientX}px; top:${e.clientY}px; transform:translate(-50%,-50%);`;
+        drop.animate([{width:'0px', height:'0px', opacity:0.8}, {width:'100px', height:'100px', opacity:0}], {duration:800});
+        splash.appendChild(drop);
+        setTimeout(() => drop.remove(), 800);
+    }
+
+    async function checkDiscordStatus() {
+        try {
+            const res = await fetch(`https://api.lanyard.rest/v1/users/${SEU_DISCORD_ID}`);
+            const data = await res.json();
+            const status = data.data.discord_status;
+            const dot = document.getElementById('status-dot');
+            dot.className = status === 'online' ? 'dot-online' : '';
+            document.getElementById('status-text').innerText = status.toUpperCase();
+        } catch (e) {}
+    }
+
+    window.onload = () => {
+        checkDiscordStatus();
+        const screen = document.getElementById('splash-screen');
+        for (let i = 0; i < 50; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.cssText = `width:2px; height:2px; top:${Math.random()*100}%; left:${Math.random()*100}%; --duration:${Math.random()*3+2}s;`;
+            screen.appendChild(star);
         }
-
-        function togglePlay() {
-            const state = player.getPlayerState();
-            if (state === 1) {
-                player.pauseVideo();
-                document.getElementById('play-btn').innerText = 'Play';
-            } else {
-                player.playVideo();
-                document.getElementById('play-btn').innerText = 'Pause';
-            }
-        }
-
-        function changeTrack(direction) {
-            currentTrack += direction;
-            if (currentTrack >= playlist.length) currentTrack = 0;
-            if (currentTrack < 0) currentTrack = playlist.length - 1;
-            
-            player.loadVideoById(playlist[currentTrack]);
-            updateUI();
-            document.getElementById('play-btn').innerText = 'Pause';
-        }
-
-        function updateUI() {
-            document.getElementById('track-info').innerText = `Música ${currentTrack + 1} de ${playlist.length}`;
-            // Como o player é oculto, aqui você poderia adicionar um array com os nomes das músicas se desejar
-            document.getElementById('song-title').innerText = "Tocando agora...";
-        }
-
-        function onPlayerStateChange(event) {
-            if (event.data === YT.PlayerState.ENDED) {
-                changeTrack(1); // Muda para a próxima música automaticamente
-            }
-        }
-
-        // Script para carregar a API do YouTube de forma assíncrona
-        var tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-    </script>
+    };
+</script>
 </body>
 </html>
 <!DOCTYPE html>
