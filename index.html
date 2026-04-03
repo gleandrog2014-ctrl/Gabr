@@ -163,10 +163,12 @@
 
         #visit-counter { position: fixed; bottom: 20px; left: 20px; z-index: 1000001; background: rgba(0, 0, 0, 0.9); border: 1px solid #0048FF; padding: 6px 12px; border-radius: 4px; display: flex; flex-direction: column; align-items: center; }
         
-        /* Botão de like atualizado com cor azul #0048FF para combinar com o site */
         #like-container { position: fixed; bottom: 20px; right: 20px; z-index: 1000001; display: flex; flex-direction: column; align-items: center; gap: 5px; }
         .like-btn { background: rgba(0, 0, 0, 0.8); border: 2px solid #0048FF; color: #0048FF; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 20px; transition: 0.3s; }
         .like-btn:hover { background: #0048FF; color: #fff; box-shadow: 0 0 15px #0048FF; }
+        
+        /* Ajustado para ficar sempre visível abaixo do botão */
+        #like-number { color: #fff; font-family: monospace; font-size: 14px; font-weight: bold; text-shadow: 0 0 5px #0048FF; }
         
         .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle var(--duration) infinite; pointer-events: none; }
     </style>
@@ -226,7 +228,7 @@
 
 <div id="like-container">
     <button class="like-btn" onclick="darLike()"><i class="fas fa-thumbs-up"></i></button>
-    <span id="like-number" style="color: #fff; opacity: 0; font-family: monospace;">0</span>
+    <span id="like-number">0</span>
 </div>
 
 <script>
@@ -287,9 +289,10 @@
             const res = await fetch(`https://api.counterapi.dev/v1/wrs-galeria/${ID_LIKES}/up`);
             const data = await res.json();
             likeNum.innerText = data.count || data.value;
-            likeNum.style.opacity = "1";
-            setTimeout(() => likeNum.style.opacity = "0", 3000);
-        } catch (e) { likeNum.innerText = "1"; likeNum.style.opacity = "1"; setTimeout(() => likeNum.style.opacity = "0", 3000); }
+        } catch (e) { 
+            let current = parseInt(likeNum.innerText);
+            likeNum.innerText = current + 1; 
+        }
     }
 
     async function carregarContadores() {
@@ -297,7 +300,15 @@
             const resV = await fetch(`https://api.counterapi.dev/v1/wrs-galeria/${ID_VISITAS}/up`);
             const dataV = await resV.json();
             document.getElementById('count-number').innerText = dataV.count || dataV.value;
-        } catch(e) { document.getElementById('count-number').innerText = "1"; }
+            
+            // Carrega os likes iniciais sem dar "up"
+            const resL = await fetch(`https://api.counterapi.dev/v1/wrs-galeria/${ID_LIKES}`);
+            const dataL = await resL.json();
+            document.getElementById('like-number').innerText = dataL.count || dataL.value;
+        } catch(e) { 
+            document.getElementById('count-number').innerText = "1"; 
+            document.getElementById('like-number').innerText = "0";
+        }
     }
 
     async function checkDiscordStatus() {
