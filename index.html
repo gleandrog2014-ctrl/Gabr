@@ -38,16 +38,6 @@
             z-index: 10;
         }
 
-        /* Status Discord (Direita) */
-        #status-indicator {
-            position: fixed; top: 20px; right: 20px;
-            display: flex; align-items: center; gap: 10px;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 8px 15px; border-radius: 20px;
-            border: 1px solid rgba(0, 72, 255, 0.3);
-            z-index: 1000002; backdrop-filter: blur(5px);
-        }
-
         /* Player de Música com Letreiro e Transparência */
         #music-player-ui {
             position: fixed;
@@ -62,25 +52,19 @@
             gap: 12px;
             box-shadow: 0 0 15px rgba(0, 72, 255, 0.4);
             backdrop-filter: blur(5px);
-            opacity: 0.3; /* Transparência inicial */
+            opacity: 0.3;
             transition: all 0.4s ease;
-            width: 220px; /* Largura fixa para o letreiro funcionar */
+            width: 220px;
             overflow: hidden;
         }
 
         #music-player-ui:hover {
             opacity: 1;
             box-shadow: 0 0 25px rgba(0, 72, 255, 0.7);
-            width: 250px; /* Expande um pouco ao passar o mouse */
+            width: 250px;
         }
 
-        /* Container do Letreiro */
-        .music-info {
-            flex: 1;
-            overflow: hidden;
-            white-space: nowrap;
-            position: relative;
-        }
+        .music-info { flex: 1; overflow: hidden; white-space: nowrap; position: relative; }
 
         .track-name {
             display: inline-block;
@@ -90,12 +74,12 @@
             letter-spacing: 1px;
             text-transform: uppercase;
             animation: marquee 12s linear infinite;
-            padding-left: 100%; /* Começa fora da visão */
+            padding-left: 100%;
         }
 
         @keyframes marquee {
             0% { transform: translateX(0%); }
-            100% { transform: translateX(-150%); } /* Ajustado para o tamanho do nome */
+            100% { transform: translateX(-150%); }
         }
 
         .play-toggle {
@@ -106,12 +90,7 @@
         }
         .play-toggle:hover { background: #0048FF; color: #fff; box-shadow: 0 0 10px #0048FF; }
 
-        #status-dot { width: 10px; height: 10px; border-radius: 50%; background-color: #555; transition: 0.5s; }
-        #status-text { color: #fff; font-size: 11px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; }
-        .dot-online { background-color: #00ff00 !important; box-shadow: 0 0 15px #00ff00; }
-        .dot-idle { background-color: #f1c40f !important; box-shadow: 0 0 15px #f1c40f; }
-        .dot-dnd { background-color: #e74c3c !important; box-shadow: 0 0 15px #e74c3c; }
-
+        /* Estilos da Logo e Menu */
         .logo-wrs {
             font-family: 'Arial Black', sans-serif;
             font-size: 75px; letter-spacing: 15px;
@@ -123,93 +102,20 @@
         }
         @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        .menu-wrapper { 
-            display: flex; flex-direction: column; gap: 12px; align-items: center; margin-bottom: 30px;
-        }
-
         .btn-glow {
             background: rgba(0, 0, 0, 0.6); border: 2px solid #0048FF; color: #0048FF;
             padding: 12px 0; font-size: 15px; cursor: pointer; font-weight: bold; letter-spacing: 3px;
             width: 280px; display: flex; justify-content: center; align-items: center;
-            backdrop-filter: blur(5px); transition: 0.3s; z-index: 20;
+            backdrop-filter: blur(5px); transition: 0.3s; z-index: 20; margin-top: 10px;
         }
         .btn-glow:hover { background: #0048FF; color: #fff; box-shadow: 0 0 25px #0048FF; transform: scale(1.03); }
 
-        /* Grade de Preços */
-        .price-grid-container {
-            display: none; grid-template-columns: repeat(1, 1fr); gap: 8px; width: 300px;
-            max-height: 250px; overflow-y: auto; background: rgba(0, 0, 0, 0.9);
-            border: 1px solid #0048FF; padding: 12px; margin-top: -10px; margin-bottom: 10px;
-            scrollbar-width: thin; scrollbar-color: #0048FF #000;
-        }
-        .price-grid-container::-webkit-scrollbar { width: 4px; }
-        .price-grid-container::-webkit-scrollbar-thumb { background: #0048FF; border-radius: 10px; }
-        .show-grid { display: grid !important; }
-
-        .price-card {
-            background: rgba(0, 72, 255, 0.03); border: 1px solid rgba(0, 72, 255, 0.2);
-            padding: 10px; text-align: center; transition: 0.2s;
-        }
-        .price-card:hover { border-color: #0048FF; background: rgba(0, 72, 255, 0.08); }
-        .price-card i { font-size: 16px; color: #0048FF; margin-bottom: 5px; }
-        .price-card h4 { color: #fff; margin: 0; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
-        .price-card p { color: rgba(255,255,255,0.5); font-size: 9px; margin: 3px 0 8px 0; line-height: 1.1; }
-        .price-card .value { color: #00ffcc; font-family: monospace; font-weight: bold; display: block; margin-bottom: 8px; font-size: 14px; }
-
-        .btn-comprar {
-            display: block; background: #ff0055; color: #fff; text-decoration: none;
-            font-size: 10px; font-weight: bold; padding: 5px; border-radius: 2px; transition: 0.3s;
-        }
-        .btn-comprar:hover { background: #fff; color: #ff0055; box-shadow: 0 0 10px #ff0055; }
-
-        .custom-list-hidden { 
-            display: none; flex-direction: column; background: rgba(0, 0, 0, 0.9); 
-            border: 1px solid #0048FF; width: 280px; margin-top: -10px; margin-bottom: 5px;
-        }
-        .show-list { display: flex !important; }
-        
-        .friend-item { 
-            color: #0048FF; padding: 10px; border-bottom: 1px solid rgba(0, 72, 255, 0.1); 
-            text-align: center; text-decoration: none; font-weight: bold; transition: 0.3s; cursor: pointer; font-size: 14px;
-        }
-        .friend-item:hover { background: #0048FF !important; color: #fff !important; }
-
-        .footer-wrs { margin-top: 15px; color: rgba(255,255,255,0.3); font-size: 10px; letter-spacing: 2px; text-align: center; }
-
-        #visit-counter {
-            position: fixed; bottom: 20px; left: 20px; z-index: 1000001;
-            background: rgba(0, 0, 0, 0.9); border: 1px solid #0048FF;
-            padding: 6px 12px; border-radius: 4px; display: flex; flex-direction: column; align-items: center;
-        }
-
-        #like-container {
-            position: fixed; bottom: 20px; right: 20px; z-index: 1000001;
-            display: flex; flex-direction: column; align-items: center; gap: 5px;
-        }
-        .like-btn {
-            background: rgba(0, 0, 0, 0.8); border: 2px solid #ff0055; color: #ff0055;
-            width: 50px; height: 50px; border-radius: 50%; cursor: pointer; font-size: 20px;
-            display: flex; justify-content: center; align-items: center; transition: 0.3s;
-            box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
-        }
-        .like-btn:hover { background: #ff0055; color: #fff; transform: scale(1.1); }
-
-        #like-number {
-            color: #fff; font-family: 'Courier New', monospace; font-weight: bold; 
-            text-shadow: 0 0 5px #ff0055; opacity: 0; transition: opacity 0.5s ease; pointer-events: none;
-        }
-
+        .hidden-splash { opacity: 0; visibility: hidden; transform: translateY(-100%); }
         .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle var(--duration) infinite; pointer-events: none; }
         @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
-        .hidden-splash { opacity: 0; visibility: hidden; transform: translateY(-100%); }
     </style>
 </head>
 <body onmousemove="createDrop(event)">
-
-<div id="status-indicator">
-    <span id="status-dot"></span>
-    <span id="status-text">...</span>
-</div>
 
 <div id="music-player-ui">
     <button class="play-toggle" onclick="controlMusic()" id="music-btn">
@@ -224,49 +130,8 @@
     <div id="splash-container">
         <div style="font-size: 40px; color: #0048FF; margin-bottom: 15px;"><i class="fas fa-user-astronaut"></i></div>
         <h1 class="logo-wrs">GALERIA</h1>
-        <div style="color: #0048FF; letter-spacing: 5px; font-size: 11px; margin-bottom: 30px; font-weight: bold;">GALERIA GALÁCTICA</div>
-        
-        <div class="menu-wrapper">
-            <button class="btn-glow" onclick="entrarNoPerfil()"><i class="fas fa-rocket"></i> ENTRE</button>
-            
-            <button class="btn-glow" onclick="toggleSimpleMenu('lista-xat')"><i class="fas fa-comments"></i> XAT COMUNIDADE</button>
-            <div id="lista-xat" class="custom-list-hidden">
-                <a href="https://xat.com/tuga" target="_blank" class="friend-item">XAT TUGA</a>
-                <a href="https://xat.com/conexaosertanejoo" target="_blank" class="friend-item">XAT CONEXÃO</a>
-            </div>
-
-            <button class="btn-glow" onclick="togglePriceGrid()"><i class="fas fa-tags"></i> TABELA DE PREÇOS</button>
-            
-            <div id="price-grid" class="price-grid-container">
-                <div class="price-card">
-                    <i class="fas fa-file-video"></i>
-                    <h4>Gifs</h4>
-                    <p>Foto e animação em movimento</p>
-                    <span class="value">400 xats</span>
-                    <a href="https://xat.com/tuga" target="_blank" class="btn-comprar">COMPRAR</a>
-                </div>
-                <div class="price-card">
-                    <i class="fas fa-wand-magic-sparkles"></i>
-                    <h4>Pstyle Gif</h4>
-                    <p>Banner de perfil COM Efeito</p>
-                    <span class="value">350 xats</span>
-                    <a href="https://xat.com/tuga" target="_blank" class="btn-comprar">COMPRAR</a>
-                </div>
-            </div>
-
-            <div class="footer-wrs">© GALERIA - 2026</div>
-        </div>
+        <button class="btn-glow" onclick="entrarNoPerfil()"><i class="fas fa-rocket"></i> ENTRE NO PORTAL</button>
     </div>
-</div>
-
-<div id="visit-counter">
-    <span style="color: #0048FF; font-size: 8px; letter-spacing: 2px; font-family: 'Arial Black', sans-serif;">VISITAS</span>
-    <span id="count-number" style="color: #fff; font-size: 18px; font-family: monospace; font-weight: bold;">...</span>
-</div>
-
-<div id="like-container">
-    <button class="like-btn" onclick="darLike()"><i class="fas fa-heart"></i></button>
-    <span id="like-number">0</span>
 </div>
 
 <div id="yt-player" style="position: absolute; top: -9999px;">
@@ -274,11 +139,7 @@
 </div>
 
 <script>
-    const SEU_DISCORD_ID = "454632435054018560";
-    const ID_VISITAS = "galeria_wrs_2026_main";
-    const ID_LIKES = "galeria_wrs_likes_2026_main";
     var player;
-
     var tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -288,39 +149,51 @@
         player = new YT.Player('player', {
             height: '0', width: '0',
             videoId: 'uxX0Qvr_eYo',
-            playerVars: { 'autoplay': 1, 'loop': 1, 'playlist': 'uxX0Qvr_eYo', 'controls': 0 },
-            events: { 'onReady': onPlayerReady }
+            playerVars: { 
+                'autoplay': 1, 
+                'loop': 1, 
+                'playlist': 'uxX0Qvr_eYo', 
+                'controls': 0,
+                'mute': 0 // Tenta iniciar com som
+            },
+            events: { 
+                'onReady': onPlayerReady,
+                'onStateChange': onPlayerStateChange
+            }
         });
     }
 
-    function onPlayerReady(event) { event.target.setVolume(50); }
+    function onPlayerReady(event) {
+        event.target.setVolume(50);
+        event.target.playVideo();
+        
+        // Reforço para navegadores que bloqueiam autoplay
+        document.body.addEventListener('mousedown', () => {
+            if (player.getPlayerState() !== 1) {
+                player.playVideo();
+            }
+        }, { once: true });
+    }
 
-    function controlMusic() {
+    function onPlayerStateChange(event) {
         const btn = document.getElementById('music-btn');
-        if (player && player.getPlayerState() === 1) {
-            player.pauseVideo();
-            btn.innerHTML = '<i class="fas fa-play"></i>';
-        } else if (player) {
-            player.playVideo();
+        if (event.data === YT.PlayerState.PLAYING) {
             btn.innerHTML = '<i class="fas fa-pause"></i>';
+        } else {
+            btn.innerHTML = '<i class="fas fa-play"></i>';
         }
     }
 
-    function toggleSimpleMenu(id) {
-        document.getElementById('price-grid').classList.remove('show-grid');
-        const menu = document.getElementById(id);
-        menu.classList.toggle('show-list');
-    }
-
-    function togglePriceGrid() {
-        document.querySelectorAll('.custom-list-hidden').forEach(m => m.classList.remove('show-list'));
-        const grid = document.getElementById('price-grid');
-        grid.classList.toggle('show-grid');
+    function controlMusic() {
+        if (player && player.getPlayerState() === 1) {
+            player.pauseVideo();
+        } else if (player) {
+            player.playVideo();
+        }
     }
 
     function entrarNoPerfil() {
         document.getElementById('splash-screen').classList.add('hidden-splash');
-        if (player && player.playVideo) player.playVideo();
     }
 
     function createDrop(e) {
@@ -339,45 +212,7 @@
         setTimeout(() => drop.remove(), 800);
     }
 
-    async function darLike() {
-        const likeNum = document.getElementById('like-number');
-        try {
-            const res = await fetch(`https://api.counterapi.dev/v1/wrs-galeria/${ID_LIKES}/up`);
-            const data = await res.json();
-            likeNum.innerText = data.count || data.value;
-            likeNum.style.opacity = "1";
-            confetti({ particleCount: 150, spread: 70, origin: { x: 0.9, y: 0.9 }, zIndex: 1000005 });
-            setTimeout(() => { likeNum.style.opacity = "0"; }, 3000);
-        } catch (e) { console.log("Erro like"); }
-    }
-
-    async function carregarContadores() {
-        try {
-            const resV = await fetch(`https://api.counterapi.dev/v1/wrs-galeria/${ID_VISITAS}/up`);
-            const dataV = await resV.json();
-            document.getElementById('count-number').innerText = dataV.count || dataV.value;
-        } catch(e) { document.getElementById('count-number').innerText = "1"; }
-    }
-
-    async function checkDiscordStatus() {
-        const dot = document.getElementById('status-dot');
-        const text = document.getElementById('status-text');
-        try {
-            const response = await fetch(`https://api.lanyard.rest/v1/users/${SEU_DISCORD_ID}`);
-            const data = await response.json();
-            const status = data.data.discord_status;
-            dot.className = ''; 
-            if (status === "online") { dot.classList.add('dot-online'); text.innerText = "ONLINE"; }
-            else if (status === "idle") { dot.classList.add('dot-idle'); text.innerText = "AUSENTE"; }
-            else if (status === "dnd") { dot.classList.add('dot-dnd'); text.innerText = "OCUPADO"; }
-            else { text.innerText = "OFFLINE"; }
-        } catch (e) { text.innerText = "OFFLINE"; }
-    }
-
     window.onload = () => { 
-        carregarContadores();
-        checkDiscordStatus();
-        setInterval(checkDiscordStatus, 15000);
         const screen = document.getElementById('splash-screen');
         for (let i = 0; i < 80; i++) {
             const star = document.createElement('div');
