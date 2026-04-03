@@ -1363,13 +1363,13 @@ window.addEventListener('resize', resize);
 resize();
 
 window.addEventListener('mousemove', (e) => {
-    // Cria uma nova gota na posição do mouse
+    // Adiciona uma gota menor e mais suave
     points.push({
         x: e.clientX,
         y: e.clientY,
-        size: 0,          // Começa pequena
-        alpha: 0.8,       // Opacidade inicial
-        maxSize: 80       // Tamanho máximo que a gota atinge (igual ao efeito da entrada)
+        size: 0,
+        alpha: 0.5,       // Opacidade inicial reduzida (mais transparente)
+        maxSize: 40       // Tamanho máximo reduzido pela metade
     });
 });
 
@@ -1379,21 +1379,20 @@ function animate() {
     for (let i = 0; i < points.length; i++) {
         let p = points[i];
         
-        // Aumenta o tamanho da gota e diminui a opacidade (efeito de expansão)
-        p.size += 3;       // Velocidade da expansão
-        p.alpha -= 0.02;   // Velocidade do sumiço
+        // Expansão mais lenta e sutil
+        p.size += 1.5;     
+        p.alpha -= 0.02;   
         
-        // EFEITO DE BRILHO NEON (Igual ao seu estilo)
-        ctx.shadowBlur = 15; 
-        ctx.shadowColor = `rgba(0, 72, 255, ${p.alpha})`; // Brilho azul neon
-        ctx.fillStyle = `rgba(0, 72, 255, ${p.alpha * 0.4})`; // Cor da gota com transparência
+        // EFEITO DE BRILHO SUAVE
+        ctx.shadowBlur = 8; 
+        ctx.shadowColor = `rgba(0, 72, 255, ${p.alpha})`; 
+        ctx.fillStyle = `rgba(0, 72, 255, ${p.alpha * 0.3})`; 
         
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fill();
         
-        // Remove a gota quando ela sumir completamente
-        if (p.alpha <= 0) {
+        if (p.alpha <= 0 || p.size >= p.maxSize) {
             points.splice(i, 1);
             i--;
         }
