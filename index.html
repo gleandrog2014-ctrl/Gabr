@@ -8,64 +8,66 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
-        body { margin: 0; background-color: #000; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
+        body { margin: 0; background-color: #000; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at bottom right, rgba(0, 72, 255, 0.15), transparent 40%), #000;
+            background: radial-gradient(circle at bottom right, rgba(0, 72, 255, 0.15), transparent 40%),
+                        radial-gradient(circle at top left, rgba(80, 0, 255, 0.1), transparent 30%), #000;
             display: flex; justify-content: center; align-items: center; z-index: 999999;
             transition: all 0.8s cubic-bezier(0.65, 0, 0.35, 1);
         }
 
-        /* Player de Música Reconstruído */
+        /* Player UI Unificada */
         #music-player-ui {
             position: fixed; top: 20px; left: 20px; z-index: 1000002;
             background: rgba(0, 0, 0, 0.85); border: 1px solid #0048FF;
             padding: 8px 12px; border-radius: 4px; display: flex; align-items: center;
-            gap: 8px; box-shadow: 0 0 15px rgba(0, 72, 255, 0.4);
-            backdrop-filter: blur(5px); opacity: 0.6; transition: 0.4s; width: 220px;
+            gap: 10px; box-shadow: 0 0 15px rgba(0, 72, 255, 0.4);
+            backdrop-filter: blur(5px); opacity: 0.5; transition: all 0.4s ease; width: 240px;
         }
-        #music-player-ui:hover { opacity: 1; width: 240px; }
+        #music-player-ui:hover { opacity: 1; width: 260px; }
 
-        .play-controls { display: flex; gap: 5px; align-items: center; }
+        .play-controls { display: flex; gap: 6px; align-items: center; }
         
         .music-btn {
             background: none; border: 1px solid #0048FF; color: #0048FF;
-            cursor: pointer; width: 26px; height: 26px; border-radius: 50%;
+            cursor: pointer; width: 28px; height: 28px; border-radius: 50%;
             display: flex; justify-content: center; align-items: center; transition: 0.3s;
-            font-size: 10px;
+            font-size: 11px;
         }
         .music-btn:hover { background: #0048FF; color: #fff; box-shadow: 0 0 10px #0048FF; }
 
         .volume-control {
-            width: 40px; height: 4px; -webkit-appearance: none;
-            background: rgba(0, 72, 255, 0.3); border-radius: 2px; cursor: pointer;
+            width: 45px; height: 4px; -webkit-appearance: none;
+            background: rgba(0, 72, 255, 0.3); border-radius: 2px; cursor: pointer; outline: none;
         }
         .volume-control::-webkit-slider-thumb {
             -webkit-appearance: none; width: 10px; height: 10px;
-            background: #0048FF; border-radius: 50%;
+            background: #0048FF; border-radius: 50%; box-shadow: 0 0 5px #0048FF;
         }
 
-        .music-info { flex: 1; overflow: hidden; white-space: nowrap; }
+        .music-info { flex: 1; overflow: hidden; white-space: nowrap; position: relative; margin-left: 5px; }
         .track-name {
             display: inline-block; color: #fff; font-size: 9px; font-weight: bold;
-            text-transform: uppercase; animation: marquee 12s linear infinite; padding-left: 100%;
+            text-transform: uppercase; animation: marquee 15s linear infinite; padding-left: 100%;
         }
-        @keyframes marquee { 0% { transform: translateX(0%); } 100% { transform: translateX(-350%); } }
+        @keyframes marquee { 0% { transform: translateX(0%); } 100% { transform: translateX(-400%); } }
 
-        /* Elementos da Interface */
+        /* Estilos da Interface Principal */
         .logo-wrs {
             font-family: 'Arial Black', sans-serif; font-size: 75px; letter-spacing: 15px;
-            text-align: center; background: linear-gradient(270deg, #FFFFFF, #0048FF, #FFFFFF);
-            background-size: 400%; -webkit-background-clip: text; background-clip: text;
+            text-align: center; background: linear-gradient(270deg, #FFFFFF, #0048FF, #FFFFFF, #0048FF, #FFFFFF);
+            background-size: 400% 400%; -webkit-background-clip: text; background-clip: text;
             color: transparent; animation: gradientMove 4s linear infinite;
         }
         @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
         .btn-glow {
             background: rgba(0, 0, 0, 0.6); border: 2px solid #0048FF; color: #0048FF;
-            padding: 12px 0; font-size: 15px; cursor: pointer; font-weight: bold;
-            width: 280px; margin-bottom: 12px; transition: 0.3s;
+            padding: 12px 0; font-size: 15px; cursor: pointer; font-weight: bold; letter-spacing: 3px;
+            width: 280px; display: flex; justify-content: center; align-items: center;
+            backdrop-filter: blur(5px); transition: 0.3s; margin-bottom: 10px;
         }
         .btn-glow:hover { background: #0048FF; color: #fff; box-shadow: 0 0 25px #0048FF; transform: scale(1.03); }
 
@@ -74,11 +76,11 @@
             background: rgba(0, 0, 0, 0.6); padding: 8px 15px; border-radius: 20px;
             border: 1px solid rgba(0, 72, 255, 0.3); z-index: 1000002;
         }
-        #status-dot { width: 10px; height: 10px; border-radius: 50%; background: #555; }
-        .dot-online { background: #00ff00 !important; box-shadow: 0 0 10px #00ff00; }
+        #status-dot { width: 10px; height: 10px; border-radius: 50%; background-color: #555; }
+        .dot-online { background-color: #00ff00 !important; box-shadow: 0 0 15px #00ff00; }
 
-        .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle var(--duration) infinite; }
-        @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+        .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle var(--duration) infinite; pointer-events: none; }
+        @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
         .hidden-splash { opacity: 0; visibility: hidden; transform: translateY(-100%); }
     </style>
 </head>
@@ -86,27 +88,26 @@
 
 <div id="status-indicator">
     <span id="status-dot"></span>
-    <span id="status-text" style="color:white; font-size:11px;">CARREGANDO...</span>
+    <span id="status-text" style="color:white; font-size:11px; font-weight:bold;">OFFLINE</span>
 </div>
 
 <div id="music-player-ui">
     <div class="play-controls">
-        <button class="music-btn" onclick="changeTrack(-1)"><i class="fas fa-step-backward"></i></button>
+        <button class="music-btn" onclick="changeTrack(-1)"><i class="fas fa-backward"></i></button>
         <button class="music-btn" onclick="controlMusic()" id="music-btn"><i class="fas fa-play"></i></button>
-        <button class="music-btn" onclick="changeTrack(1)"><i class="fas fa-step-forward"></i></button>
+        <button class="music-btn" onclick="changeTrack(1)"><i class="fas fa-forward"></i></button>
     </div>
     <input type="range" class="volume-control" min="0" max="100" value="50" oninput="changeVolume(this.value)">
     <div class="music-info">
-        <span class="track-name" id="track-display">Sua Playlist Neon - Carregando...</span>
+        <span class="track-name" id="track-display">Carregando Playlist Galáctica...</span>
     </div>
 </div>
 
 <div id="splash-screen">
     <div id="splash-container">
         <h1 class="logo-wrs">GALERIA</h1>
-        <div style="text-align:center;">
-            <button class="btn-glow" onclick="entrarNoPerfil()"><i class="fas fa-rocket"></i> ENTRE</button>
-        </div>
+        <button class="btn-glow" onclick="entrarNoPerfil()"><i class="fas fa-rocket"></i> ENTRE</button>
+        <div style="color: rgba(255,255,255,0.3); font-size: 10px; letter-spacing: 2px; margin-top:20px;">© GALERIA - 2026</div>
     </div>
 </div>
 
@@ -114,7 +115,15 @@
 
 <script>
     const SEU_DISCORD_ID = "454632435054018560";
-    const playlist = ['6NXnxTNIWkc', '0f8Uz-UHSuw', 'wp43OdtAAkM', 'tCVkdWXIglk', '9SfbvR2we8U'];
+    // Lista com as 6 músicas (A original + as 5 novas)
+    const playlist = [
+        'uxX0Qvr_eYo', // Original: Sound of Silence Remix
+        '6NXnxTNIWkc', // 4 Non Blondes
+        '0f8Uz-UHSuw', // Desireless
+        'wp43OdtAAkM', // Kate Bush
+        'tCVkdWXIglk', // Bon Jovi
+        '9SfbvR2we8U'  // Phonk
+    ];
     let currentTrack = 0;
     let player;
 
@@ -127,13 +136,19 @@
         player = new YT.Player('player', {
             height: '0', width: '0',
             videoId: playlist[currentTrack],
-            playerVars: { 'autoplay': 0, 'controls': 0 },
-            events: { 'onReady': (e) => e.target.setVolume(50), 'onStateChange': onPlayerStateChange }
+            playerVars: { 'autoplay': 0, 'controls': 0, 'disablekb': 1 },
+            events: { 
+                'onReady': (e) => e.target.setVolume(50),
+                'onStateChange': onPlayerStateChange 
+            }
         });
     }
 
     function onPlayerStateChange(event) {
         if (event.data === YT.PlayerState.ENDED) changeTrack(1);
+        if (event.data === YT.PlayerState.PLAYING) {
+            document.getElementById('track-display').innerText = `Música ${currentTrack + 1} de ${playlist.length} - Tocando agora`;
+        }
     }
 
     function controlMusic() {
@@ -151,7 +166,6 @@
         currentTrack = (currentTrack + dir + playlist.length) % playlist.length;
         player.loadVideoById(playlist[currentTrack]);
         document.getElementById('music-btn').innerHTML = '<i class="fas fa-pause"></i>';
-        document.getElementById('track-display').innerText = `Tocando música ${currentTrack + 1} de ${playlist.length}...`;
     }
 
     function changeVolume(val) { if(player) player.setVolume(val); }
@@ -178,15 +192,17 @@
             const data = await res.json();
             const status = data.data.discord_status;
             const dot = document.getElementById('status-dot');
+            const text = document.getElementById('status-text');
             dot.className = status === 'online' ? 'dot-online' : '';
-            document.getElementById('status-text').innerText = status.toUpperCase();
+            text.innerText = status.toUpperCase();
         } catch (e) {}
     }
 
     window.onload = () => {
         checkDiscordStatus();
+        setInterval(checkDiscordStatus, 15000);
         const screen = document.getElementById('splash-screen');
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 60; i++) {
             const star = document.createElement('div');
             star.className = 'star';
             star.style.cssText = `width:2px; height:2px; top:${Math.random()*100}%; left:${Math.random()*100}%; --duration:${Math.random()*3+2}s;`;
