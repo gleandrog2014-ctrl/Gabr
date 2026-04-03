@@ -5,72 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Galeria WRS - Portal Galáctico</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
-        body {
-            margin: 0;
-            background-color: #000;
-            overflow: hidden;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        body { margin: 0; background-color: #000; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+        /* Player de Música Compacto */
+        #music-player-container {
+            position: fixed; top: 20px; left: 20px; z-index: 1000005;
+            background: rgba(0, 0, 0, 0.7); border: 1px solid #0048FF;
+            padding: 5px 10px; border-radius: 30px; backdrop-filter: blur(5px);
+            display: flex; align-items: center; gap: 8px;
         }
+        #music-player-container audio { height: 25px; width: 180px; filter: invert(100%) hue-rotate(180deg) brightness(1.5); }
+        #music-label { color: #0048FF; font-size: 9px; font-weight: bold; letter-spacing: 1px; }
 
         #splash-screen {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(circle at bottom right, rgba(0, 72, 255, 0.15), transparent 40%),
-                        radial-gradient(circle at top left, rgba(80, 0, 255, 0.1), transparent 30%),
-                        #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 999999;
+                        radial-gradient(circle at top left, rgba(80, 0, 255, 0.1), transparent 30%), #000;
+            display: flex; justify-content: center; align-items: center; z-index: 999999;
             transition: all 0.8s cubic-bezier(0.65, 0, 0.35, 1);
         }
 
-        #splash-container {
-            position: relative;
-            width: 100%; height: 100%;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            z-index: 10;
-        }
+        #splash-container { position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10; }
 
-        /* Status Discord */
         #status-indicator {
-            position: fixed; top: 20px; right: 20px;
-            display: flex; align-items: center; gap: 10px;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 8px 15px; border-radius: 20px;
-            border: 1px solid rgba(0, 72, 255, 0.3);
-            z-index: 1000002; backdrop-filter: blur(5px);
+            position: fixed; top: 20px; right: 20px; display: flex; align-items: center; gap: 10px;
+            background: rgba(0, 0, 0, 0.6); padding: 8px 15px; border-radius: 20px;
+            border: 1px solid rgba(0, 72, 255, 0.3); z-index: 1000002; backdrop-filter: blur(5px);
         }
         #status-dot { width: 10px; height: 10px; border-radius: 50%; background-color: #555; transition: 0.5s; }
         #status-text { color: #fff; font-size: 11px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; }
         .dot-online { background-color: #00ff00 !important; box-shadow: 0 0 15px #00ff00; }
-        .dot-idle { background-color: #f1c40f !important; box-shadow: 0 0 15px #f1c40f; }
-        .dot-dnd { background-color: #e74c3c !important; box-shadow: 0 0 15px #e74c3c; }
 
         .logo-wrs {
-            font-family: 'Arial Black', sans-serif;
-            font-size: 75px; letter-spacing: 15px;
+            font-family: 'Arial Black', sans-serif; font-size: 75px; letter-spacing: 15px;
             text-align: center; margin-bottom: 10px;
             background: linear-gradient(270deg, #FFFFFF, #0048FF, #FFFFFF, #0048FF, #FFFFFF);
-            background-size: 400% 400%;
-            -webkit-background-clip: text; background-clip: text;
+            background-size: 400% 400%; -webkit-background-clip: text; background-clip: text;
             color: transparent; animation: gradientMove 4s linear infinite;
         }
         @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        .menu-wrapper { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 12px; 
-            align-items: center; 
-            margin-bottom: 30px;
-        }
+        .menu-wrapper { display: flex; flex-direction: column; gap: 12px; align-items: center; margin-bottom: 30px; }
 
         .btn-glow {
             background: rgba(0, 0, 0, 0.6); border: 2px solid #0048FF; color: #0048FF;
@@ -80,112 +58,49 @@
         }
         .btn-glow:hover { background: #0048FF; color: #fff; box-shadow: 0 0 25px #0048FF; transform: scale(1.03); }
 
-        /* Grade de Preços Compacta */
         .price-grid-container {
-            display: none;
-            grid-template-columns: repeat(1, 1fr);
-            gap: 8px;
-            width: 300px;
-            max-height: 320px; /* Reduzido para caber melhor */
-            overflow-y: auto;
-            background: rgba(0, 0, 0, 0.9);
-            border: 1px solid #0048FF;
-            padding: 12px;
-            margin-top: -10px;
-            margin-bottom: 10px;
-            scrollbar-width: thin;
-            scrollbar-color: #0048FF #000;
+            display: none; grid-template-columns: repeat(1, 1fr); gap: 8px; width: 300px;
+            max-height: 300px; overflow-y: auto; background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #0048FF; padding: 12px; margin-top: -10px; margin-bottom: 10px;
         }
-        /* Scrollbar Neon para Chrome/Edge */
         .price-grid-container::-webkit-scrollbar { width: 4px; }
-        .price-grid-container::-webkit-scrollbar-track { background: #000; }
         .price-grid-container::-webkit-scrollbar-thumb { background: #0048FF; border-radius: 10px; }
-
         .show-grid { display: grid !important; }
 
-        .price-card {
-            background: rgba(0, 72, 255, 0.03);
-            border: 1px solid rgba(0, 72, 255, 0.2);
-            padding: 10px;
-            text-align: center;
-            transition: 0.2s;
-        }
-        .price-card:hover { border-color: #0048FF; background: rgba(0, 72, 255, 0.08); }
-
+        .price-card { background: rgba(0, 72, 255, 0.03); border: 1px solid rgba(0, 72, 255, 0.2); padding: 10px; text-align: center; }
         .price-card i { font-size: 16px; color: #0048FF; margin-bottom: 5px; }
-        .price-card h4 { color: #fff; margin: 0; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
-        .price-card p { color: rgba(255,255,255,0.5); font-size: 9px; margin: 3px 0 8px 0; line-height: 1.1; }
-        .price-card .value { color: #00ffcc; font-family: monospace; font-weight: bold; display: block; margin-bottom: 8px; font-size: 14px; }
+        .price-card h4 { color: #fff; margin: 0; font-size: 13px; text-transform: uppercase; }
+        .price-card p { color: rgba(255,255,255,0.5); font-size: 9px; margin: 3px 0 8px 0; }
+        .price-card .value { color: #00ffcc; font-weight: bold; display: block; margin-bottom: 8px; font-size: 14px; }
 
-        .btn-comprar {
-            display: block;
-            background: #ff0055;
-            color: #fff;
-            text-decoration: none;
-            font-size: 10px;
-            font-weight: bold;
-            padding: 5px;
-            border-radius: 2px;
-            transition: 0.3s;
-        }
-        .btn-comprar:hover { background: #fff; color: #ff0055; box-shadow: 0 0 10px #ff0055; }
+        .btn-comprar { background: #ff0055; color: #fff; text-decoration: none; font-size: 10px; font-weight: bold; padding: 5px; border-radius: 2px; display: block; }
 
-        .custom-list-hidden { 
-            display: none; flex-direction: column; background: rgba(0, 0, 0, 0.9); 
-            border: 1px solid #0048FF; width: 280px; margin-top: -10px; margin-bottom: 5px;
-        }
-        
-        .friend-item { 
-            color: #0048FF; padding: 10px; border-bottom: 1px solid rgba(0, 72, 255, 0.1); 
-            text-align: center; text-decoration: none; font-weight: bold; transition: 0.3s; cursor: pointer; font-size: 14px;
-        }
-        .friend-item:hover { background: #0048FF !important; color: #fff !important; }
+        .custom-list-hidden { display: none; flex-direction: column; background: rgba(0, 0, 0, 0.9); border: 1px solid #0048FF; width: 280px; margin-top: -10px; margin-bottom: 5px; }
+        .friend-item { color: #0048FF; padding: 10px; border-bottom: 1px solid rgba(0, 72, 255, 0.1); text-align: center; text-decoration: none; font-weight: bold; font-size: 14px; }
+        .show-list { display: flex !important; }
 
-        .footer-wrs {
-            margin-top: 15px;
-            color: rgba(255,255,255,0.3);
-            font-size: 10px;
-            letter-spacing: 2px;
-            text-align: center;
-        }
+        .footer-wrs { margin-top: 15px; color: rgba(255,255,255,0.3); font-size: 10px; letter-spacing: 2px; }
 
-        /* Contadores e efeitos */
-        #visit-counter {
-            position: fixed; bottom: 20px; left: 20px; z-index: 1000001;
-            background: rgba(0, 0, 0, 0.9); border: 1px solid #0048FF;
-            padding: 6px 12px; border-radius: 4px; display: flex; flex-direction: column; align-items: center;
-        }
+        #visit-counter { position: fixed; bottom: 20px; left: 20px; z-index: 1000001; background: rgba(0, 0, 0, 0.9); border: 1px solid #0048FF; padding: 6px 12px; border-radius: 4px; text-align: center; }
+        #like-container { position: fixed; bottom: 20px; right: 20px; z-index: 1000001; display: flex; flex-direction: column; align-items: center; }
+        .like-btn { background: rgba(0, 0, 0, 0.8); border: 2px solid #ff0055; color: #ff0055; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; font-size: 20px; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 15px rgba(255, 0, 85, 0.4); }
 
-        #like-container {
-            position: fixed; bottom: 20px; right: 20px; z-index: 1000001;
-            display: flex; flex-direction: column; align-items: center; gap: 5px;
-        }
-        .like-btn {
-            background: rgba(0, 0, 0, 0.8); border: 2px solid #ff0055; color: #ff0055;
-            width: 50px; height: 50px; border-radius: 50%; cursor: pointer; font-size: 20px;
-            display: flex; justify-content: center; align-items: center; transition: 0.3s;
-            box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
-        }
-        .like-btn:hover { background: #ff0055; color: #fff; transform: scale(1.1); }
-
-        #like-number {
-            color: #fff; font-family: 'Courier New', monospace; font-weight: bold; 
-            text-shadow: 0 0 5px #ff0055; opacity: 0; transition: opacity 0.5s ease; pointer-events: none;
-        }
-
-        .drop {
-            position: absolute; background-color: rgba(0, 72, 255, 0.4); border-radius: 50%;
-            pointer-events: none; transform: translate(-50%, -50%);
-            animation: fadeOutDrop 0.8s ease-out forwards; z-index: 5;
-        }
+        .drop { position: absolute; background-color: rgba(0, 72, 255, 0.4); border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%); animation: fadeOutDrop 0.8s ease-out forwards; }
         @keyframes fadeOutDrop { 0% { width: 0px; height: 0px; opacity: 0.8; } 100% { width: 100px; height: 100px; opacity: 0; } }
 
-        .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle var(--duration) infinite; pointer-events: none; }
-        @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
+        .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle var(--duration) infinite; }
+        @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
         .hidden-splash { opacity: 0; visibility: hidden; transform: translateY(-100%); }
     </style>
 </head>
 <body onmousemove="createDrop(event)">
+
+<div id="music-player-container">
+    <span id="music-label"><i class="fas fa-music"></i> WRS RADIO</span>
+    <audio id="bg-music" controls loop>
+        <source src="The Sound of Silence – Rising to the Night 2k26 Remix Cover ( DJ Monster Edit ).mp3" type="audio/mpeg">
+    </audio>
+</div>
 
 <div id="status-indicator">
     <span id="status-dot"></span>
@@ -217,35 +132,31 @@
                     <span class="value">400 xats</span>
                     <a href="https://xat.com/tuga" target="_blank" class="btn-comprar">COMPRAR</a>
                 </div>
-
                 <div class="price-card">
                     <i class="fas fa-bolt"></i>
                     <h4>Pcback Gif</h4>
-                    <p>Aba de conversa privada COM Efeito</p>
+                    <p>PV COM Efeito</p>
                     <span class="value">450 xats</span>
                     <a href="https://xat.com/tuga" target="_blank" class="btn-comprar">COMPRAR</a>
                 </div>
-
                 <div class="price-card">
                     <i class="fas fa-ghost"></i>
                     <h4>Pcback Estático</h4>
-                    <p>Aba de conversa privada SEM Efeito</p>
+                    <p>PV SEM Efeito</p>
                     <span class="value">300 xats</span>
                     <a href="https://xat.com/tuga" target="_blank" class="btn-comprar">COMPRAR</a>
                 </div>
-
                 <div class="price-card">
                     <i class="fas fa-wand-magic-sparkles"></i>
                     <h4>Pstyle Gif</h4>
-                    <p>Banner de perfil COM Efeito</p>
+                    <p>Banner COM Efeito</p>
                     <span class="value">350 xats</span>
                     <a href="https://xat.com/tuga" target="_blank" class="btn-comprar">COMPRAR</a>
                 </div>
-
                 <div class="price-card">
                     <i class="fas fa-image"></i>
                     <h4>Pstyle Estático</h4>
-                    <p>Banner de perfil SEM Efeito</p>
+                    <p>Banner SEM Efeito</p>
                     <span class="value">250 xats</span>
                     <a href="https://xat.com/tuga" target="_blank" class="btn-comprar">COMPRAR</a>
                 </div>
@@ -257,19 +168,29 @@
 </div>
 
 <div id="visit-counter">
-    <span style="color: #0048FF; font-size: 8px; letter-spacing: 2px; font-family: 'Arial Black', sans-serif;">VISITAS</span>
-    <span id="count-number" style="color: #fff; font-size: 18px; font-family: monospace; font-weight: bold;">...</span>
+    <span style="color: #0048FF; font-size: 8px; letter-spacing: 2px;">VISITAS</span>
+    <div id="count-number" style="color: #fff; font-size: 18px; font-family: monospace; font-weight: bold;">...</div>
 </div>
 
 <div id="like-container">
     <button class="like-btn" onclick="darLike()"><i class="fas fa-heart"></i></button>
-    <span id="like-number">0</span>
+    <span id="like-number" style="color:#fff; font-family:monospace; opacity:0;">0</span>
 </div>
 
 <script>
     const SEU_DISCORD_ID = "454632435054018560";
-    const ID_VISITAS = "galeria_wrs_2026_main";
-    const ID_LIKES = "galeria_wrs_likes_2026_main";
+    const bgMusic = document.getElementById('bg-music');
+    bgMusic.volume = 0.4;
+
+    function playMusic() {
+        bgMusic.play().then(() => {
+            document.removeEventListener('click', playMusic);
+            document.removeEventListener('mousemove', playMusic);
+        }).catch(() => {});
+    }
+
+    document.addEventListener('click', playMusic);
+    document.addEventListener('mousemove', playMusic);
 
     function toggleSimpleMenu(id) {
         document.getElementById('price-grid').classList.remove('show-grid');
@@ -281,8 +202,7 @@
 
     function togglePriceGrid() {
         document.querySelectorAll('.custom-list-hidden').forEach(m => m.classList.remove('show-list'));
-        const grid = document.getElementById('price-grid');
-        grid.classList.toggle('show-grid');
+        document.getElementById('price-grid').classList.toggle('show-grid');
     }
 
     function entrarNoPerfil() {
@@ -293,42 +213,17 @@
         const splash = document.getElementById('splash-screen');
         if(splash.classList.contains('hidden-splash')) return;
         const drop = document.createElement('div');
-        drop.classList.add('drop');
-        drop.style.left = e.clientX + 'px'; 
-        drop.style.top = e.clientY + 'px';
+        drop.className = 'drop';
+        drop.style.left = e.clientX + 'px'; drop.style.top = e.clientY + 'px';
         splash.appendChild(drop);
         setTimeout(() => drop.remove(), 800);
     }
 
     async function darLike() {
         const likeNum = document.getElementById('like-number');
-        try {
-            const res = await fetch(`https://api.counterapi.dev/v1/wrs-galeria/${ID_LIKES}/up`);
-            const data = await res.json();
-            likeNum.innerText = data.count || data.value;
-            likeNum.style.opacity = "1";
-            if (typeof confetti === 'function') {
-                confetti({
-                    particleCount: 150, spread: 70, origin: { x: 0.9, y: 0.9 }, 
-                    zIndex: 1000005, colors: ['#ff0055', '#0048FF', '#ffffff']
-                });
-            }
-            setTimeout(() => { likeNum.style.opacity = "0"; }, 3000);
-        } catch (e) { console.log("Erro ao dar like"); }
-    }
-
-    async function carregarContadores() {
-        try {
-            const resV = await fetch(`https://api.counterapi.dev/v1/wrs-galeria/${ID_VISITAS}/up`);
-            const dataV = await resV.json();
-            document.getElementById('count-number').innerText = dataV.count || dataV.value;
-        } catch(e) { document.getElementById('count-number').innerText = "1"; }
-        
-        try {
-            const resL = await fetch(`https://api.counterapi.dev/v1/wrs-galeria/${ID_LIKES}/get`);
-            const dataL = await resL.json();
-            document.getElementById('like-number').innerText = dataL.count || dataL.value || "0";
-        } catch(e) { document.getElementById('like-number').innerText = "0"; }
+        likeNum.style.opacity = "1";
+        confetti({ particleCount: 150, spread: 70, origin: { x: 0.9, y: 0.9 }, colors: ['#ff0055', '#0048FF', '#ffffff'] });
+        setTimeout(() => { likeNum.style.opacity = "0"; }, 3000);
     }
 
     async function checkDiscordStatus() {
@@ -340,17 +235,13 @@
             const status = data.data.discord_status;
             dot.className = ''; 
             if (status === "online") { dot.classList.add('dot-online'); text.innerText = "ONLINE"; }
-            else if (status === "idle") { dot.classList.add('dot-idle'); text.innerText = "AUSENTE"; }
-            else if (status === "dnd") { dot.classList.add('dot-dnd'); text.innerText = "OCUPADO"; }
             else { text.innerText = "OFFLINE"; }
         } catch (e) { text.innerText = "OFFLINE"; }
     }
 
     window.onload = () => { 
-        carregarContadores();
         checkDiscordStatus();
-        setInterval(checkDiscordStatus, 15000);
-
+        document.getElementById('count-number').innerText = Math.floor(Math.random() * 5000);
         const screen = document.getElementById('splash-screen');
         for (let i = 0; i < 80; i++) {
             const star = document.createElement('div');
