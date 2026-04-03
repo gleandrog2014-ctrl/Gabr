@@ -3,30 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrossel Neon - Galeria WRS</title>
+    <title>Carrossel Neon Escuro - Galeria WRS</title>
     <style>
-        /* --- ESTILO NEON AZUL WRS --- */
+        /* --- ESTILO NEON AZUL ESCURO WRS --- */
+        :root {
+            /* NOVA COR: Azul Mais Escuro e Profundo */
+            --neon-color: #0000cd; 
+            --neon-glow: rgba(0, 0, 205, 0.7);
+            --bg-dark: #000000;
+        }
+
         body {
-            background-color: #000;
+            background-color: var(--bg-dark);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
             font-family: Arial, sans-serif;
+            overflow: hidden; /* Evita barras de rolagem no body */
         }
 
         .carrossel-wrs {
             width: 90%;
             max-width: 500px;
-            height: 280px;
+            height: 300px; /* Aumentei um pouco a altura para acomodar o fundo */
             position: relative;
             overflow: hidden;
-            /* Borda Neon Azul */
-            border: 2px solid #00d4ff; 
+            /* Borda Neon Azul Escuro */
+            border: 2px solid var(--neon-color); 
             border-radius: 15px;
-            box-shadow: 0 0 15px #00d4ff, inset 0 0 10px #00d4ff;
-            background: #050505;
+            box-shadow: 0 0 20px var(--neon-glow), inset 0 0 15px var(--neon-glow);
+            background: #010101; /* Fundo quase preto */
+        }
+
+        /* --- NOVO: Fundo Animado de Partículas (Preenchendo o Espaço) --- */
+        .fundo-particulas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(var(--neon-color) 1px, transparent 1px),
+                radial-gradient(var(--neon-color) 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            opacity: 0.15; /* Bem sutil para não distrair */
+            animation: piscarFundo 4s infinite alternate;
+            z-index: 1; /* Atrás dos slides */
+        }
+
+        @keyframes piscarFundo {
+            0% { opacity: 0.1; }
+            100% { opacity: 0.25; }
         }
 
         .slide-item {
@@ -34,11 +64,12 @@
             width: 100%;
             height: 100%;
             opacity: 0;
-            transition: opacity 0.6s ease-in-out;
+            transition: opacity 0.8s ease-in-out; /* Transição mais suave */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            z-index: 2; /* À frente do fundo */
         }
 
         .slide-item.active { 
@@ -47,41 +78,45 @@
 
         .slide-item img {
             max-width: 85%;
-            max-height: 65%;
+            max-height: 70%; /* Ajuste para equilibrar com a legenda */
             object-fit: contain;
-            /* Brilho na Imagem/GIF */
-            filter: drop-shadow(0 0 8px #00d4ff);
+            /* Brilho na Imagem/GIF (Sutil) */
+            filter: drop-shadow(0 0 5px var(--neon-color));
         }
 
         .legenda {
             margin-top: 15px;
-            color: #00d4ff;
+            color: var(--neon-color);
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 2px;
-            text-shadow: 0 0 8px #00d4ff;
+            font-size: 14px;
+            /* Brilho no Texto */
+            text-shadow: 0 0 10px var(--neon-color);
         }
 
-        /* Botões de Navegação */
+        /* Botões de Navegação (Mais Escuros e Sutis) */
         .seta {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.7);
-            color: #00d4ff;
-            border: 1px solid #00d4ff;
-            padding: 12px;
+            background: rgba(0, 0, 0, 0.8);
+            color: var(--neon-color);
+            border: 1px solid var(--neon-color);
+            padding: 10px;
             cursor: pointer;
             z-index: 10;
             border-radius: 50%;
             transition: 0.3s;
-            box-shadow: 0 0 5px #00d4ff;
+            box-shadow: 0 0 5px var(--neon-glow);
+            opacity: 0.7; /* Ligeiramente transparente por padrão */
         }
 
         .seta:hover { 
-            background: #00d4ff; 
+            background: var(--neon-color); 
             color: #000; 
-            box-shadow: 0 0 15px #00d4ff;
+            box-shadow: 0 0 15px var(--neon-color);
+            opacity: 1;
         }
 
         .voltar { left: 10px; }
@@ -92,6 +127,8 @@
 
     <div class="carrossel-wrs">
         
+        <div class="fundo-particulas"></div>
+
         <div class="slide-item active">
             <img src="https://i.imgur.com/SFnk7A6.gif" alt="Destaque 1">
             <div class="legenda">PROJETO 01</div>
@@ -123,24 +160,20 @@
         let autoSlide;
 
         function mostrar(n) {
-            // Remove classe ativa do slide atual
             slides[atual].classList.remove('active');
-            // Calcula o próximo índice
             atual = (n + slides.length) % slides.length;
-            // Adiciona classe ativa ao novo slide
             slides[atual].classList.add('active');
         }
 
         function mudarSlide(n) {
             mostrar(atual + n);
-            resetTimer(); // Reseta o tempo se alguém clicar manualmente
+            resetTimer(); 
         }
 
-        // Função para iniciar o movimento automático
         function startTimer() {
             autoSlide = setInterval(() => {
                 mudarSlide(1);
-            }, 4000); // 4000 = 4 segundos
+            }, 5000); // Aumentei para 5 segundos para apreciar o fundo
         }
 
         function resetTimer() {
@@ -148,7 +181,6 @@
             startTimer();
         }
 
-        // Inicia o carrossel automático ao carregar
         startTimer();
     </script>
 
