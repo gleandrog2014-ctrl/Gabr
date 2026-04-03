@@ -64,7 +64,13 @@
         }
         @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        .menu-wrapper { display: flex; flex-direction: column; gap: 15px; align-items: center; }
+        .menu-wrapper { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 15px; 
+            align-items: center; 
+            margin-bottom: 40px; /* Garante espaço para o rodapé */
+        }
 
         .btn-glow {
             background: rgba(0, 0, 0, 0.6); border: 2px solid #0048FF; color: #0048FF;
@@ -76,7 +82,8 @@
 
         .friends-list-hidden, .custom-list-hidden { 
             display: none; flex-direction: column; background: rgba(0, 0, 0, 0.9); 
-            border: 1px solid #0048FF; width: 300px; margin-top: 2px;
+            border: 1px solid #0048FF; width: 300px; margin-top: -10px;
+            margin-bottom: 5px;
         }
         .show-list { display: flex !important; }
         
@@ -85,8 +92,17 @@
             text-align: center; text-decoration: none; font-weight: bold; transition: 0.3s; cursor: pointer;
         }
 
-        #lista-amigos .friend-item { padding: 6px; font-size: 14px; }
+        #lista-amigos .friend-item { padding: 8px; font-size: 14px; }
         .friend-item:hover { background: #0048FF !important; color: #fff !important; }
+
+        /* Rodapé Ajustado */
+        .footer-wrs {
+            margin-top: 20px;
+            color: rgba(255,255,255,0.3);
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-align: center;
+        }
 
         /* Contadores */
         #visit-counter {
@@ -107,7 +123,6 @@
         }
         .like-btn:hover { background: #ff0055; color: #fff; transform: scale(1.1); }
 
-        /* Estilo do número de like (escondido por padrão) */
         #like-number {
             color: #fff; 
             font-family: 'Courier New', monospace; 
@@ -161,8 +176,9 @@
                 <div class="friend-item">Pstyle Gif - 350 xats </div>
                 <div class="friend-item">Pstyle Estático - 250 xats </div>
             </div>
+
+            <div class="footer-wrs">© GALERIA - 2026</div>
         </div>
-        <div style="position: absolute; bottom: 20px; color: rgba(255,255,255,0.3); font-size: 11px;">© GALERIA - 2026</div>
     </div>
 </div>
 
@@ -208,23 +224,15 @@
         try {
             const res = await fetch(`https://api.counterapi.dev/v1/wrs-galeria/${ID_LIKES}/up`);
             const data = await res.json();
-            
-            // Mostra o número
             likeNum.innerText = data.count || data.value;
             likeNum.style.opacity = "1";
-
             if (typeof confetti === 'function') {
                 confetti({
                     particleCount: 150, spread: 70, origin: { x: 0.9, y: 0.9 }, 
                     zIndex: 1000005, colors: ['#ff0055', '#0048FF', '#ffffff']
                 });
             }
-
-            // Esconde o número após 3 segundos
-            setTimeout(() => {
-                likeNum.style.opacity = "0";
-            }, 3000);
-
+            setTimeout(() => { likeNum.style.opacity = "0"; }, 3000);
         } catch (e) { console.log("Erro ao dar like"); }
     }
 
@@ -235,7 +243,6 @@
             document.getElementById('count-number').innerText = dataV.count || dataV.value;
         } catch(e) { document.getElementById('count-number').innerText = "1"; }
         
-        // Apenas carrega o valor dos likes internamente, sem mostrar
         try {
             const resL = await fetch(`https://api.counterapi.dev/v1/wrs-galeria/${ID_LIKES}/get`);
             const dataL = await resL.json();
