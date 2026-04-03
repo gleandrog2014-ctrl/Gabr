@@ -133,6 +133,18 @@
         .like-btn { background: rgba(0, 0, 0, 0.8); border: 2px solid #ff0055; color: #ff0055; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 20px; transition: 0.3s; }
         .like-btn:hover { background: #ff0055; color: #fff; transform: scale(1.1); }
         .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle var(--duration) infinite; pointer-events: none; }
+
+        /* AJUSTE PARA O NAVEGADOR NÃO BLOQUEAR O ÁUDIO */
+        #yt-player { 
+            position: fixed; 
+            bottom: 0; 
+            right: 0; 
+            width: 1px; 
+            height: 1px; 
+            opacity: 0.01; 
+            pointer-events: none; 
+            z-index: -1; 
+        }
     </style>
 </head>
 <body onmousemove="createDrop(event)">
@@ -201,7 +213,7 @@
     <span id="like-number" style="color: #fff; opacity: 0; font-family: monospace;">0</span>
 </div>
 
-<div id="yt-player" style="position: absolute; top: -9999px;"><div id="player"></div></div>
+<div id="yt-player"><div id="player"></div></div>
 
 <script>
     const SEU_DISCORD_ID = "454632435054018560";
@@ -224,7 +236,7 @@
 
     function onYouTubeIframeAPIReady() {
         player = new YT.Player('player', {
-            height: '0', width: '0', videoId: playlist[currentTrack].id,
+            height: '1', width: '1', videoId: playlist[currentTrack].id,
             playerVars: { 
                 'autoplay': 1, 
                 'controls': 0,
@@ -254,6 +266,7 @@
 
     function controlMusic() { 
         const btn = document.getElementById('music-btn'); 
+        if (!player) return;
         const state = player.getPlayerState();
         if (state === YT.PlayerState.PLAYING) { 
             player.pauseVideo(); 
@@ -271,10 +284,14 @@
         const splash = document.getElementById('splash-screen');
         splash.style.opacity = "0";
         document.body.style.overflowY = "auto";
-        if (player && typeof player.playVideo === 'function') {
+        
+        if (player) {
+            player.unMute();
+            player.setVolume(50);
             player.playVideo(); 
             document.getElementById('music-btn').innerHTML = '<i class="fas fa-pause"></i>';
         }
+        
         setTimeout(() => { splash.style.display = "none"; }, 600);
     }
 
