@@ -9,14 +9,14 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
+        /* AJUSTE NA ROLAGEM */
         body {
             margin: 0;
             background-color: #000;
-            overflow: hidden;
+            overflow-x: hidden; /* Evita barra horizontal */
+            overflow-y: hidden; /* Começa travado para o splash */
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
+            min-height: 100vh;
         }
 
         #splash-screen {
@@ -31,7 +31,7 @@
             justify-content: center;
             align-items: center;
             z-index: 999999;
-            transition: all 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+            transition: opacity 0.8s ease, visibility 0.8s;
         }
 
         /* Status Discord */
@@ -49,15 +49,14 @@
         .dot-idle { background-color: #f1c40f !important; box-shadow: 0 0 15px #f1c40f; }
         .dot-dnd { background-color: #e74c3c !important; box-shadow: 0 0 15px #e74c3c; }
 
-        /* Player de Música - AJUSTADO PARA 195PX */
+        /* Player - 195px */
         #music-player-ui {
             position: fixed; top: 20px; left: 20px; z-index: 1000002;
             background: rgba(0, 0, 0, 0.85); border: 1px solid #0048FF;
             padding: 8px 12px; border-radius: 6px; display: flex; align-items: center;
             gap: 10px; box-shadow: 0 0 15px rgba(0, 72, 255, 0.4);
             backdrop-filter: blur(5px); opacity: 0.5; transition: 0.4s; 
-            width: 195px; /* Novo ajuste solicitado */
-            overflow: hidden;
+            width: 195px; overflow: hidden;
         }
         #music-player-ui:hover { opacity: 1; box-shadow: 0 0 25px rgba(0, 72, 255, 0.7); }
 
@@ -71,7 +70,7 @@
         .music-nav-btn { background: none; border: 1px solid rgba(0, 72, 255, 0.4); color: #0048FF; cursor: pointer; width: 22px; height: 22px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 8px; }
         .play-toggle { background: none; border: 1px solid #0048FF; color: #0048FF; cursor: pointer; width: 28px; height: 28px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 11px; }
 
-        /* Menu de Botões Empilhados */
+        /* Menu de Botões */
         .menu-wrapper { display: flex; flex-direction: column; align-items: center; gap: 15px; }
         .btn-glow { background: rgba(0, 0, 0, 0.6); border: 2px solid #0048FF; color: #0048FF; padding: 12px 0; font-size: 15px; cursor: pointer; font-weight: bold; letter-spacing: 3px; width: 280px; backdrop-filter: blur(5px); transition: 0.3s; }
         .btn-glow:hover { background: #0048FF; color: #fff; box-shadow: 0 0 25px #0048FF; transform: scale(1.03); }
@@ -84,24 +83,26 @@
         .price-grid-container { display: none; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 320px; max-height: 200px; overflow-y: auto; background: rgba(0, 0, 0, 0.95); border: 1px solid #0048FF; padding: 15px; }
         .show-grid { display: grid !important; }
 
-        /* Rodapé */
+        /* Rodapé Splash */
         #footer-branding {
             position: absolute; bottom: 20px; width: 100%; text-align: center;
             color: rgba(255, 255, 255, 0.5); font-size: 11px; letter-spacing: 4px;
             font-weight: bold; text-transform: uppercase; text-shadow: 0 0 10px #0048FF;
         }
 
-        /* Logo WRS */
+        /* Logo */
         .logo-wrs { font-family: 'Arial Black', sans-serif; font-size: 75px; letter-spacing: 15px; text-align: center; background: linear-gradient(270deg, #FFFFFF, #0048FF, #FFFFFF, #0048FF, #FFFFFF); background-size: 400% 400%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: gradientMove 4s linear infinite; margin-bottom: 30px; }
         @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
         /* Contadores */
-        #visit-counter { position: fixed; bottom: 60px; left: 20px; z-index: 1000001; background: rgba(0, 0, 0, 0.9); border: 1px solid #0048FF; padding: 6px 12px; border-radius: 4px; display: flex; flex-direction: column; align-items: center; }
-        #like-container { position: fixed; bottom: 60px; right: 20px; z-index: 1000001; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        #visit-counter { position: fixed; bottom: 20px; left: 20px; z-index: 1000001; background: rgba(0, 0, 0, 0.9); border: 1px solid #0048FF; padding: 6px 12px; border-radius: 4px; display: flex; flex-direction: column; align-items: center; }
+        #like-container { position: fixed; bottom: 20px; right: 20px; z-index: 1000001; display: flex; flex-direction: column; align-items: center; gap: 5px; }
         .like-btn { background: rgba(0, 0, 0, 0.8); border: 2px solid #ff0055; color: #ff0055; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 20px; transition: 0.3s; }
         .like-btn:hover { background: #ff0055; color: #fff; transform: scale(1.1); }
         
-        .hidden-splash { opacity: 0; visibility: hidden; transform: translateY(-100%); }
+        /* Classe para sumir com o Splash e liberar o site */
+        .hidden-splash { opacity: 0; visibility: hidden; pointer-events: none; }
+        
         .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle var(--duration) infinite; pointer-events: none; }
     </style>
 </head>
@@ -124,16 +125,13 @@
 
 <div id="splash-screen">
     <h1 class="logo-wrs">GALERIA</h1>
-    
     <div class="menu-wrapper">
         <button class="btn-glow" onclick="entrarNoPerfil()"><i class="fas fa-rocket"></i> ENTRE</button>
-        
         <button class="btn-glow" onclick="toggleSimpleMenu('lista-xat')"><i class="fas fa-comments"></i> XAT COMUNIDADE</button>
         <div id="lista-xat" class="custom-list-hidden">
             <a href="https://xat.com/tuga" target="_blank" class="friend-item">XAT TUGA</a>
             <a href="https://xat.com/conexaosertanejoo" target="_blank" class="friend-item">XAT CONEXÃO</a>
         </div>
-
         <button class="btn-glow" onclick="togglePriceGrid()"><i class="fas fa-tags"></i> TABELA DE PREÇOS</button>
         <div id="price-grid" class="price-grid-container">
             <div style="color:#fff; font-size:10px; text-align:center; grid-column: span 2; margin-bottom:5px;">PREÇOS EM XATS</div>
@@ -151,8 +149,12 @@
             </div>
         </div>
     </div>
-
     <div id="footer-branding">GALERIA DE GIFS - 2026</div>
+</div>
+
+<div style="height: 2000px; padding: 100px 20px; color: white; text-align: center;">
+    <h2>SUA GALERIA COMEÇA AQUI</h2>
+    <p>Agora você consegue rolar a página normalmente!</p>
 </div>
 
 <div id="visit-counter">
@@ -203,7 +205,17 @@
     
     function toggleSimpleMenu(id) { document.getElementById('price-grid').classList.remove('show-grid'); document.getElementById(id).classList.toggle('show-list'); }
     function togglePriceGrid() { document.getElementById('lista-xat').classList.remove('show-list'); document.getElementById('price-grid').classList.toggle('show-grid'); }
-    function entrarNoPerfil() { document.getElementById('splash-screen').classList.add('hidden-splash'); if (player) player.playVideo(); }
+
+    // FUNÇÃO CORRIGIDA
+    function entrarNoPerfil() { 
+        document.getElementById('splash-screen').classList.add('hidden-splash'); 
+        document.body.style.overflowY = "auto"; // Libera a rolagem
+        if (player) player.playVideo(); 
+        // Remove do DOM após a animação para não atrapalhar cliques
+        setTimeout(() => {
+            document.getElementById('splash-screen').style.display = "none";
+        }, 800);
+    }
 
     async function darLike() {
         const likeNum = document.getElementById('like-number');
@@ -241,7 +253,7 @@
     }
 
     function createDrop(e) {
-        if(document.getElementById('splash-screen').classList.contains('hidden-splash')) return;
+        if(document.getElementById('splash-screen').style.display === "none") return;
         const drop = document.createElement('div');
         drop.style.cssText = `position:absolute; background:rgba(0, 72, 255, 0.4); border-radius:50%; pointer-events:none; left:${e.clientX}px; top:${e.clientY}px;`;
         document.getElementById('splash-screen').appendChild(drop);
