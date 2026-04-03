@@ -10,6 +10,7 @@
     <style>
         body { margin: 0; background-color: #000; overflow-x: hidden; overflow-y: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         
+        /* Splash Screen */
         #splash-screen { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: radial-gradient(circle at bottom right, rgba(0, 72, 255, 0.15), transparent 40%), 
@@ -18,6 +19,7 @@
             z-index: 999999; transition: opacity 0.6s ease; 
         }
 
+        /* Status Discord */
         #status-indicator { 
             position: fixed; top: 20px; right: 20px; display: flex; align-items: center; gap: 10px; 
             background: rgba(0, 0, 0, 0.6); padding: 8px 15px; border-radius: 20px; 
@@ -29,6 +31,7 @@
         .dot-idle { background-color: #f1c40f !important; box-shadow: 0 0 15px #f1c40f; }
         .dot-dnd { background-color: #e74c3c !important; box-shadow: 0 0 15px #e74c3c; }
 
+        /* Player Lateral */
         #music-player-ui { 
             position: fixed; top: 250px; left: 20px; z-index: 1000002; 
             background: rgba(0, 0, 0, 0.85); border: 1px solid #0048FF; 
@@ -44,7 +47,7 @@
             background: rgba(0, 72, 255, 0.3); outline: none; border-radius: 2px; 
             cursor: pointer; transform: rotate(-90deg); margin: 20px 0; 
         }
-        .volume-control::-webkit-slider-thumb { -webkit-appearance: none; width: 10px; height: 10px; background: #0048FF; border-radius: 50%; box-shadow: 0 0 5px #0048FF; }
+        .volume-control::-webkit-slider-thumb { -webkit-appearance: none; width: 10px; height: 10px; background: #0048FF; border-radius: 50%; }
 
         .music-info { 
             width: 100%; height: 100px; overflow: hidden; position: relative; 
@@ -65,6 +68,7 @@
         }
         .play-toggle:hover { background: #0048FF; color: #fff; }
 
+        /* Botão Entre */
         .btn-glow { 
             background: rgba(0, 0, 0, 0.6); border: 2px solid #0048FF; color: #0048FF; 
             padding: 12px 0; font-size: 15px; cursor: pointer; font-weight: bold; 
@@ -81,23 +85,13 @@
         }
         @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        #visit-counter { position: fixed; bottom: 20px; left: 20px; z-index: 1000001; background: rgba(0, 0, 0, 0.9); border: 1px solid #0048FF; padding: 6px 12px; border-radius: 4px; display: flex; flex-direction: column; align-items: center; }
-        #like-container { position: fixed; bottom: 20px; right: 20px; z-index: 1000001; display: flex; flex-direction: column; align-items: center; gap: 5px; }
-        
-        .like-btn { 
-            background: rgba(0, 0, 0, 0.8); border: 2px solid #ff0055; color: #ff0055; 
-            width: 50px; height: 50px; border-radius: 50%; cursor: pointer; 
-            display: flex; justify-content: center; align-items: center; font-size: 20px; transition: 0.3s; 
-        }
-        .like-btn:hover { background: #ff0055; color: #fff; transform: scale(1.1); }
-        
         .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle var(--duration) infinite; pointer-events: none; }
     </style>
 </head>
 <body onmousemove="createDrop(event)">
 
 <audio id="meuAudio" loop preload="auto">
-    <source src="https://docs.google.com/uc?export=download&id=1YwrtWC04EI1Nbh_b1OhEoXs_WxWKEzwf" type="audio/mpeg">
+    <source src="https://cdn.discordapp.com/attachments/1489682267264520284/1489682358335569920/4-Non-Blondes-whats-up.mp3.mp3?ex=69d14e4f&is=69cffccf&hm=80284e95d90307d6de8428368b56d5435ed1150cec5a6238b8a744855f683751&" type="audio/mpeg">
 </audio>
 
 <div id="status-indicator">
@@ -109,7 +103,7 @@
     <button class="play-toggle" onclick="controlMusic()" id="music-btn"><i class="fas fa-play"></i></button>
     <input type="range" class="volume-control" id="volume-slider" min="0" max="100" value="50" oninput="changeVolume(this.value)">
     <div class="music-info">
-        <span class="track-name" id="track-display">GALERIA WRS - MUSIC</span>
+        <span class="track-name" id="track-display">WRS - WHAT'S UP</span>
     </div>
 </div>
 
@@ -121,80 +115,38 @@
     <div style="position: absolute; bottom: 20px; color: rgba(255, 255, 255, 0.5); font-size: 11px; letter-spacing: 4px; font-weight: bold; text-transform: uppercase;">GALERIA DE GIFS - 2026</div>
 </div>
 
-<div id="visit-counter">
-    <span style="color: #0048FF; font-size: 8px;">VISITAS</span>
-    <span id="count-number" style="color: #fff; font-size: 18px; font-family: monospace;">...</span>
-</div>
-
-<div id="like-container">
-    <button class="like-btn" onclick="darLike()"><i class="fas fa-heart"></i></button>
-    <span id="like-number" style="color: #fff; opacity: 0; font-family: monospace;">0</span>
-</div>
-
 <script>
     const SEU_DISCORD_ID = "454632435054018560";
     const audio = document.getElementById('meuAudio');
     const btn = document.getElementById('music-btn');
 
-    // Função Manual de Play/Pause
     function controlMusic() {
-        if (audio.paused) {
-            audio.play().then(() => {
-                btn.innerHTML = '<i class="fas fa-pause"></i>';
-            });
-        } else {
-            audio.pause();
-            btn.innerHTML = '<i class="fas fa-play"></i>';
+        if (audio.paused) { 
+            audio.play(); 
+            btn.innerHTML = '<i class="fas fa-pause"></i>'; 
+        } else { 
+            audio.pause(); 
+            btn.innerHTML = '<i class="fas fa-play"></i>'; 
         }
     }
 
     function changeVolume(val) { audio.volume = val / 100; }
 
-    // Função que libera o som ao clicar no botão
     function entrarNoPerfil() { 
         const splash = document.getElementById('splash-screen');
         
-        // Garante que o áudio não comece mudo
+        // Ativa o áudio
         audio.muted = false;
-        audio.volume = 0.5;
-
-        // Tenta tocar imediatamente após o clique
         audio.play().then(() => {
             btn.innerHTML = '<i class="fas fa-pause"></i>';
             document.getElementById('track-display').innerText = "TOCANDO AGORA";
-        }).catch(e => {
-            console.log("O navegador exigiu clique manual no player.");
-            btn.innerHTML = '<i class="fas fa-play"></i>';
-        });
+        }).catch(e => console.log("O navegador bloqueou o autoplay."));
 
         splash.style.opacity = "0";
         document.body.style.overflowY = "auto";
         setTimeout(() => { splash.style.display = "none"; }, 600);
     }
 
-    // Sistema de Curtidas
-    async function darLike() {
-        const likeNum = document.getElementById('like-number');
-        try {
-            const res = await fetch(`https://api.counterapi.dev/v1/wrs-galeria/likes_main/up`);
-            const data = await res.json();
-            likeNum.innerText = data.count || data.value;
-            likeNum.style.opacity = "1";
-            confetti({ particleCount: 150, spread: 70, origin: { x: 0.9, y: 0.9 } });
-            setTimeout(() => likeNum.style.opacity = "0", 3000);
-        } catch (e) {}
-    }
-
-    // Sistema de Visitas
-    async function carregarContadores() {
-        try {
-            const resV = await fetch(`https://api.counterapi.dev/v1/wrs-galeria/visitas_main/up`);
-            const dataV = await resV.json();
-            document.getElementById('count-number').innerText = dataV.count || dataV.value;
-        } catch(e) { document.getElementById('count-number').innerText = "1"; }
-    }
-
-    // Status do Discord via Lanyard
     async function checkDiscordStatus() {
         const dot = document.getElementById('status-dot');
         const text = document.getElementById('status-text');
@@ -210,7 +162,6 @@
         } catch (e) { text.innerText = "OFFLINE"; }
     }
 
-    // Efeito Visual de Gotas/Clique
     function createDrop(e) {
         if(document.getElementById('splash-screen').style.display === "none") return;
         const drop = document.createElement('div');
@@ -221,11 +172,8 @@
     }
 
     window.onload = () => {
-        carregarContadores();
         checkDiscordStatus();
         setInterval(checkDiscordStatus, 15000);
-        
-        // Gerar estrelas de fundo
         const screen = document.getElementById('splash-screen');
         for (let i = 0; i < 40; i++) {
             const star = document.createElement('div');
