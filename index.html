@@ -163,12 +163,39 @@
 
         #visit-counter { position: fixed; bottom: 20px; left: 20px; z-index: 1000001; background: rgba(0, 0, 0, 0.9); border: 1px solid #0048FF; padding: 6px 12px; border-radius: 4px; display: flex; flex-direction: column; align-items: center; }
         
-        /* Botão de like atualizado com cor azul #0048FF para combinar com o site */
         #like-container { position: fixed; bottom: 20px; right: 20px; z-index: 1000001; display: flex; flex-direction: column; align-items: center; gap: 5px; }
         .like-btn { background: rgba(0, 0, 0, 0.8); border: 2px solid #0048FF; color: #0048FF; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 20px; transition: 0.3s; }
         .like-btn:hover { background: #0048FF; color: #fff; box-shadow: 0 0 15px #0048FF; }
         
-        .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle var(--duration) infinite; pointer-events: none; }
+        /* ESTRELAS ATUALIZADAS */
+        .star { 
+            position: absolute; 
+            background: white; 
+            border-radius: 50%; 
+            opacity: 0.6; 
+            pointer-events: none; 
+            animation: twinkle var(--duration) infinite, moveStar var(--move-duration) linear infinite;
+        }
+        @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 0.8; transform: scale(1.2); } }
+        @keyframes moveStar { from { transform: translateX(0); } to { transform: translateX(15px) translateY(10px); } }
+
+        /* METEOROS */
+        .meteor {
+            position: absolute;
+            width: 2px;
+            height: 100px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.8), transparent);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 1;
+            animation: shoot 3s linear infinite;
+        }
+        @keyframes shoot {
+            0% { transform: rotate(215deg) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            30% { transform: rotate(215deg) translateX(-600px); opacity: 0; }
+            100% { transform: rotate(215deg) translateX(-600px); opacity: 0; }
+        }
     </style>
 </head>
 <body onmousemove="createDrop(event)">
@@ -324,16 +351,39 @@
         setTimeout(() => drop.remove(), 800);
     }
 
+    // FUNÇÃO PARA CRIAR METEOROS
+    function createMeteor() {
+        const screen = document.getElementById('splash-screen');
+        if(screen.style.display === "none") return;
+        const meteor = document.createElement('div');
+        meteor.className = 'meteor';
+        meteor.style.left = Math.random() * 100 + "%";
+        meteor.style.top = Math.random() * 50 + "%";
+        meteor.style.animationDuration = (Math.random() * 2 + 1) + "s";
+        screen.appendChild(meteor);
+        setTimeout(() => meteor.remove(), 3000);
+    }
+
     window.onload = () => {
         loadTrack(0);
         carregarContadores();
         checkDiscordStatus();
         setInterval(checkDiscordStatus, 15000);
+        setInterval(createMeteor, 4000); // Cria um meteoro a cada 4 segundos
+        
         const screen = document.getElementById('splash-screen');
         for (let i = 0; i < 60; i++) {
             const star = document.createElement('div');
             star.className = 'star';
-            star.style.cssText = `width:2px; height:2px; top:${Math.random()*100}%; left:${Math.random()*100}%; --duration:${Math.random()*3+2}s;`;
+            const size = Math.random() * 3 + 1; // Estrelas maiores (1px a 4px)
+            star.style.cssText = `
+                width:${size}px; 
+                height:${size}px; 
+                top:${Math.random()*100}%; 
+                left:${Math.random()*100}%; 
+                --duration:${Math.random()*3+2}s;
+                --move-duration:${Math.random()*20+10}s;
+            `;
             screen.appendChild(star);
         }
     };
