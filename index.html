@@ -3,60 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrossel Neon Escuro - Galeria WRS</title>
+    <title>Carrossel Neon WRS - Oficial</title>
     <style>
-        /* --- ESTILO NEON AZUL ESCURO WRS --- */
+        /* --- PADRÃO DE COR DA SUA GALERIA (AZUL CIANO NEON) --- */
         :root {
-            /* NOVA COR: Azul Mais Escuro e Profundo */
-            --neon-color: #0000cd; 
-            --neon-glow: rgba(0, 0, 205, 0.7);
-            --bg-dark: #000000;
+            --neon-azul: #00ffff; /* O azul exato dos seus botões e tabelas */
+            --neon-glow: rgba(0, 255, 255, 0.5);
+            --bg-preto: #000000;
         }
 
         body {
-            background-color: var(--bg-dark);
+            background-color: var(--bg-preto);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            font-family: Arial, sans-serif;
-            overflow: hidden; /* Evita barras de rolagem no body */
+            font-family: 'Segoe UI', Arial, sans-serif;
         }
 
-        .carrossel-wrs {
+        .carrossel-wrs-container {
             width: 90%;
-            max-width: 500px;
-            height: 300px; /* Aumentei um pouco a altura para acomodar o fundo */
+            max-width: 550px;
+            height: 320px;
             position: relative;
             overflow: hidden;
-            /* Borda Neon Azul Escuro */
-            border: 2px solid var(--neon-color); 
-            border-radius: 15px;
-            box-shadow: 0 0 20px var(--neon-glow), inset 0 0 15px var(--neon-glow);
-            background: #010101; /* Fundo quase preto */
+            background: var(--bg-preto);
+            /* Borda idêntica à sua tabela de preços */
+            border: 2px solid var(--neon-azul);
+            border-radius: 10px;
+            box-shadow: 0 0 15px var(--neon-glow), inset 0 0 10px var(--neon-glow);
         }
 
-        /* --- NOVO: Fundo Animado de Partículas (Preenchendo o Espaço) --- */
-        .fundo-particulas {
+        /* --- EFEITO PARA PREENCHER O ESPAÇO PRETO (LINHA DE SCANNER) --- */
+        .carrossel-wrs-container::before {
+            content: "";
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100%;
-            background-image: 
-                radial-gradient(var(--neon-color) 1px, transparent 1px),
-                radial-gradient(var(--neon-color) 1px, transparent 1px);
-            background-size: 20px 20px;
-            background-position: 0 0, 10px 10px;
-            opacity: 0.15; /* Bem sutil para não distrair */
-            animation: piscarFundo 4s infinite alternate;
-            z-index: 1; /* Atrás dos slides */
+            height: 2px;
+            background: var(--neon-azul);
+            box-shadow: 0 0 15px var(--neon-azul);
+            opacity: 0.3;
+            z-index: 5;
+            animation: scanline 4s linear infinite;
         }
 
-        @keyframes piscarFundo {
-            0% { opacity: 0.1; }
-            100% { opacity: 0.25; }
+        @keyframes scanline {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
+
+        /* --- FUNDO DE GRADE SUTIL --- */
+        .grid-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(var(--neon-glow) 1px, transparent 1px),
+                              linear-gradient(90deg, var(--neon-glow) 1px, transparent 1px);
+            background-size: 30px 30px;
+            opacity: 0.1;
+            z-index: 1;
         }
 
         .slide-item {
@@ -64,120 +72,117 @@
             width: 100%;
             height: 100%;
             opacity: 0;
-            transition: opacity 0.8s ease-in-out; /* Transição mais suave */
+            transition: opacity 0.8s ease-in-out;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 2; /* À frente do fundo */
+            z-index: 2;
         }
 
-        .slide-item.active { 
-            opacity: 1; 
-        }
+        .slide-item.active { opacity: 1; }
 
         .slide-item img {
-            max-width: 85%;
-            max-height: 70%; /* Ajuste para equilibrar com a legenda */
+            max-width: 80%;
+            max-height: 65%;
             object-fit: contain;
-            /* Brilho na Imagem/GIF (Sutil) */
-            filter: drop-shadow(0 0 5px var(--neon-color));
+            filter: drop-shadow(0 0 10px var(--neon-azul));
+            z-index: 3;
         }
 
-        .legenda {
-            margin-top: 15px;
-            color: var(--neon-color);
+        .legenda-neon {
+            margin-top: 20px;
+            color: var(--neon-azul);
             font-weight: bold;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 14px;
-            /* Brilho no Texto */
-            text-shadow: 0 0 10px var(--neon-color);
+            letter-spacing: 3px;
+            font-size: 13px;
+            text-shadow: 0 0 10px var(--neon-azul);
+            border-top: 1px solid var(--neon-azul);
+            padding-top: 5px;
         }
 
-        /* Botões de Navegação (Mais Escuros e Sutis) */
-        .seta {
+        /* Botões Estilo Galeria */
+        .btn-wrs {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
             background: rgba(0, 0, 0, 0.8);
-            color: var(--neon-color);
-            border: 1px solid var(--neon-color);
-            padding: 10px;
+            color: var(--neon-azul);
+            border: 1px solid var(--neon-azul);
+            padding: 10px 14px;
             cursor: pointer;
             z-index: 10;
-            border-radius: 50%;
+            border-radius: 5px;
+            font-weight: bold;
             transition: 0.3s;
-            box-shadow: 0 0 5px var(--neon-glow);
-            opacity: 0.7; /* Ligeiramente transparente por padrão */
         }
 
-        .seta:hover { 
-            background: var(--neon-color); 
-            color: #000; 
-            box-shadow: 0 0 15px var(--neon-color);
-            opacity: 1;
+        .btn-wrs:hover {
+            background: var(--neon-azul);
+            color: #000;
+            box-shadow: 0 0 20px var(--neon-azul);
         }
 
-        .voltar { left: 10px; }
-        .avancar { right: 10px; }
+        .prev { left: 15px; }
+        .next { right: 15px; }
+
     </style>
 </head>
 <body>
 
-    <div class="carrossel-wrs">
+    <div class="carrossel-wrs-container">
+        <div class="grid-bg"></div>
         
-        <div class="fundo-particulas"></div>
-
         <div class="slide-item active">
             <img src="https://i.imgur.com/SFnk7A6.gif" alt="Destaque 1">
-            <div class="legenda">PROJETO 01</div>
+            <div class="legenda-neon">Destaque WRS 01</div>
         </div>
 
         <div class="slide-item">
             <img src="https://i.imgur.com/KKY2zqU.gif" alt="Destaque 2">
-            <div class="legenda">PROJETO 02</div>
+            <div class="legenda-neon">Destaque WRS 02</div>
         </div>
 
         <div class="slide-item">
             <img src="https://i.imgur.com/28xDTg0.gif" alt="Destaque 3">
-            <div class="legenda">PROJETO 03</div>
+            <div class="legenda-neon">Destaque WRS 03</div>
         </div>
          
         <div class="slide-item">
             <img src="https://i.imgur.com/kSK0E1f.gif" alt="Destaque 4">
-            <div class="legenda">PROJETO 04</div>
+            <div class="legenda-neon">Destaque WRS 04</div>
         </div>
 
-        <button class="seta voltar" onclick="mudarSlide(-1)">&#10094;</button>
-        <button class="seta avancar" onclick="mudarSlide(1)">&#10095;</button>
+        <button class="btn-wrs prev" onclick="mudarSlide(-1)">&#10094;</button>
+        <button class="btn-wrs next" onclick="mudarSlide(1)">&#10095;</button>
 
     </div>
 
     <script>
-        let atual = 0;
+        let index = 0;
         const slides = document.querySelectorAll('.slide-item');
-        let autoSlide;
+        let timer;
 
         function mostrar(n) {
-            slides[atual].classList.remove('active');
-            atual = (n + slides.length) % slides.length;
-            slides[atual].classList.add('active');
+            slides[index].classList.remove('active');
+            index = (n + slides.length) % slides.length;
+            slides[index].classList.add('active');
         }
 
         function mudarSlide(n) {
-            mostrar(atual + n);
-            resetTimer(); 
+            mostrar(index + n);
+            resetTimer();
         }
 
         function startTimer() {
-            autoSlide = setInterval(() => {
-                mudarSlide(1);
-            }, 5000); // Aumentei para 5 segundos para apreciar o fundo
+            timer = setInterval(() => {
+                mostrar(index + 1);
+            }, 4000); // 4 segundos
         }
 
         function resetTimer() {
-            clearInterval(autoSlide);
+            clearInterval(timer);
             startTimer();
         }
 
