@@ -3,242 +3,427 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galeria WRS - Completa</title>
+    <title>Galeria WRS - Portal Galáctico</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
-        body { margin: 0; background-color: #000; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
+        body {
+            margin: 0;
+            background-color: #000;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-        /* Splash Screen */
         #splash-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at bottom right, rgba(0, 72, 255, 0.15), transparent 40%), #000;
-            display: flex; justify-content: center; align-items: center; z-index: 999999;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle at bottom right, rgba(0, 72, 255, 0.15), transparent 40%),
+                        radial-gradient(circle at top left, rgba(80, 0, 255, 0.1), transparent 30%),
+                        #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999999;
             transition: all 0.8s cubic-bezier(0.65, 0, 0.35, 1);
         }
 
-        /* Player UI */
+        #splash-container {
+            position: relative;
+            width: 100%; height: 100%;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            z-index: 10;
+        }
+
+        /* Status Discord (Direita) */
+        #status-indicator {
+            position: fixed; top: 20px; right: 20px;
+            display: flex; align-items: center; gap: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 8px 15px; border-radius: 20px;
+            border: 1px solid rgba(0, 72, 255, 0.3);
+            z-index: 1000002; backdrop-filter: blur(5px);
+        }
+
+        /* Player de Música AJUSTADO */
         #music-player-ui {
-            position: fixed; top: 20px; left: 20px; z-index: 1000002;
-            background: rgba(0, 0, 0, 0.85); border: 1px solid #0048FF;
-            padding: 8px 12px; border-radius: 4px; display: flex; align-items: center;
-            gap: 8px; box-shadow: 0 0 15px rgba(0, 72, 255, 0.4);
-            backdrop-filter: blur(5px); opacity: 0.6; transition: 0.4s; width: 260px;
+            position: fixed;
+            top: 20px; left: 20px;
+            z-index: 1000002;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid #0048FF;
+            padding: 8px 12px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 0 15px rgba(0, 72, 255, 0.4);
+            backdrop-filter: blur(5px);
+            opacity: 0.4;
+            transition: all 0.4s ease;
+            width: 260px; /* Aumentado para os novos botões */
+            overflow: hidden;
         }
-        #music-player-ui:hover { opacity: 1; }
 
-        .play-controls { display: flex; gap: 5px; align-items: center; }
-        .music-btn {
-            background: none; border: 1px solid #0048FF; color: #0048FF;
-            cursor: pointer; width: 26px; height: 26px; border-radius: 50%;
-            display: flex; justify-content: center; align-items: center; font-size: 10px; transition: 0.3s;
+        #music-player-ui:hover {
+            opacity: 1;
+            box-shadow: 0 0 25px rgba(0, 72, 255, 0.7);
         }
-        .music-btn:hover { background: #0048FF; color: #fff; box-shadow: 0 0 10px #0048FF; }
 
-        .volume-control { width: 40px; height: 4px; -webkit-appearance: none; background: rgba(0, 72, 255, 0.3); cursor: pointer; }
-        .volume-control::-webkit-slider-thumb { -webkit-appearance: none; width: 10px; height: 10px; background: #0048FF; border-radius: 50%; }
+        /* Estilo do Slider de Volume */
+        .volume-control {
+            width: 35px;
+            height: 4px;
+            -webkit-appearance: none;
+            background: rgba(0, 72, 255, 0.3);
+            outline: none;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+        .volume-control::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 8px; height: 8px;
+            background: #0048FF;
+            border-radius: 50%;
+        }
 
-        .music-info { flex: 1; overflow: hidden; white-space: nowrap; margin-left: 5px; border-left: 1px solid rgba(0,72,255,0.3); padding-left: 5px; }
+        .music-info {
+            flex: 1;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            margin-left: 5px;
+            border-left: 1px solid rgba(0, 72, 255, 0.2);
+            padding-left: 5px;
+        }
+
         .track-name {
-            display: inline-block; color: #fff; font-size: 9px; font-weight: bold;
-            text-transform: uppercase; animation: marquee 25s linear infinite; /* Bem Lento */
+            display: inline-block;
+            color: #fff;
+            font-size: 9px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            animation: marquee 25s linear infinite; /* VELOCIDADE LENTA */
             padding-left: 100%;
         }
-        @keyframes marquee { 0% { transform: translateX(0%); } 100% { transform: translateX(-500%); } }
 
-        /* Logo e Menus */
+        @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-500%); }
+        }
+
+        .music-nav-btn {
+            background: none; border: 1px solid rgba(0, 72, 255, 0.5); color: #0048FF;
+            cursor: pointer; width: 24px; height: 24px; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center; transition: 0.3s;
+            font-size: 9px;
+        }
+        .music-nav-btn:hover { background: #0048FF; color: #fff; }
+
+        .play-toggle {
+            background: none; border: 1px solid #0048FF; color: #0048FF;
+            cursor: pointer; width: 28px; height: 28px; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center; transition: 0.3s;
+            flex-shrink: 0; font-size: 11px;
+        }
+        .play-toggle:hover { background: #0048FF; color: #fff; box-shadow: 0 0 10px #0048FF; }
+
+        #status-dot { width: 10px; height: 10px; border-radius: 50%; background-color: #555; transition: 0.5s; }
+        #status-text { color: #fff; font-size: 11px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; }
+        .dot-online { background-color: #00ff00 !important; box-shadow: 0 0 15px #00ff00; }
+        .dot-idle { background-color: #f1c40f !important; box-shadow: 0 0 15px #f1c40f; }
+        .dot-dnd { background-color: #e74c3c !important; box-shadow: 0 0 15px #e74c3c; }
+
         .logo-wrs {
-            font-family: 'Arial Black', sans-serif; font-size: 70px; letter-spacing: 10px;
-            text-align: center; background: linear-gradient(270deg, #FFFFFF, #0048FF, #FFFFFF);
-            background-size: 400%; -webkit-background-clip: text; background-clip: text;
-            color: transparent; animation: gradientMove 4s linear infinite; margin: 0;
+            font-family: 'Arial Black', sans-serif;
+            font-size: 75px; letter-spacing: 15px;
+            text-align: center; margin-bottom: 10px;
+            background: linear-gradient(270deg, #FFFFFF, #0048FF, #FFFFFF, #0048FF, #FFFFFF);
+            background-size: 400% 400%;
+            -webkit-background-clip: text; background-clip: text;
+            color: transparent; animation: gradientMove 4s linear infinite;
         }
         @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        .menu-wrapper { display: flex; flex-direction: column; gap: 10px; align-items: center; margin-top: 20px; }
+        .menu-wrapper { 
+            display: flex; flex-direction: column; gap: 12px; align-items: center; margin-bottom: 30px;
+        }
+
         .btn-glow {
             background: rgba(0, 0, 0, 0.6); border: 2px solid #0048FF; color: #0048FF;
-            padding: 10px 0; font-size: 14px; cursor: pointer; font-weight: bold;
-            width: 280px; transition: 0.3s; backdrop-filter: blur(5px);
+            padding: 12px 0; font-size: 15px; cursor: pointer; font-weight: bold; letter-spacing: 3px;
+            width: 280px; display: flex; justify-content: center; align-items: center;
+            backdrop-filter: blur(5px); transition: 0.3s; z-index: 20;
         }
-        .btn-glow:hover { background: #0048FF; color: #fff; box-shadow: 0 0 20px #0048FF; transform: scale(1.02); }
+        .btn-glow:hover { background: #0048FF; color: #fff; box-shadow: 0 0 25px #0048FF; transform: scale(1.03); }
 
-        /* Listas e Tabelas */
-        .custom-list-hidden { display: none; flex-direction: column; background: rgba(0,0,0,0.9); border: 1px solid #0048FF; width: 280px; margin-top: -5px; }
-        .price-grid { display: none; grid-template-columns: 1fr; gap: 5px; width: 280px; background: #000; border: 1px solid #0048FF; padding: 10px; max-height: 150px; overflow-y: auto; }
-        .show { display: flex !important; }
+        .price-grid-container {
+            display: none; grid-template-columns: repeat(1, 1fr); gap: 8px; width: 300px;
+            max-height: 250px; overflow-y: auto; background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #0048FF; padding: 12px; margin-top: -10px; margin-bottom: 10px;
+        }
         .show-grid { display: grid !important; }
-        .item-link { color: #0048FF; padding: 8px; text-decoration: none; font-size: 12px; text-align: center; border-bottom: 1px solid rgba(0,72,255,0.1); }
-        .item-link:hover { background: #0048FF; color: #fff; }
 
-        /* Contadores */
-        #visit-counter { position: fixed; bottom: 20px; left: 20px; background: rgba(0,0,0,0.8); border: 1px solid #0048FF; padding: 5px 10px; border-radius: 4px; text-align: center; }
-        #like-container { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; align-items: center; }
-        .like-btn { background: none; border: 2px solid #ff0055; color: #ff0055; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; transition: 0.3s; }
+        .price-card {
+            background: rgba(0, 72, 255, 0.03); border: 1px solid rgba(0, 72, 255, 0.2);
+            padding: 10px; text-align: center;
+        }
+        .price-card h4 { color: #fff; margin: 0; font-size: 13px; text-transform: uppercase; }
+        .price-card .value { color: #00ffcc; font-family: monospace; font-weight: bold; display: block; font-size: 14px; margin: 5px 0; }
+
+        .btn-comprar {
+            display: block; background: #ff0055; color: #fff; text-decoration: none;
+            font-size: 10px; font-weight: bold; padding: 5px; border-radius: 2px;
+        }
+
+        .custom-list-hidden { 
+            display: none; flex-direction: column; background: rgba(0, 0, 0, 0.9); 
+            border: 1px solid #0048FF; width: 280px; margin-top: -10px; margin-bottom: 5px;
+        }
+        .show-list { display: flex !important; }
+        
+        .friend-item { 
+            color: #0048FF; padding: 10px; border-bottom: 1px solid rgba(0, 72, 255, 0.1); 
+            text-align: center; text-decoration: none; font-weight: bold; transition: 0.3s; cursor: pointer; font-size: 14px;
+        }
+        .friend-item:hover { background: #0048FF !important; color: #fff !important; }
+
+        .footer-wrs { margin-top: 15px; color: rgba(255,255,255,0.3); font-size: 10px; letter-spacing: 2px; text-align: center; }
+
+        #visit-counter {
+            position: fixed; bottom: 20px; left: 20px; z-index: 1000001;
+            background: rgba(0, 0, 0, 0.9); border: 1px solid #0048FF;
+            padding: 6px 12px; border-radius: 4px; display: flex; flex-direction: column; align-items: center;
+        }
+
+        #like-container {
+            position: fixed; bottom: 20px; right: 20px; z-index: 1000001;
+            display: flex; flex-direction: column; align-items: center; gap: 5px;
+        }
+        .like-btn {
+            background: rgba(0, 0, 0, 0.8); border: 2px solid #ff0055; color: #ff0055;
+            width: 50px; height: 50px; border-radius: 50%; cursor: pointer; font-size: 20px;
+            display: flex; justify-content: center; align-items: center; transition: 0.3s;
+        }
         .like-btn:hover { background: #ff0055; color: #fff; transform: scale(1.1); }
 
-        #status-indicator { position: fixed; top: 20px; right: 20px; display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.6); padding: 5px 12px; border-radius: 20px; border: 1px solid #0048FF; }
-        #status-dot { width: 8px; height: 8px; border-radius: 50%; background: #555; }
-        .dot-online { background: #00ff00 !important; box-shadow: 0 0 10px #00ff00; }
+        #like-number { color: #fff; font-family: 'Courier New', monospace; font-weight: bold; opacity: 0; transition: 0.5s; }
 
-        .hidden-splash { opacity: 0; visibility: hidden; transform: scale(1.1); }
-        .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle var(--duration) infinite; }
-        @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+        .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle var(--duration) infinite; pointer-events: none; }
+        @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
+        .hidden-splash { opacity: 0; visibility: hidden; transform: translateY(-100%); }
     </style>
 </head>
 <body onmousemove="createDrop(event)">
 
 <div id="status-indicator">
     <span id="status-dot"></span>
-    <span id="status-text" style="color:white; font-size:10px; font-weight:bold;">OFFLINE</span>
+    <span id="status-text">...</span>
 </div>
 
 <div id="music-player-ui">
-    <div class="play-controls">
-        <button class="music-btn" onclick="changeTrack(-1)"><i class="fas fa-backward"></i></button>
-        <button class="music-btn" onclick="controlMusic()" id="music-btn"><i class="fas fa-play"></i></button>
-        <button class="music-btn" onclick="changeTrack(1)"><i class="fas fa-forward"></i></button>
-    </div>
-    <input type="range" class="volume-control" min="0" max="100" value="50" oninput="changeVolume(this.value)">
+    <button class="music-nav-btn" onclick="changeTrack(-1)"><i class="fas fa-backward"></i></button>
+    <button class="play-toggle" onclick="controlMusic()" id="music-btn"><i class="fas fa-pause"></i></button>
+    <button class="music-nav-btn" onclick="changeTrack(1)"><i class="fas fa-forward"></i></button>
+    
+    <input type="range" class="volume-control" id="volume-slider" min="0" max="100" value="50" oninput="changeVolume(this.value)">
+    
     <div class="music-info">
-        <span class="track-name" id="track-display">Carregando Playlist...</span>
+        <span class="track-name" id="track-display">Carregando Playlist WRS...</span>
     </div>
 </div>
 
 <div id="splash-screen">
     <div id="splash-container">
+        <div style="font-size: 40px; color: #0048FF; margin-bottom: 15px;"><i class="fas fa-user-astronaut"></i></div>
         <h1 class="logo-wrs">GALERIA</h1>
+        <div style="color: #0048FF; letter-spacing: 5px; font-size: 11px; margin-bottom: 30px; font-weight: bold;">GALERIA GALÁCTICA</div>
+        
         <div class="menu-wrapper">
             <button class="btn-glow" onclick="entrarNoPerfil()"><i class="fas fa-rocket"></i> ENTRE</button>
             
-            <button class="btn-glow" onclick="toggleMenu('xat-list')"><i class="fas fa-comments"></i> XAT COMUNIDADE</button>
-            <div id="xat-list" class="custom-list-hidden">
-                <a href="https://xat.com/tuga" target="_blank" class="item-link">XAT TUGA</a>
-                <a href="https://xat.com/conexaosertanejoo" target="_blank" class="item-link">XAT CONEXÃO</a>
+            <button class="btn-glow" onclick="toggleSimpleMenu('lista-xat')"><i class="fas fa-comments"></i> XAT COMUNIDADE</button>
+            <div id="lista-xat" class="custom-list-hidden">
+                <a href="https://xat.com/tuga" target="_blank" class="friend-item">XAT TUGA</a>
+                <a href="https://xat.com/conexaosertanejoo" target="_blank" class="friend-item">XAT CONEXÃO</a>
             </div>
 
-            <button class="btn-glow" onclick="toggleMenu('price-list')"><i class="fas fa-tags"></i> TABELA DE PREÇOS</button>
-            <div id="price-list" class="price-grid">
-                <div style="color:#fff; font-size:11px; text-align:center;">GIFS: 400 XATS | PSTYLE: 350 XATS</div>
-                <a href="https://xat.com/tuga" target="_blank" class="item-link" style="border:1px solid #ff0055; margin-top:5px;">COMPRAR AGORA</a>
+            <button class="btn-glow" onclick="togglePriceGrid()"><i class="fas fa-tags"></i> TABELA DE PREÇOS</button>
+            
+            <div id="price-grid" class="price-grid-container">
+                <div class="price-card">
+                    <h4>Gifs</h4>
+                    <span class="value">400 xats</span>
+                    <a href="https://xat.com/tuga" target="_blank" class="btn-comprar">COMPRAR</a>
+                </div>
+                <div class="price-card">
+                    <h4>Pstyle Gif</h4>
+                    <span class="value">350 xats</span>
+                    <a href="https://xat.com/tuga" target="_blank" class="btn-comprar">COMPRAR</a>
+                </div>
             </div>
+
+            <div class="footer-wrs">© GALERIA - 2026</div>
         </div>
     </div>
 </div>
 
 <div id="visit-counter">
-    <div style="color:#0048FF; font-size:8px; font-weight:bold;">VISITAS</div>
-    <div id="count-number" style="color:#fff; font-size:16px; font-family:monospace;">...</div>
+    <span style="color: #0048FF; font-size: 8px; letter-spacing: 2px; font-family: 'Arial Black', sans-serif;">VISITAS</span>
+    <span id="count-number" style="color: #fff; font-size: 18px; font-family: monospace; font-weight: bold;">...</span>
 </div>
 
 <div id="like-container">
     <button class="like-btn" onclick="darLike()"><i class="fas fa-heart"></i></button>
-    <span id="like-count" style="color:#fff; font-size:12px; margin-top:5px; opacity:0;">0</span>
+    <span id="like-number">0</span>
 </div>
 
-<div id="yt-player" style="position: absolute; top: -9999px;"><div id="player"></div></div>
+<div id="yt-player" style="position: absolute; top: -9999px;">
+    <div id="player"></div>
+</div>
 
 <script>
     const SEU_DISCORD_ID = "454632435054018560";
+    const ID_VISITAS = "galeria_wrs_2026_main";
+    const ID_LIKES = "galeria_wrs_likes_2026_main";
+    
+    // PLAYLIST COM AS 6 MÚSICAS
     const playlist = [
-        {id: 'uxX0Qvr_eYo', name: 'The Sound of Silence (Rising to the Night 2k26 Remix)'},
-        {id: '6NXnxTNIWkc', name: '4 Non Blondes - What\'s Up (Official Video)'},
+        {id: 'uxX0Qvr_eYo', name: 'The Sound of Silence – Rising to the Night 2k26 Remix Cover ( DJ Monster Edit )'},
+        {id: '6NXnxTNIWkc', name: '4 Non Blondes - What\'s Up (Official Music Video)'},
         {id: '0f8Uz-UHSuw', name: 'Desireless - Voyage Voyage (80\'s Redrum)'},
-        {id: 'wp43OdtAAkM', name: 'Kate Bush - Running Up That Hill'},
-        {id: 'tCVkdWXIglk', name: 'Bon Jovi - Livin\' On a Prayer (Tradução)'},
-        {id: '9SfbvR2we8U', name: 'Montagem Coral - Phonk Style Edit'}
+        {id: 'wp43OdtAAkM', name: 'Kate Bush - Running Up That Hill - Official Video'},
+        {id: 'tCVkdWXIglk', name: 'Bon Jovi - Livin\' On a Prayer (Tradução/Legendado)'},
+        {id: '9SfbvR2we8U', name: 'phonk MONTAGEM CORAL - Slowed Bass Boosted'}
     ];
+    
     let currentTrack = 0;
-    let player;
+    var player;
 
-    // API Youtube
     var tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
-    document.head.appendChild(tag);
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
     function onYouTubeIframeAPIReady() {
         player = new YT.Player('player', {
-            height: '0', width: '0', videoId: playlist[currentTrack].id,
-            events: { 'onReady': (e) => e.target.setVolume(50), 'onStateChange': (e) => { if(e.data === 0) changeTrack(1); } }
+            height: '0', width: '0',
+            videoId: playlist[currentTrack].id,
+            playerVars: { 'autoplay': 1, 'controls': 0, 'disablekb': 1 },
+            events: { 
+                'onReady': onPlayerReady,
+                'onStateChange': (e) => { if(e.data === 0) changeTrack(1); } 
+            }
         });
-        updateTrackName();
     }
 
-    function updateTrackName() {
+    function onPlayerReady(event) { 
+        event.target.setVolume(50); 
+        updateTrackDisplay();
+    }
+
+    function updateTrackDisplay() {
         document.getElementById('track-display').innerText = playlist[currentTrack].name;
-    }
-
-    function controlMusic() {
-        const btn = document.getElementById('music-btn');
-        if (player.getPlayerState() === 1) { player.pauseVideo(); btn.innerHTML = '<i class="fas fa-play"></i>'; }
-        else { player.playVideo(); btn.innerHTML = '<i class="fas fa-pause"></i>'; }
     }
 
     function changeTrack(dir) {
         currentTrack = (currentTrack + dir + playlist.length) % playlist.length;
         player.loadVideoById(playlist[currentTrack].id);
-        updateTrackName();
+        updateTrackDisplay();
         document.getElementById('music-btn').innerHTML = '<i class="fas fa-pause"></i>';
     }
 
-    function changeVolume(val) { if(player) player.setVolume(val); }
+    function changeVolume(val) {
+        if (player && player.setVolume) player.setVolume(val);
+    }
+
+    function controlMusic() {
+        const btn = document.getElementById('music-btn');
+        if (player && player.getPlayerState() === 1) {
+            player.pauseVideo();
+            btn.innerHTML = '<i class="fas fa-play"></i>';
+        } else if (player) {
+            player.playVideo();
+            btn.innerHTML = '<i class="fas fa-pause"></i>';
+        }
+    }
+
+    function toggleSimpleMenu(id) {
+        document.getElementById('price-grid').classList.remove('show-grid');
+        const menu = document.getElementById(id);
+        menu.classList.toggle('show-list');
+    }
+
+    function togglePriceGrid() {
+        document.querySelectorAll('.custom-list-hidden').forEach(m => m.classList.remove('show-list'));
+        const grid = document.getElementById('price-grid');
+        grid.classList.toggle('show-grid');
+    }
 
     function entrarNoPerfil() {
         document.getElementById('splash-screen').classList.add('hidden-splash');
-        player.playVideo();
-        document.getElementById('music-btn').innerHTML = '<i class="fas fa-pause"></i>';
-    }
-
-    function toggleMenu(id) {
-        const el = document.getElementById(id);
-        el.classList.toggle(id === 'price-list' ? 'show-grid' : 'show');
-    }
-
-    async function checkDiscordStatus() {
-        try {
-            const res = await fetch(`https://api.lanyard.rest/v1/users/${SEU_DISCORD_ID}`);
-            const data = await res.json();
-            const status = data.data.discord_status;
-            document.getElementById('status-dot').className = status === 'online' ? 'dot-online' : '';
-            document.getElementById('status-text').innerText = status.toUpperCase();
-        } catch (e) {}
-    }
-
-    async function carregarContadores() {
-        try {
-            const resV = await fetch(`https://api.counterapi.dev/v1/wrs-galeria/visitas_main/up`);
-            const dataV = await resV.json();
-            document.getElementById('count-number').innerText = dataV.count || dataV.value;
-        } catch(e) { document.getElementById('count-number').innerText = "128"; }
-    }
-
-    async function darLike() {
-        confetti({ particleCount: 100, spread: 70, origin: { x: 0.9, y: 0.9 } });
-        const lc = document.getElementById('like-count');
-        lc.style.opacity = "1";
-        lc.innerText = parseInt(lc.innerText) + 1;
-        setTimeout(() => lc.style.opacity = "0", 2000);
+        if (player && player.playVideo) player.playVideo();
     }
 
     function createDrop(e) {
         const splash = document.getElementById('splash-screen');
         if(splash.classList.contains('hidden-splash')) return;
         const drop = document.createElement('div');
-        drop.style.cssText = `position:absolute; background:rgba(0,72,255,0.4); border-radius:50%; pointer-events:none; left:${e.clientX}px; top:${e.clientY}px; transform:translate(-50%,-50%);`;
-        drop.animate([{width:'0px', height:'0px', opacity:0.8}, {width:'80px', height:'80px', opacity:0}], {duration:600});
+        drop.style.cssText = `position:absolute; background:rgba(0, 72, 255, 0.4); border-radius:50%; pointer-events:none; left:${e.clientX}px; top:${e.clientY}px; transform:translate(-50%,-50%);`;
+        drop.animate([{ width: '0px', height: '0px', opacity: 0.8 }, { width: '100px', height: '100px', opacity: 0 }], { duration: 800 });
         splash.appendChild(drop);
-        setTimeout(() => drop.remove(), 600);
+        setTimeout(() => drop.remove(), 800);
     }
 
-    window.onload = () => {
-        checkDiscordStatus();
+    async function darLike() {
+        const likeNum = document.getElementById('like-number');
+        try {
+            const res = await fetch(`https://api.counterapi.dev/v1/wrs-galeria/${ID_LIKES}/up`);
+            const data = await res.json();
+            likeNum.innerText = data.count || data.value;
+            likeNum.style.opacity = "1";
+            confetti({ particleCount: 150, spread: 70, origin: { x: 0.9, y: 0.9 }, zIndex: 1000005 });
+            setTimeout(() => { likeNum.style.opacity = "0"; }, 3000);
+        } catch (e) {}
+    }
+
+    async function carregarContadores() {
+        try {
+            const resV = await fetch(`https://api.counterapi.dev/v1/wrs-galeria/${ID_VISITAS}/up`);
+            const dataV = await resV.json();
+            document.getElementById('count-number').innerText = dataV.count || dataV.value;
+        } catch(e) { document.getElementById('count-number').innerText = "1"; }
+    }
+
+    async function checkDiscordStatus() {
+        const dot = document.getElementById('status-dot');
+        const text = document.getElementById('status-text');
+        try {
+            const response = await fetch(`https://api.lanyard.rest/v1/users/${SEU_DISCORD_ID}`);
+            const data = await response.json();
+            const status = data.data.discord_status;
+            dot.className = ''; 
+            if (status === "online") { dot.classList.add('dot-online'); text.innerText = "ONLINE"; }
+            else if (status === "idle") { dot.classList.add('dot-idle'); text.innerText = "AUSENTE"; }
+            else if (status === "dnd") { dot.classList.add('dot-dnd'); text.innerText = "OCUPADO"; }
+            else { text.innerText = "OFFLINE"; }
+        } catch (e) { text.innerText = "OFFLINE"; }
+    }
+
+    window.onload = () => { 
         carregarContadores();
+        checkDiscordStatus();
+        setInterval(checkDiscordStatus, 15000);
         const screen = document.getElementById('splash-screen');
-        for (let i = 0; i < 40; i++) {
+        for (let i = 0; i < 80; i++) {
             const star = document.createElement('div');
             star.className = 'star';
-            star.style.cssText = `width:2px; height:2px; top:${Math.random()*100}%; left:${Math.random()*100}%; --duration:${Math.random()*3+2}s;`;
+            const size = Math.random() * 2 + 'px';
+            star.style.cssText = `width:${size}; height:${size}; top:${Math.random()*100}%; left:${Math.random()*100}%; --duration:${Math.random()*3+2}s;`;
             screen.appendChild(star);
         }
     };
