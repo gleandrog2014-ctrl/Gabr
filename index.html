@@ -3,92 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galeria WRS - Portal Galáctico</title>
+    <title>Galeria WRS - Completa</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
-        body { margin: 0; background-color: #000; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { margin: 0; background-color: #000; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
 
+        /* Splash Screen */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at bottom right, rgba(0, 72, 255, 0.15), transparent 40%),
-                        radial-gradient(circle at top left, rgba(80, 0, 255, 0.1), transparent 30%), #000;
+            background: radial-gradient(circle at bottom right, rgba(0, 72, 255, 0.15), transparent 40%), #000;
             display: flex; justify-content: center; align-items: center; z-index: 999999;
             transition: all 0.8s cubic-bezier(0.65, 0, 0.35, 1);
         }
 
-        /* Player UI Unificada */
+        /* Player UI */
         #music-player-ui {
             position: fixed; top: 20px; left: 20px; z-index: 1000002;
             background: rgba(0, 0, 0, 0.85); border: 1px solid #0048FF;
             padding: 8px 12px; border-radius: 4px; display: flex; align-items: center;
-            gap: 10px; box-shadow: 0 0 15px rgba(0, 72, 255, 0.4);
-            backdrop-filter: blur(5px); opacity: 0.5; transition: all 0.4s ease; width: 240px;
+            gap: 8px; box-shadow: 0 0 15px rgba(0, 72, 255, 0.4);
+            backdrop-filter: blur(5px); opacity: 0.6; transition: 0.4s; width: 260px;
         }
-        #music-player-ui:hover { opacity: 1; width: 260px; }
+        #music-player-ui:hover { opacity: 1; }
 
-        .play-controls { display: flex; gap: 6px; align-items: center; }
-        
+        .play-controls { display: flex; gap: 5px; align-items: center; }
         .music-btn {
             background: none; border: 1px solid #0048FF; color: #0048FF;
-            cursor: pointer; width: 28px; height: 28px; border-radius: 50%;
-            display: flex; justify-content: center; align-items: center; transition: 0.3s;
-            font-size: 11px;
+            cursor: pointer; width: 26px; height: 26px; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center; font-size: 10px; transition: 0.3s;
         }
         .music-btn:hover { background: #0048FF; color: #fff; box-shadow: 0 0 10px #0048FF; }
 
-        .volume-control {
-            width: 45px; height: 4px; -webkit-appearance: none;
-            background: rgba(0, 72, 255, 0.3); border-radius: 2px; cursor: pointer; outline: none;
-        }
-        .volume-control::-webkit-slider-thumb {
-            -webkit-appearance: none; width: 10px; height: 10px;
-            background: #0048FF; border-radius: 50%; box-shadow: 0 0 5px #0048FF;
-        }
+        .volume-control { width: 40px; height: 4px; -webkit-appearance: none; background: rgba(0, 72, 255, 0.3); cursor: pointer; }
+        .volume-control::-webkit-slider-thumb { -webkit-appearance: none; width: 10px; height: 10px; background: #0048FF; border-radius: 50%; }
 
-        .music-info { flex: 1; overflow: hidden; white-space: nowrap; position: relative; margin-left: 5px; }
+        .music-info { flex: 1; overflow: hidden; white-space: nowrap; margin-left: 5px; border-left: 1px solid rgba(0,72,255,0.3); padding-left: 5px; }
         .track-name {
             display: inline-block; color: #fff; font-size: 9px; font-weight: bold;
-            text-transform: uppercase; animation: marquee 15s linear infinite; padding-left: 100%;
+            text-transform: uppercase; animation: marquee 25s linear infinite; /* Bem Lento */
+            padding-left: 100%;
         }
-        @keyframes marquee { 0% { transform: translateX(0%); } 100% { transform: translateX(-400%); } }
+        @keyframes marquee { 0% { transform: translateX(0%); } 100% { transform: translateX(-500%); } }
 
-        /* Estilos da Interface Principal */
+        /* Logo e Menus */
         .logo-wrs {
-            font-family: 'Arial Black', sans-serif; font-size: 75px; letter-spacing: 15px;
-            text-align: center; background: linear-gradient(270deg, #FFFFFF, #0048FF, #FFFFFF, #0048FF, #FFFFFF);
-            background-size: 400% 400%; -webkit-background-clip: text; background-clip: text;
-            color: transparent; animation: gradientMove 4s linear infinite;
+            font-family: 'Arial Black', sans-serif; font-size: 70px; letter-spacing: 10px;
+            text-align: center; background: linear-gradient(270deg, #FFFFFF, #0048FF, #FFFFFF);
+            background-size: 400%; -webkit-background-clip: text; background-clip: text;
+            color: transparent; animation: gradientMove 4s linear infinite; margin: 0;
         }
         @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
+        .menu-wrapper { display: flex; flex-direction: column; gap: 10px; align-items: center; margin-top: 20px; }
         .btn-glow {
             background: rgba(0, 0, 0, 0.6); border: 2px solid #0048FF; color: #0048FF;
-            padding: 12px 0; font-size: 15px; cursor: pointer; font-weight: bold; letter-spacing: 3px;
-            width: 280px; display: flex; justify-content: center; align-items: center;
-            backdrop-filter: blur(5px); transition: 0.3s; margin-bottom: 10px;
+            padding: 10px 0; font-size: 14px; cursor: pointer; font-weight: bold;
+            width: 280px; transition: 0.3s; backdrop-filter: blur(5px);
         }
-        .btn-glow:hover { background: #0048FF; color: #fff; box-shadow: 0 0 25px #0048FF; transform: scale(1.03); }
+        .btn-glow:hover { background: #0048FF; color: #fff; box-shadow: 0 0 20px #0048FF; transform: scale(1.02); }
 
-        #status-indicator {
-            position: fixed; top: 20px; right: 20px; display: flex; align-items: center; gap: 10px;
-            background: rgba(0, 0, 0, 0.6); padding: 8px 15px; border-radius: 20px;
-            border: 1px solid rgba(0, 72, 255, 0.3); z-index: 1000002;
-        }
-        #status-dot { width: 10px; height: 10px; border-radius: 50%; background-color: #555; }
-        .dot-online { background-color: #00ff00 !important; box-shadow: 0 0 15px #00ff00; }
+        /* Listas e Tabelas */
+        .custom-list-hidden { display: none; flex-direction: column; background: rgba(0,0,0,0.9); border: 1px solid #0048FF; width: 280px; margin-top: -5px; }
+        .price-grid { display: none; grid-template-columns: 1fr; gap: 5px; width: 280px; background: #000; border: 1px solid #0048FF; padding: 10px; max-height: 150px; overflow-y: auto; }
+        .show { display: flex !important; }
+        .show-grid { display: grid !important; }
+        .item-link { color: #0048FF; padding: 8px; text-decoration: none; font-size: 12px; text-align: center; border-bottom: 1px solid rgba(0,72,255,0.1); }
+        .item-link:hover { background: #0048FF; color: #fff; }
 
-        .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle var(--duration) infinite; pointer-events: none; }
-        @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
-        .hidden-splash { opacity: 0; visibility: hidden; transform: translateY(-100%); }
+        /* Contadores */
+        #visit-counter { position: fixed; bottom: 20px; left: 20px; background: rgba(0,0,0,0.8); border: 1px solid #0048FF; padding: 5px 10px; border-radius: 4px; text-align: center; }
+        #like-container { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; align-items: center; }
+        .like-btn { background: none; border: 2px solid #ff0055; color: #ff0055; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; transition: 0.3s; }
+        .like-btn:hover { background: #ff0055; color: #fff; transform: scale(1.1); }
+
+        #status-indicator { position: fixed; top: 20px; right: 20px; display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.6); padding: 5px 12px; border-radius: 20px; border: 1px solid #0048FF; }
+        #status-dot { width: 8px; height: 8px; border-radius: 50%; background: #555; }
+        .dot-online { background: #00ff00 !important; box-shadow: 0 0 10px #00ff00; }
+
+        .hidden-splash { opacity: 0; visibility: hidden; transform: scale(1.1); }
+        .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle var(--duration) infinite; }
+        @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
     </style>
 </head>
 <body onmousemove="createDrop(event)">
 
 <div id="status-indicator">
     <span id="status-dot"></span>
-    <span id="status-text" style="color:white; font-size:11px; font-weight:bold;">OFFLINE</span>
+    <span id="status-text" style="color:white; font-size:10px; font-weight:bold;">OFFLINE</span>
 </div>
 
 <div id="music-player-ui">
@@ -99,72 +102,83 @@
     </div>
     <input type="range" class="volume-control" min="0" max="100" value="50" oninput="changeVolume(this.value)">
     <div class="music-info">
-        <span class="track-name" id="track-display">Carregando Playlist Galáctica...</span>
+        <span class="track-name" id="track-display">Carregando Playlist...</span>
     </div>
 </div>
 
 <div id="splash-screen">
     <div id="splash-container">
         <h1 class="logo-wrs">GALERIA</h1>
-        <button class="btn-glow" onclick="entrarNoPerfil()"><i class="fas fa-rocket"></i> ENTRE</button>
-        <div style="color: rgba(255,255,255,0.3); font-size: 10px; letter-spacing: 2px; margin-top:20px;">© GALERIA - 2026</div>
+        <div class="menu-wrapper">
+            <button class="btn-glow" onclick="entrarNoPerfil()"><i class="fas fa-rocket"></i> ENTRE</button>
+            
+            <button class="btn-glow" onclick="toggleMenu('xat-list')"><i class="fas fa-comments"></i> XAT COMUNIDADE</button>
+            <div id="xat-list" class="custom-list-hidden">
+                <a href="https://xat.com/tuga" target="_blank" class="item-link">XAT TUGA</a>
+                <a href="https://xat.com/conexaosertanejoo" target="_blank" class="item-link">XAT CONEXÃO</a>
+            </div>
+
+            <button class="btn-glow" onclick="toggleMenu('price-list')"><i class="fas fa-tags"></i> TABELA DE PREÇOS</button>
+            <div id="price-list" class="price-grid">
+                <div style="color:#fff; font-size:11px; text-align:center;">GIFS: 400 XATS | PSTYLE: 350 XATS</div>
+                <a href="https://xat.com/tuga" target="_blank" class="item-link" style="border:1px solid #ff0055; margin-top:5px;">COMPRAR AGORA</a>
+            </div>
+        </div>
     </div>
+</div>
+
+<div id="visit-counter">
+    <div style="color:#0048FF; font-size:8px; font-weight:bold;">VISITAS</div>
+    <div id="count-number" style="color:#fff; font-size:16px; font-family:monospace;">...</div>
+</div>
+
+<div id="like-container">
+    <button class="like-btn" onclick="darLike()"><i class="fas fa-heart"></i></button>
+    <span id="like-count" style="color:#fff; font-size:12px; margin-top:5px; opacity:0;">0</span>
 </div>
 
 <div id="yt-player" style="position: absolute; top: -9999px;"><div id="player"></div></div>
 
 <script>
     const SEU_DISCORD_ID = "454632435054018560";
-    // Lista com as 6 músicas (A original + as 5 novas)
     const playlist = [
-        'uxX0Qvr_eYo', // Original: Sound of Silence Remix
-        '6NXnxTNIWkc', // 4 Non Blondes
-        '0f8Uz-UHSuw', // Desireless
-        'wp43OdtAAkM', // Kate Bush
-        'tCVkdWXIglk', // Bon Jovi
-        '9SfbvR2we8U'  // Phonk
+        {id: 'uxX0Qvr_eYo', name: 'The Sound of Silence (Rising to the Night 2k26 Remix)'},
+        {id: '6NXnxTNIWkc', name: '4 Non Blondes - What\'s Up (Official Video)'},
+        {id: '0f8Uz-UHSuw', name: 'Desireless - Voyage Voyage (80\'s Redrum)'},
+        {id: 'wp43OdtAAkM', name: 'Kate Bush - Running Up That Hill'},
+        {id: 'tCVkdWXIglk', name: 'Bon Jovi - Livin\' On a Prayer (Tradução)'},
+        {id: '9SfbvR2we8U', name: 'Montagem Coral - Phonk Style Edit'}
     ];
     let currentTrack = 0;
     let player;
 
+    // API Youtube
     var tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
-    var firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    document.head.appendChild(tag);
 
     function onYouTubeIframeAPIReady() {
         player = new YT.Player('player', {
-            height: '0', width: '0',
-            videoId: playlist[currentTrack],
-            playerVars: { 'autoplay': 0, 'controls': 0, 'disablekb': 1 },
-            events: { 
-                'onReady': (e) => e.target.setVolume(50),
-                'onStateChange': onPlayerStateChange 
-            }
+            height: '0', width: '0', videoId: playlist[currentTrack].id,
+            events: { 'onReady': (e) => e.target.setVolume(50), 'onStateChange': (e) => { if(e.data === 0) changeTrack(1); } }
         });
+        updateTrackName();
     }
 
-    function onPlayerStateChange(event) {
-        if (event.data === YT.PlayerState.ENDED) changeTrack(1);
-        if (event.data === YT.PlayerState.PLAYING) {
-            document.getElementById('track-display').innerText = `Música ${currentTrack + 1} de ${playlist.length} - Tocando agora`;
-        }
+    function updateTrackName() {
+        document.getElementById('track-display').innerText = playlist[currentTrack].name;
     }
 
     function controlMusic() {
         const btn = document.getElementById('music-btn');
-        if (player.getPlayerState() === 1) {
-            player.pauseVideo();
-            btn.innerHTML = '<i class="fas fa-play"></i>';
-        } else {
-            player.playVideo();
-            btn.innerHTML = '<i class="fas fa-pause"></i>';
-        }
+        if (player.getPlayerState() === 1) { player.pauseVideo(); btn.innerHTML = '<i class="fas fa-play"></i>'; }
+        else { player.playVideo(); btn.innerHTML = '<i class="fas fa-pause"></i>'; }
     }
 
     function changeTrack(dir) {
         currentTrack = (currentTrack + dir + playlist.length) % playlist.length;
-        player.loadVideoById(playlist[currentTrack]);
+        player.loadVideoById(playlist[currentTrack].id);
+        updateTrackName();
         document.getElementById('music-btn').innerHTML = '<i class="fas fa-pause"></i>';
     }
 
@@ -176,14 +190,9 @@
         document.getElementById('music-btn').innerHTML = '<i class="fas fa-pause"></i>';
     }
 
-    function createDrop(e) {
-        const splash = document.getElementById('splash-screen');
-        if(splash.classList.contains('hidden-splash')) return;
-        const drop = document.createElement('div');
-        drop.style.cssText = `position:absolute; background:rgba(0,72,255,0.4); border-radius:50%; pointer-events:none; left:${e.clientX}px; top:${e.clientY}px; transform:translate(-50%,-50%);`;
-        drop.animate([{width:'0px', height:'0px', opacity:0.8}, {width:'100px', height:'100px', opacity:0}], {duration:800});
-        splash.appendChild(drop);
-        setTimeout(() => drop.remove(), 800);
+    function toggleMenu(id) {
+        const el = document.getElementById(id);
+        el.classList.toggle(id === 'price-list' ? 'show-grid' : 'show');
     }
 
     async function checkDiscordStatus() {
@@ -191,18 +200,42 @@
             const res = await fetch(`https://api.lanyard.rest/v1/users/${SEU_DISCORD_ID}`);
             const data = await res.json();
             const status = data.data.discord_status;
-            const dot = document.getElementById('status-dot');
-            const text = document.getElementById('status-text');
-            dot.className = status === 'online' ? 'dot-online' : '';
-            text.innerText = status.toUpperCase();
+            document.getElementById('status-dot').className = status === 'online' ? 'dot-online' : '';
+            document.getElementById('status-text').innerText = status.toUpperCase();
         } catch (e) {}
+    }
+
+    async function carregarContadores() {
+        try {
+            const resV = await fetch(`https://api.counterapi.dev/v1/wrs-galeria/visitas_main/up`);
+            const dataV = await resV.json();
+            document.getElementById('count-number').innerText = dataV.count || dataV.value;
+        } catch(e) { document.getElementById('count-number').innerText = "128"; }
+    }
+
+    async function darLike() {
+        confetti({ particleCount: 100, spread: 70, origin: { x: 0.9, y: 0.9 } });
+        const lc = document.getElementById('like-count');
+        lc.style.opacity = "1";
+        lc.innerText = parseInt(lc.innerText) + 1;
+        setTimeout(() => lc.style.opacity = "0", 2000);
+    }
+
+    function createDrop(e) {
+        const splash = document.getElementById('splash-screen');
+        if(splash.classList.contains('hidden-splash')) return;
+        const drop = document.createElement('div');
+        drop.style.cssText = `position:absolute; background:rgba(0,72,255,0.4); border-radius:50%; pointer-events:none; left:${e.clientX}px; top:${e.clientY}px; transform:translate(-50%,-50%);`;
+        drop.animate([{width:'0px', height:'0px', opacity:0.8}, {width:'80px', height:'80px', opacity:0}], {duration:600});
+        splash.appendChild(drop);
+        setTimeout(() => drop.remove(), 600);
     }
 
     window.onload = () => {
         checkDiscordStatus();
-        setInterval(checkDiscordStatus, 15000);
+        carregarContadores();
         const screen = document.getElementById('splash-screen');
-        for (let i = 0; i < 60; i++) {
+        for (let i = 0; i < 40; i++) {
             const star = document.createElement('div');
             star.className = 'star';
             star.style.cssText = `width:2px; height:2px; top:${Math.random()*100}%; left:${Math.random()*100}%; --duration:${Math.random()*3+2}s;`;
