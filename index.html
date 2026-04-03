@@ -39,7 +39,7 @@
 <body onmousemove="createDrop(event)">
 
 <audio id="meuAudio" loop>
-    <source src="1YwrtWC04EI1Nbh_b1OhEoXs_WxWKEzwf" type="audio/mpeg">
+    <source src="https://docs.google.com/uc?export=download&id=1YwrtWC04EI1Nbh_b1OhEoXs_WxWKEzwf" type="audio/mpeg">
 </audio>
 
 <div id="status-indicator">
@@ -95,10 +95,12 @@
         splash.style.opacity = "0";
         document.body.style.overflowY = "auto";
         
-        // Tenta tocar a música assim que clica em ENTRE
         audio.play().then(() => {
             btn.innerHTML = '<i class="fas fa-pause"></i>';
-        }).catch(e => console.log("Autoplay bloqueado"));
+            document.getElementById('track-display').innerText = "TOCANDO AGORA";
+        }).catch(e => {
+            console.log("Autoplay bloqueado pelo navegador.");
+        });
 
         setTimeout(() => { splash.style.display = "none"; }, 600);
     }
