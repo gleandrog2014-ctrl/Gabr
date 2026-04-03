@@ -694,8 +694,7 @@
 1553350006, 1553342014 1480335366, 1484529437, 1484529434, 1484529671, 1480335587, 1480335597, 1484529675, 1480335580 1484529908, 1553350001, 1553350006, 1553350010, 1553350019, 
 				1553350022, 1553350080, 1553358001 1553358004, 1549200788, 1549200822, 1549200844, 1557799002, 1553366005, 1549200844, 1553347776 
             </p>
-          </div>
-        <style>
+         <style>
     .carrossel-wrs-container {
         width: 100%;
         max-width: 500px;
@@ -773,16 +772,6 @@
 </div>
 
 <script>
-    let idxWRS = 0;
-    const sldWRS = document.querySelectorAll('.slide-wrs');
-    function showWRS(n) {
-        sldWRS[idxWRS].classList.remove('active');
-        idxWRS = (n + sldWRS.length) % sldWRS.length;
-        sldWRS[idxWRS].classList.add('active');
-    }
-    function moveWRS(n) { showWRS(idxWRS + n); clearInterval(timerWRS); timerWRS = setInterval(() => showWRS(idxWRS + 1), 4000); }
-    let timerWRS = setInterval(() => showWRS(idxWRS + 1), 4000);
-</script>
     let idxWRS = 0;
     const sldWRS = document.querySelectorAll('.slide-wrs');
     function showWRS(n) {
