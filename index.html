@@ -741,7 +741,8 @@
     .legenda-wrs-animada {
         margin-top: 20px; font-weight: 900; text-transform: uppercase;
         letter-spacing: 3px; font-size: 13px; text-align: center;
-        background: linear-gradient(to right, #0048FF, #00d4ff, #fff, #00d4ff, #0048FF);
+        /* REMOVIDO O AZUL CLARO ABAIXO: Mantendo apenas azul padrão e branco */
+        background: linear-gradient(to right, #0048FF, #fff, #0048FF);
         background-size: 200% auto; -webkit-background-clip: text;
         -webkit-text-fill-color: transparent; animation: gradTextWRS 3s linear infinite;
     }
@@ -762,16 +763,26 @@
     <div class="grid-bg"></div>
     <div class="scan-line"></div>
     
-    <div class="slide-wrs active"><img src="kSK0E1f"><div class="legenda-wrs-animada">PROJETO 01</div></div>
-    <div class="slide-wrs"><img src="SFnk7A6"><div class="legenda-wrs-animada">PROJETO 02</div></div>
-    <div class="slide-wrs"><img src="KKY2zqU"><div class="legenda-wrs-animada">PROJETO 03</div></div>
-    <div class="slide-wrs"><img src="28xDTg0"><div class="legenda-wrs-animada">PROJETO 04</div></div>
+    <div class="slide-wrs active"><img src="https://i.imgur.com/SFnk7A6.gif"><div class="legenda-wrs-animada">PROJETO 01 Gabr</div></div>
+    <div class="slide-wrs"><img src="https://i.imgur.com/KKY2zqU.gif"><div class="legenda-wrs-animada">PROJETO 02 Mnna</div></div>
+    <div class="slide-wrs"><img src="https://i.imgur.com/28xDTg0.gif"><div class="legenda-wrs-animada">PROJETO 03 Marbella</div></div>
+    <div class="slide-wrs"><img src="https://i.imgur.com/kSK0E1f.gif"><div class="legenda-wrs-animada">PROJETO 04 Armando</div></div>
 
     <button class="btn-nav-wrs prev-wrs" onclick="moveWRS(-1)">&#10094;</button>
     <button class="btn-nav-wrs next-wrs" onclick="moveWRS(1)">&#10095;</button>
 </div>
 
 <script>
+    let idxWRS = 0;
+    const sldWRS = document.querySelectorAll('.slide-wrs');
+    function showWRS(n) {
+        sldWRS[idxWRS].classList.remove('active');
+        idxWRS = (n + sldWRS.length) % sldWRS.length;
+        sldWRS[idxWRS].classList.add('active');
+    }
+    function moveWRS(n) { showWRS(idxWRS + n); clearInterval(timerWRS); timerWRS = setInterval(() => showWRS(idxWRS + 1), 4000); }
+    let timerWRS = setInterval(() => showWRS(idxWRS + 1), 4000);
+</script>
     let idxWRS = 0;
     const sldWRS = document.querySelectorAll('.slide-wrs');
     function showWRS(n) {
