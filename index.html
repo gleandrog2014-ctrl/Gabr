@@ -1510,48 +1510,109 @@
    
 
 </body> ```
-<style>
-    body { -webkit-user-select: none !important; user-select: none !important; }
-    .cursor-drop { position: fixed; background: rgba(0, 72, 255, 0.4); border-radius: 50%; pointer-events: none; z-index: 9999999; transform: translate(-50%, -50%); }
-    #copyright-toast {
-        visibility: hidden; position: fixed !important; z-index: 2147483647 !important;
-        left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) scale(0.8);
-        background: #222 !important; color: #fff !important; padding: 25px; border-radius: 15px;
-        text-align: center; font-family: sans-serif; box-shadow: 0 10px 40px rgba(0,0,0,0.8);
-        opacity: 0; transition: all 0.3s; min-width: 280px; border: 1px solid #444;
+
+  <style>
+    /* Bloqueia seleção de texto e imagens */
+    body, .xat-space-content, img { 
+        -webkit-user-select: none !important; 
+        user-select: none !important; 
+        -webkit-user-drag: none !important;
     }
-    #copyright-toast.show { visibility: visible !important; opacity: 1 !important; transform: translate(-50%, -50%) scale(1) !important; }
+
+    /* Efeito de Gota (Mouse) */
+    .cursor-drop { 
+        position: fixed !important; 
+        background: rgba(0, 72, 255, 0.4) !important; 
+        border-radius: 50% !important; 
+        pointer-events: none !important; 
+        z-index: 9999999 !important; 
+        transform: translate(-50%, -50%) !important; 
+    }
+
+    /* Toast de Copyright CENTRALIZADO NA TELA */
+    #copyright-toast {
+        visibility: hidden;
+        position: fixed !important;
+        z-index: 2147483647 !important;
+        left: 50% !important;
+        top: 50% !important;
+        transform: translate(-50%, -50%) scale(0.8);
+        background: rgba(20, 20, 20, 0.95) !important;
+        color: #ffffff !important;
+        padding: 25px !important;
+        border-radius: 15px !important;
+        text-align: center !important;
+        font-family: Arial, sans-serif !important;
+        box-shadow: 0 0 30px rgba(0,0,0,1) !important;
+        border: 1px solid #444 !important;
+        opacity: 0;
+        transition: all 0.3s ease;
+        min-width: 280px !important;
+    }
+
+    #copyright-toast.show {
+        visibility: visible !important;
+        opacity: 1 !important;
+        transform: translate(-50%, -50%) scale(1) !important;
+    }
 </style>
 
 <div id="copyright-toast">
-    <b style="color:#ff4d4d;font-size:1.2em">ACESSO PROTEGIDO</b><br>
-    Cópia Proibida<br>Propriedade de Gabr (1777777)
+    <b style="color:#ff4d4d; font-size:18px;">ACESSO PROTEGIDO</b><br>
+    Cópia Proibida<br>
+    Propriedade de Gabr (1777777)
 </div>
 
 <script>
-    (function() {
-        const show = () => {
-            const t = document.getElementById('copyright-toast');
-            t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 3000);
-        };
+(function() {
+    var toast = document.getElementById('copyright-toast');
+    var toastTimeout;
 
-        // Bloqueios Críticos
-        window.addEventListener('contextmenu', e => { e.preventDefault(); show(); }, true);
-        window.addEventListener('keydown', e => {
-            if (e.ctrlKey || e.key === 'F12') { e.preventDefault(); show(); }
-        }, true);
+    function showToast() {
+        toast.classList.add('show');
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(function() { 
+            toast.classList.remove('show'); 
+        }, 3000);
+    }
 
-        // Efeito Gota
-        window.addEventListener('mousemove', e => {
-            const d = document.createElement('div');
-            d.className = 'cursor-drop';
-            d.style.left = e.clientX + 'px';
-            d.style.top = e.clientY + 'px';
-            document.body.appendChild(d);
-            d.animate([{width:0,height:0,opacity:.8},{width:'80px',height:'80px',opacity:0}],600).onfinish = () => d.remove();
-        });
-    })();
+    // Bloquear Clique Direito e Atalhos
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        showToast();
+    }, true);
+
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey || e.key === 'F12') {
+            e.preventDefault();
+            showToast();
+        }
+    }, true);
+
+    // Efeito Gota no Mouse (Opcional, se o xat permitir animate)
+    document.addEventListener('mousemove', function(e) {
+        var d = document.createElement('div');
+        d.className = 'cursor-drop';
+        d.style.left = e.clientX + 'px';
+        d.style.top = e.clientY + 'px';
+        document.body.appendChild(d);
+
+        // Animação simples que funciona na maioria dos browsers
+        var size = 0;
+        var opacity = 0.8;
+        var timer = setInterval(function() {
+            size += 5;
+            opacity -= 0.05;
+            d.style.width = size + 'px';
+            d.style.height = size + 'px';
+            d.style.opacity = opacity;
+            if (opacity <= 0) {
+                clearInterval(timer);
+                if(d.parentNode) d.parentNode.removeChild(d);
+            }
+        }, 30);
+    });
+})();
 </script>
   </body>
 </html>
