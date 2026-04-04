@@ -1511,45 +1511,14 @@
 
 </body> ```
 
- <script>
-    // Mensagem de alerta
-    const mensagemProtecao = "Acesso Protegido - Cópia Proibida - Propriedade de Gabr (1777777)";
-
-    // Bloquear Botão Direito
-    document.addEventListener('contextmenu', function(e) {
-        e.preventDefault();
-        alert(mensagemProtecao);
-    });
-
-    // Bloquear Atalhos de Teclado
-    document.addEventListener('keydown', function(e) {
-        // Ctrl+U (Código fonte), F12 (DevTools), Ctrl+Shift+I (Inspecionar)
-        if (
-            (e.ctrlKey && (e.key === 'u' || e.key === 'U')) || 
-            e.key === 'F12' || 
-            (e.ctrlKey && e.shiftKey && (e.key === 'i' || e.key === 'I')) ||
-            (e.ctrlKey && e.shiftKey && (e.key === 'j' || e.key === 'J')) ||
-            (e.ctrlKey && (e.key === 's' || e.key === 'S'))
-        ) {
-            e.preventDefault();
-            alert(mensagemProtecao);
-            return false;
-        }
-    });
-
-    // Bloquear Arrastar Imagens (Opcional, útil para galerias)
-    document.addEventListener('dragstart', function(e) {
-        e.preventDefault();
-    });
-</script>
-
-<style>
+ <style>
     /* Bloquear seleção de texto */
     body {
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
+        margin: 0;
     }
 
     /* Estilo da Gota de Água (Cursor) */
@@ -1562,46 +1531,55 @@
         transform: translate(-50%, -50%);
     }
 
-    /* Estilo da Notificação de Copyright (Toast) */
+    /* Notificação de Copyright (Toast) CENTRALIZADA */
     #copyright-toast {
         visibility: hidden;
-        min-width: 250px;
-        background-color: #333;
+        min-width: 300px;
+        background-color: rgba(51, 51, 51, 0.95);
         color: #fff;
         text-align: center;
-        border-radius: 8px;
-        padding: 16px;
+        border-radius: 12px;
+        padding: 20px;
+        
+        /* Mágica do posicionamento: Fixo no centro da janela atual */
         position: fixed;
         z-index: 1000000;
         left: 50%;
-        bottom: 30px;
-        transform: translateX(-50%);
+        top: 50%;
+        transform: translate(-50%, -50%) scale(0.8);
+        
         font-family: sans-serif;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         opacity: 0;
-        transition: opacity 0.4s, visibility 0.4s;
+        transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
     }
 
+    /* Quando o aviso aparece */
     #copyright-toast.show {
         visibility: visible;
         opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
     }
 </style>
 
-<div id="copyright-toast">Acesso Protegido - Cópia Proibida - Propriedade de Gabr (1777777)</div>
+<div id="copyright-toast">
+    <strong>ACESSO PROTEGIDO</strong><br>
+    Cópia Proibida<br>
+    Propriedade de Gabr (1777777)
+</div>
 
 <script>
     (function() {
         const toast = document.getElementById('copyright-toast');
         let toastTimeout;
 
-        // Função para mostrar aviso de Copyright
+        // Função para mostrar aviso de Copyright no centro da tela
         function showCopyright() {
             clearTimeout(toastTimeout);
             toast.classList.add('show');
             toastTimeout = setTimeout(() => {
                 toast.classList.remove('show');
-            }, 3000); // Some após 3 segundos
+            }, 3000); 
         }
 
         // 1. Bloquear Botão Direito
@@ -1610,17 +1588,17 @@
             showCopyright();
         });
 
-        // 2. Bloquear Atalhos de Teclado (F12, Ctrl+U, etc)
+        // 2. Bloquear Atalhos de Teclado (F12, Ctrl+U, Ctrl+I, Ctrl+S, etc)
         document.addEventListener('keydown', function(e) {
-            if (
-                (e.ctrlKey && (e.key === 'u' || e.key === 'U')) || 
-                e.key === 'F12' || 
-                (e.ctrlKey && e.shiftKey && (e.key === 'i' || e.key === 'I')) ||
-                (e.ctrlKey && e.shiftKey && (e.key === 'j' || e.key === 'J')) ||
-                (e.ctrlKey && (e.key === 's' || e.key === 'S'))
-            ) {
+            const keys = ['u', 's', 'i', 'j'];
+            const isForbidden = e.ctrlKey && keys.includes(e.key.toLowerCase());
+            const isF12 = e.key === 'F12';
+            const isInspect = e.ctrlKey && e.shiftKey && (e.key.toLowerCase() === 'i' || e.key.toLowerCase() === 'j');
+
+            if (isForbidden || isF12 || isInspect) {
                 e.preventDefault();
                 showCopyright();
+                return false;
             }
         });
 
