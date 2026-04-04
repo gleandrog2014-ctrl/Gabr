@@ -1511,36 +1511,62 @@
 
 </body> ```
 
- <script>
-    // Mensagem de alerta
-    const mensagemProtecao = "Acesso Protegido - Cópia Proibida - Propriedade de Gabr (1777777)";
+ <style>
+    #aviso-gabr {
+        display: none;
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #1a1a1a;
+        color: #ffffff;
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-family: sans-serif;
+        font-size: 14px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        z-index: 10000;
+        border: 1px solid #444;
+        transition: opacity 0.4s ease;
+    }
+</style>
 
-    // Bloquear Botão Direito
-    document.addEventListener('contextmenu', function(e) {
-        e.preventDefault();
-        alert(mensagemProtecao);
-    });
+<div id="aviso-gabr">Copyright - Gabr (1777777)</div>
 
-    // Bloquear Atalhos de Teclado
-    document.addEventListener('keydown', function(e) {
-        // Ctrl+U (Código fonte), F12 (DevTools), Ctrl+Shift+I (Inspecionar)
-        if (
-            (e.ctrlKey && (e.key === 'u' || e.key === 'U')) || 
-            e.key === 'F12' || 
-            (e.ctrlKey && e.shiftKey && (e.key === 'i' || e.key === 'I')) ||
-            (e.ctrlKey && e.shiftKey && (e.key === 'j' || e.key === 'J')) ||
-            (e.ctrlKey && (e.key === 's' || e.key === 'S'))
-        ) {
+<script>
+    (function() {
+        const elemento = document.getElementById('aviso-gabr');
+        let timeout;
+
+        function exibirAlerta(e) {
             e.preventDefault();
-            alert(mensagemProtecao);
-            return false;
-        }
-    });
+            
+            // Exibe o aviso
+            elemento.style.display = 'block';
+            elemento.style.opacity = '1';
 
-    // Bloquear Arrastar Imagens (Opcional, útil para galerias)
-    document.addEventListener('dragstart', function(e) {
-        e.preventDefault();
-    });
+            // Limpa o timer se o usuário clicar de novo rápido
+            clearTimeout(timeout);
+
+            // Começa a sumir depois de 2 segundos
+            timeout = setTimeout(() => {
+                elemento.style.opacity = '0';
+                setTimeout(() => {
+                    elemento.style.display = 'none';
+                }, 400); // tempo da transição
+            }, 2000);
+        }
+
+        // Bloqueia botão direito
+        document.addEventListener('contextmenu', exibirAlerta);
+
+        // Bloqueia Ctrl+U e F12
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey && (e.key === 'u' || e.key === 'U')) || e.key === 'F12') {
+                exibirAlerta(e);
+            }
+        });
+    })();
 </script>
 
 <style>
