@@ -1416,6 +1416,71 @@
     </script>
  <canvas id="cursor-canvas" style="position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999;"></canvas>
 </body> ```
+<style>
+    /* Estilo das gotas - Configurado para não interferir nos cliques dos botões */
+    .cursor-drop-wrs {
+        position: fixed; /* Fixed garante que funcione mesmo com scroll */
+        background: rgba(0, 72, 255, 0.4);
+        border-radius: 50%;
+        pointer-events: none; /* ESSENCIAL: Clique passa por "dentro" da gota */
+        z-index: 9999999; /* Fica acima do fundo, mas o pointer-events libera os botões */
+        transform: translate(-50%, -50%);
+        left: 0; top: 0;
+    }
+</style>
 
+<script>
+    (function() {
+        // --- LÓGICA DAS GOTAS (Otimizada para não conflitar) ---
+        document.addEventListener('mousemove', function(e) {
+            // Só cria a gota se o splash-screen estiver visível (opcional, remova a linha abaixo se quiser em tudo)
+            if(document.getElementById('splash-screen') && document.getElementById('splash-screen').style.display === "none") return;
+
+            const drop = document.createElement('div');
+            drop.className = 'cursor-drop-wrs';
+            
+            // Posicionamento preciso
+            drop.style.left = e.clientX + 'px';
+            drop.style.top = e.clientY + 'px';
+            
+            document.body.appendChild(drop);
+
+            // Animação suave
+            drop.animate([
+                { width: '0px', height: '0px', opacity: 0.8 },
+                { width: '100px', height: '100px', opacity: 0 }
+            ], {
+                duration: 800,
+                easing: 'ease-out'
+            });
+
+            // Remove do DOM após 800ms
+            setTimeout(() => { drop.remove(); }, 800);
+        });
+
+        // --- BLOQUEIOS DE SEGURANÇA (Ctrl+U, F12, Clique Direito) ---
+        
+        // Bloqueia Clique Direito
+        document.addEventListener('contextmenu', e => e.preventDefault());
+
+        // Bloqueia Teclas de Atalho
+        document.addEventListener('keydown', function(e) {
+            // Bloqueia F12
+            if (e.keyCode === 123) { e.preventDefault(); return false; }
+
+            // Bloqueia Ctrl+U (Código Fonte)
+            if (e.ctrlKey && e.keyCode === 85) { e.preventDefault(); return false; }
+
+            // Bloqueia Ctrl+Shift+I / J / C (Inspecionar)
+            if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) { 
+                e.preventDefault(); 
+                return false; 
+            }
+
+            // Bloqueia Ctrl+S (Salvar)
+            if (e.ctrlKey && e.keyCode === 83) { e.preventDefault(); return false; }
+        });
+    })();
+</script>
  </body>
 </html>
