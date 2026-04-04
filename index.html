@@ -855,36 +855,28 @@
         timerGabr = setInterval(() => showSliderGabr(idxGabr + 1), 4000);
     })();
 </script>
+      </div><!-- ================= VISTA DE GIFS ================= -->
       <div id="view-gifs">
         <div class="gifs-header">
           <h2 style="color: #fff; font-family: 'Agbalumo', cursive; margin: 0;">
             Galería Exclusiva
-          </h2>
-          <button class="btn-style" onclick="toggleView('profile')" style="background-color: #d9534f; margin: 0;">
-            ⬅ Voltar para o Perfil
-          </button>
-        </div>
-
+          </h2><button class="btn-style" onclick="toggleView('profile')" style="background-color: #d9534f; margin: 0;">⬅ Voltar para o Perfil</button>
+        </div><!-- Efecto Canvas Text Glow idéntico al de Gif.html -->
         <div class="canvas-container" id="canvasContainer">
           <canvas id="canvas" height="150"></canvas>
-        </div>
-
+        </div><!-- Contenedor donde se inyectarán las TABLAS ORIGINALES de los GIFs -->
         <div id="gifs-galleries-container"></div>
       </div>
-
       <div class="footer-text">
         <p>
-          © 2026 Gabr / Gifs / Fundos / Pcback / Pstyle.
+          © 2026 Gabr / Gifs / Fundos / Pcback / Pstyle .
         </p>
       </div>
-
-    </div> <div id="copyright-toast">
-        Copyright Gabr 
+    </div><!-- Contenedor para el mensaje de Copyright -->
+    <div id="copyright-toast">
+       Copyright Gabr 
     </div>
-
     <script>
-      // Seu código JavaScript de lógica de visualização ou canvas entra aqui
-    </script>
         // ==========================================
         // LÓGICA DE NAVEGACIÓN Y VISTAS
         // ==========================================
@@ -1520,66 +1512,142 @@
 </body> ```
 
  <script>
-        (function() {
-            /**
-             * PROTEÇÃO DE CONTEÚDO
-             */
-            const mensagemProtecao = "Acesso Protegido - Cópia Proibida - Propriedade de Gabr (1777777)";
+    // Mensagem de alerta
+    const mensagemProtecao = "Acesso Protegido - Cópia Proibida - Propriedade de Gabr (1777777)";
 
-            // Bloquear Botão Direito
-            document.addEventListener('contextmenu', e => {
+    // Bloquear Botão Direito
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        alert(mensagemProtecao);
+    });
+
+    // Bloquear Atalhos de Teclado
+    document.addEventListener('keydown', function(e) {
+        // Ctrl+U (Código fonte), F12 (DevTools), Ctrl+Shift+I (Inspecionar)
+        if (
+            (e.ctrlKey && (e.key === 'u' || e.key === 'U')) || 
+            e.key === 'F12' || 
+            (e.ctrlKey && e.shiftKey && (e.key === 'i' || e.key === 'I')) ||
+            (e.ctrlKey && e.shiftKey && (e.key === 'j' || e.key === 'J')) ||
+            (e.ctrlKey && (e.key === 's' || e.key === 'S'))
+        ) {
+            e.preventDefault();
+            alert(mensagemProtecao);
+            return false;
+        }
+    });
+
+    // Bloquear Arrastar Imagens (Opcional, útil para galerias)
+    document.addEventListener('dragstart', function(e) {
+        e.preventDefault();
+    });
+</script>
+
+<style>
+    /* Bloquear seleção de texto */
+    body {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    /* Estilo da Gota de Água (Cursor) */
+    .cursor-drop {
+        position: fixed;
+        background: rgba(0, 72, 255, 0.4);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 999999;
+        transform: translate(-50%, -50%);
+    }
+
+    /* Estilo da Notificação de Copyright (Toast) */
+    #copyright-toast {
+        visibility: hidden;
+        min-width: 250px;
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        border-radius: 8px;
+        padding: 16px;
+        position: fixed;
+        z-index: 1000000;
+        left: 50%;
+        bottom: 30px;
+        transform: translateX(-50%);
+        font-family: sans-serif;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        opacity: 0;
+        transition: opacity 0.4s, visibility 0.4s;
+    }
+
+    #copyright-toast.show {
+        visibility: visible;
+        opacity: 1;
+    }
+</style>
+
+<div id="copyright-toast">Acesso Protegido - Cópia Proibida - Propriedade de Gabr (1777777)</div>
+
+<script>
+    (function() {
+        const toast = document.getElementById('copyright-toast');
+        let toastTimeout;
+
+        // Função para mostrar aviso de Copyright
+        function showCopyright() {
+            clearTimeout(toastTimeout);
+            toast.classList.add('show');
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000); // Some após 3 segundos
+        }
+
+        // 1. Bloquear Botão Direito
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            showCopyright();
+        });
+
+        // 2. Bloquear Atalhos de Teclado (F12, Ctrl+U, etc)
+        document.addEventListener('keydown', function(e) {
+            if (
+                (e.ctrlKey && (e.key === 'u' || e.key === 'U')) || 
+                e.key === 'F12' || 
+                (e.ctrlKey && e.shiftKey && (e.key === 'i' || e.key === 'I')) ||
+                (e.ctrlKey && e.shiftKey && (e.key === 'j' || e.key === 'J')) ||
+                (e.ctrlKey && (e.key === 's' || e.key === 'S'))
+            ) {
                 e.preventDefault();
-                alert(mensagemProtecao);
-            });
-
-            // Bloquear Atalhos (F12, Ctrl+U, Ctrl+I, Ctrl+S)
-            document.addEventListener('keydown', e => {
-                const isInspect = (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j'));
-                const isViewSource = (e.ctrlKey && (e.key === 'U' || e.key === 'u'));
-                const isSave = (e.ctrlKey && (e.key === 'S' || e.key === 's'));
-                const isF12 = (e.key === 'F12');
-
-                if (isInspect || isViewSource || isSave || isF12) {
-                    e.preventDefault();
-                    alert(mensagemProtecao);
-                    return false;
-                }
-            });
-
-            // Bloquear Arrastar Imagens
-            document.addEventListener('dragstart', e => e.preventDefault());
-
-            /**
-             * EFEITO DE GOTAS (MOUSE TRAIL)
-             */
-            let lastDropTime = 0;
-
-            function createDrop(e) {
-                const now = Date.now();
-                if (now - lastDropTime < 30) return; // Evita lag (limite de 30ms)
-                lastDropTime = now;
-
-                const drop = document.createElement('div');
-                drop.className = 'cursor-drop';
-                
-                drop.style.left = e.clientX + 'px';
-                drop.style.top = e.clientY + 'px';
-                
-                document.body.appendChild(drop);
-
-                const anim = drop.animate([
-                    { width: '0px', height: '0px', opacity: 0.8 },
-                    { width: '80px', height: '80px', opacity: 0 }
-                ], {
-                    duration: 600,
-                    easing: 'ease-out'
-                });
-
-                anim.onfinish = () => drop.remove();
+                showCopyright();
             }
+        });
 
-            document.addEventListener('mousemove', createDrop);
-        })();
-    </script>
+        // 3. Bloquear Arrastar Imagens
+        document.addEventListener('dragstart', e => e.preventDefault());
+
+        // 4. Efeito de Gota no Mouse
+        function createDrop(e) {
+            const drop = document.createElement('div');
+            drop.className = 'cursor-drop';
+            drop.style.left = e.clientX + 'px';
+            drop.style.top = e.clientY + 'px';
+            document.body.appendChild(drop);
+
+            const anim = drop.animate([
+                { width: '0px', height: '0px', opacity: 0.8 },
+                { width: '100px', height: '100px', opacity: 0 }
+            ], {
+                duration: 800,
+                easing: 'ease-out'
+            });
+
+            anim.onfinish = () => drop.remove();
+        }
+
+        document.addEventListener('mousemove', createDrop);
+    })();
+</script>
 </body>
 </html>
