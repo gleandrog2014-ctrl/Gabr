@@ -757,10 +757,180 @@
 				1553350022, 1553350080, 1553358001 1553358004, 1549200788, 1549200822, 1549200844, 1557799002, 1553366005, 1549200844, 1553347776 
             </p>
           </div>
-        </div>
-        <div class="spotify-container">
-          <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/6brl7bwOHmGFkNw3MBqssT?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-        </div>
+        <style>
+    .carrossel-wrs-container {
+        width: 100%;
+        max-width: 500px;
+        height: 320px;
+        position: relative;
+        overflow: hidden;
+        background: #000;
+        border: 2px solid #0048FF;
+        border-radius: 5px;
+        box-shadow: 0 0 20px rgba(0, 72, 255, 0.5);
+        margin: 10px auto;
+    }
+
+    .grid-bg {
+        position: absolute; width: 100%; height: 100%;
+        background-image: linear-gradient(rgba(0, 72, 255, 0.1) 1px, transparent 1px),
+                          linear-gradient(90deg, rgba(0, 72, 255, 0.1) 1px, transparent 1px);
+        background-size: 25px 25px; z-index: 1;
+    }
+
+    .scan-line {
+        position: absolute; width: 100%; height: 4px;
+        background: #0048FF; box-shadow: 0 0 15px #0048FF;
+        opacity: 0.4; z-index: 5; animation: moveScanGabr 5s linear infinite;
+    }
+
+    @keyframes moveScanGabr { 0% { top: -5%; } 100% { top: 105%; } }
+
+    .slide-gabr {
+        position: absolute; width: 100%; height: 100%;
+        opacity: 0; transition: opacity 0.8s ease-in-out;
+        display: flex; flex-direction: column;
+        justify-content: center; align-items: center; z-index: 2;
+    }
+
+    .slide-gabr.active { opacity: 1; }
+
+    .slide-gabr img {
+        max-width: 85%; max-height: 60%;
+        object-fit: contain; filter: drop-shadow(0 0 10px #0048FF);
+    }
+
+    .legenda-gabr-animada {
+        margin-top: 20px; font-weight: 900; text-transform: uppercase;
+        letter-spacing: 3px; font-size: 13px; text-align: center;
+        background: linear-gradient(to right, #0048FF, #fff, #0048FF);
+        background-size: 200% auto; -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent; animation: gradTextGabr 3s linear infinite;
+    }
+
+    @keyframes gradTextGabr { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
+
+    .btn-nav-gabr {
+        position: absolute; top: 50%; transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.7); color: #0048FF;
+        border: 1px solid #0048FF; width: 35px; height: 35px;
+        cursor: pointer; z-index: 10; border-radius: 5px;
+    }
+    .btn-nav-gabr:hover { background: #0048FF; color: #fff; box-shadow: 0 0 15px #0048FF; }
+    .prev-gabr { left: 10px; } .next-gabr { right: 10px; }
+</style>
+
+<div class="carrossel-wrs-container">
+    <div class="grid-bg"></div>
+    <div class="scan-line"></div>
+    
+    <div class="slide-gabr active"><img src="https://i.imgur.com/SFnk7A6.gif"><div class="legenda-gabr-animada">PROJETO 01- Gabr </div></div>
+    <div class="slide-gabr"><img src="https://i.imgur.com/KKY2zqU.gif"><div class="legenda-gabr-animada">PROJETO 02 - Mnna </div></div>
+    <div class="slide-gabr"><img src="https://i.imgur.com/28xDTg0.gif"><div class="legenda-gabr-animada">PROJETO 03 - Marbella </div></div>
+    <div class="slide-gabr"><img src="https://i.imgur.com/kSK0E1f.gif"><div class="legenda-gabr-animada">PROJETO 04 - Armando </div></div>
+
+    <button class="btn-nav-gabr prev-gabr" onclick="moveSliderGabr(-1)">&#10094;</button>
+    <button class="btn-nav-gabr next-gabr" onclick="moveSliderGabr(1)">&#10095;</button>
+</div>
+
+<script>
+    // 1. FUNÇÃO PARA OS BOTÕES (GIFS / PERFIL) FUNCIONAREM
+    function toggleView(viewId) {
+        // Esconde todas as vistas
+        document.getElementById('view-profile').style.display = 'none';
+        document.getElementById('view-gifs').style.display = 'none';
+
+        // Mostra apenas a que foi clicada
+        if (viewId === 'gifs') {
+            document.getElementById('view-gifs').style.display = 'block';
+        } else {
+            document.getElementById('view-profile').style.display = 'block';
+        }
+    }
+
+    // 2. LÓGICA DE PROTEÇÃO E EFEITOS (AUTO-EXECUTÁVEL)
+    (function() {
+        // Criar o Toast de Copyright dinamicamente
+        const toast = document.createElement('div');
+        toast.id = 'copyright-toast-gabr';
+        toast.innerHTML = '<strong style="color:#ff4d4d;display:block;margin-bottom:5px;">ACESSO PROTEGIDO</strong>Copyright - Gabr (1777777)';
+        
+        // Estilo do Toast (Centralizado na tela)
+        Object.assign(toast.style, {
+            visibility: 'hidden',
+            position: 'fixed',
+            zIndex: '2147483647',
+            left: '50%',
+            top: '50%',
+            transform: 'translate(-50%, -50%) scale(0.8)',
+            backgroundColor: 'rgba(20, 20, 20, 0.95)',
+            color: '#fff',
+            padding: '25px',
+            borderRadius: '15px',
+            textAlign: 'center',
+            fontFamily: 'sans-serif',
+            boxShadow: '0 0 40px rgba(0,0,0,0.8)',
+            border: '1px solid #444',
+            opacity: '0',
+            transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+            minWidth: '280px'
+        });
+        document.body.appendChild(toast);
+
+        let toastTimeout;
+        function showCopyright() {
+            clearTimeout(toastTimeout);
+            toast.style.visibility = 'visible';
+            toast.style.opacity = '1';
+            toast.style.transform = 'translate(-50%, -50%) scale(1)';
+            
+            toastTimeout = setTimeout(() => {
+                toast.style.visibility = 'hidden';
+                toast.style.opacity = '0';
+                toast.style.transform = 'translate(-50%, -50%) scale(0.8)';
+            }, 3000);
+        }
+
+        // BLOQUEIOS (Clique Direito, Atalhos e Drag)
+        document.addEventListener('contextmenu', e => { e.preventDefault(); showCopyright(); }, true);
+        document.addEventListener('keydown', e => {
+            if (e.ctrlKey || e.key === 'F12') { e.preventDefault(); showCopyright(); }
+        }, true);
+        document.addEventListener('dragstart', e => e.preventDefault());
+
+        // EFEITO DE GOTA NO MOUSE (CSS injetado para a gota)
+        const style = document.createElement('style');
+        style.innerHTML = `
+            .cursor-drop {
+                position: fixed;
+                background: rgba(0, 72, 255, 0.4);
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: 999999;
+                transform: translate(-50%, -50%);
+            }
+        `;
+        document.head.appendChild(style);
+
+        document.addEventListener('mousemove', function(e) {
+            const drop = document.createElement('div');
+            drop.className = 'cursor-drop';
+            drop.style.left = e.clientX + 'px';
+            drop.style.top = e.clientY + 'px';
+            document.body.appendChild(drop);
+
+            const anim = drop.animate([
+                { width: '0px', height: '0px', opacity: 0.8 },
+                { width: '100px', height: '100px', opacity: 0 }
+            ], { duration: 800, easing: 'ease-out' });
+
+            anim.onfinish = () => drop.remove();
+        });
+    })();
+</script>
+
+</body>
+</html>
       </div><!-- ================= VISTA DE GIFS ================= -->
       <div id="view-gifs">
         <div class="gifs-header">
@@ -1413,63 +1583,91 @@
                 e.preventDefault();
             }
         });
-    </script>
- <canvas id="cursor-canvas" style="position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999;"></canvas>
-
-<script>
-const canvas = document.getElementById('cursor-canvas');
-const ctx = canvas.getContext('2d');
-let points = [];
-
-function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
-window.addEventListener('resize', resize);
-resize();
-
-window.addEventListener('mousemove', (e) => {
-    // Adiciona 2 gotas por vez para um efeito mais cheio
-    for(let i = 0; i < 2; i++) {
-        points.push({
-            x: e.clientX + (Math.random() * 6 - 3), // Espalha um pouco as gotas
-            y: e.clientY,
-            alpha: 1,
-            size: Math.random() * 2 + 1
-        });
-    }
-});
-
-function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    for (let i = 0; i < points.length; i++) {
-        let p = points[i];
-        p.y += 2; 
-        p.alpha -= 0.02; 
-        
-        // EFEITO DE BRILHO
-        ctx.shadowBlur = 12; // Intensidade do brilho
-        ctx.shadowColor = `rgba(255, 255, 255, ${p.alpha})`; // Cor do brilho segue a transparência
-        ctx.fillStyle = `rgba(0, 21, 255, ${p.alpha})`; // Cor da gota
-        
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fill();
-        
-        if (p.alpha <= 0) {
-            points.splice(i, 1);
-            i--;
-        }
-    }
-    // Reseta o brilho para não afetar outras coisas se houver
-    ctx.shadowBlur = 0;
-    requestAnimationFrame(animate);
-}
-animate();
-</script>
+   
 
 </body> ```
 
- </body>
+ <script>
+    // Mensagem de alerta
+    const mensagemProtecao = "Acesso Protegido - Cópia Proibida - Propriedade de Gabr (1777777)";
+
+    // Bloquear Botão Direito
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        alert(mensagemProtecao);
+    });
+
+    // Bloquear Atalhos de Teclado
+    document.addEventListener('keydown', function(e) {
+        // Ctrl+U (Código fonte), F12 (DevTools), Ctrl+Shift+I (Inspecionar)
+        if (
+            (e.ctrlKey && (e.key === 'u' || e.key === 'U')) || 
+            e.key === 'F12' || 
+            (e.ctrlKey && e.shiftKey && (e.key === 'i' || e.key === 'I')) ||
+            (e.ctrlKey && e.shiftKey && (e.key === 'j' || e.key === 'J')) ||
+            (e.ctrlKey && (e.key === 's' || e.key === 'S'))
+        ) {
+            e.preventDefault();
+            alert(mensagemProtecao);
+            return false;
+        }
+    });
+
+    // Bloquear Arrastar Imagens (Opcional, útil para galerias)
+    document.addEventListener('dragstart', function(e) {
+        e.preventDefault();
+    });
+</script>
+
+<style>
+    /* Bloquear seleção de texto visualmente */
+    body {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+</style>
+<style>
+    .cursor-drop {
+        position: fixed; /* Mantém a gota visível mesmo com scroll */
+        background: rgba(0, 72, 255, 0.4); /* Azul padrão WRS */
+        border-radius: 50%;
+        pointer-events: none; /* Não atrapalha os cliques nos botões */
+        z-index: 999999;
+        transform: translate(-50%, -50%);
+    }
+</style>
+
+<script>
+    (function() {
+        // Função que cria a gota
+        function createDrop(e) {
+            const drop = document.createElement('div');
+            drop.className = 'cursor-drop';
+            
+            // Posiciona a gota exatamente na ponta do mouse
+            drop.style.left = e.clientX + 'px';
+            drop.style.top = e.clientY + 'px';
+            
+            document.body.appendChild(drop);
+
+            // Animação de expansão e sumiço
+            const anim = drop.animate([
+                { width: '0px', height: '0px', opacity: 0.8 },
+                { width: '100px', height: '100px', opacity: 0 }
+            ], {
+                duration: 800,
+                easing: 'ease-out'
+            });
+
+            // Remove o elemento após a animação para não pesar o site
+            anim.onfinish = () => drop.remove();
+        }
+
+        // Ativa o efeito no movimento do mouse
+        document.addEventListener('mousemove', createDrop);
+    })();
+</script>
+</body>
 </html>
