@@ -866,16 +866,37 @@
         </div><!-- Contenedor donde se inyectarán las TABLAS ORIGINALES de los GIFs -->
         <div id="gifs-galleries-container"></div>
       </div>
-      <div class="footer-text">
-        <p>
-          © 2026 Gabr / Gifs / Fundos / Pcback / Pstyle .
-        </p>
+     <div class="footer-text">
+        <p>© 2026 Gabr / Gifs / Fundos / Pcback / Pstyle .</p>
       </div>
-    </div><!-- Contenedor para el mensaje de Copyright -->
-    <div id="copyright-toast">
-       Copyright Gabr 
+    </div> <div id="copyright-toast">
+        Copyright Gabr 
     </div>
+
+    <style>
+        #copyright-toast {
+            position: fixed;
+            bottom: 10px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            color: #0048FF; /* Azul Neon */
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: bold;
+            text-shadow: 0 0 10px #0048FF;
+            z-index: 999999;
+            pointer-events: none;
+            font-family: sans-serif;
+        }
+    </style>
+
     <script>
+        // Suas funções de toggleView, Canvas, etc, vem aqui dentro
+    </script>
+</body>
+</html>
         // ==========================================
         // LÓGICA DE NAVEGACIÓN Y VISTAS
         // ==========================================
@@ -1591,26 +1612,5 @@
         transform: translate(-50%, -50%);
     }
 </style>
- <div id="copyright-toast">
-        Copyright Gabr 
-    </div>
-
-    <style>
-        #copyright-toast {
-            position: fixed;
-            bottom: 8px;
-            width: 100%;
-            text-align: center;
-            color: #0048FF; /* Azul neon da Galeria WRS */
-            font-size: 10px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            font-family: sans-serif;
-            text-shadow: 0 0 5px #0048FF;
-            pointer-events: none; /* Garante que não bloqueie cliques em botões próximos */
-            z-index: 1000005;
-            opacity: 0.8;
-        }
-    </style>
   </body>
 </html>
