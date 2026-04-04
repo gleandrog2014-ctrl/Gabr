@@ -1512,7 +1512,7 @@
 </body> ```
 
  <style>
-    /* Bloquear seleção de texto visualmente */
+    /* Bloqueio de seleção */
     body {
         -webkit-user-select: none;
         -moz-user-select: none;
@@ -1520,43 +1520,67 @@
         user-select: none;
     }
 
-    /* Estilo das gotas do cursor */
+    /* Gotas do Cursor */
     .cursor-drop {
         position: fixed;
-        background: rgba(0, 72, 255, 0.4); /* Azul padrão WRS */
+        background: rgba(0, 72, 255, 0.4);
         border-radius: 50%;
         pointer-events: none;
-        z-index: 999999;
+        z-index: 2147483647; /* Máximo possível */
         transform: translate(-50%, -50%);
     }
 
-    /* Estilo do aviso de copyright - CINZA CLARO COM LETRA PRETA */
-    #aviso-gabr {
+    /* Aviso de Copyright - Cinza Claro e Letra Preta */
+    .aviso-gabr-fix {
         display: none;
         position: fixed;
-        bottom: 20px;
+        bottom: 30px;
         left: 50%;
         transform: translateX(-50%);
-        background-color: #e0e0e0; /* Cinza Claro */
-        color: #000000; /* Letra Preta */
-        padding: 12px 25px;
-        border-radius: 8px;
-        font-family: sans-serif;
+        background-color: #e0e0e0 !important;
+        color: #000000 !important;
+        padding: 15px 30px;
+        border-radius: 10px;
+        font-family: Arial, sans-serif;
         font-weight: bold;
-        font-size: 14px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        z-index: 1000001;
-        border: 1px solid #bcbcbc;
-        transition: opacity 0.4s ease;
+        font-size: 16px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        z-index: 2147483647 !important;
+        border: 2px solid #bbbbbb;
+        text-align: center;
+        white-space: nowrap;
     }
 </style>
 
-<div id="aviso-gabr">Copyright - Gabr (1777777)</div>
+<div id="aviso-gabr" class="aviso-gabr-fix">Copyright - Gabr (1777777)</div>
 
 <script>
     (function() {
-        /*** 1. EFEITO DE GOTAS NO MOUSE ***/
-        function createDrop(e) {
+        const aviso = document.getElementById('aviso-gabr');
+        let timer;
+
+        function dispararAviso(e) {
+            e.preventDefault();
+            
+            // Força a exibição
+            aviso.style.display = 'block';
+            aviso.style.opacity = '1';
+
+            clearTimeout(timer);
+
+            // Garante que suma após 2 segundos
+            timer = setTimeout(function() {
+                aviso.style.opacity = '0';
+                setTimeout(function() {
+                    if(aviso.style.opacity === '0') aviso.style.display = 'none';
+                }, 400);
+            }, 2000);
+
+            return false;
+        }
+
+        // 1. Efeito das Gotas
+        document.addEventListener('mousemove', function(e) {
             const drop = document.createElement('div');
             drop.className = 'cursor-drop';
             drop.style.left = e.clientX + 'px';
@@ -1565,63 +1589,29 @@
 
             const anim = drop.animate([
                 { width: '0px', height: '0px', opacity: 0.8 },
-                { width: '100px', height: '100px', opacity: 0 }
-            ], {
-                duration: 800,
-                easing: 'ease-out'
-            });
+                { width: '80px', height: '80px', opacity: 0 }
+            ], { duration: 600, easing: 'ease-out' });
 
             anim.onfinish = () => drop.remove();
-        }
-        document.addEventListener('mousemove', createDrop);
+        });
 
+        // 2. Bloqueios de Teclado e Mouse
+        // Clique Direito
+        document.oncontextmenu = dispararAviso;
 
-        /*** 2. BLOQUEIO E AVISO DE COPYRIGHT CUSTOMIZADO ***/
-        const aviso = document.getElementById('aviso-gabr');
-        let timeout;
-
-        function exibirAlerta(e) {
-            e.preventDefault(); // Impede o menu de aparecer
-            
-            // Faz o balão aparecer
-            aviso.style.display = 'block';
-            aviso.style.opacity = '1';
-
-            clearTimeout(timeout);
-
-            // Some após 2 segundos (2000ms)
-            timeout = setTimeout(() => {
-                aviso.style.opacity = '0';
-                setTimeout(() => {
-                    if(aviso.style.opacity === '0') aviso.style.display = 'none';
-                }, 400);
-            }, 2000);
-            
-            return false;
-        }
-
-        // Bloqueia clique direito
-        document.addEventListener('contextmenu', exibirAlerta);
-
-        // Bloqueia Atalhos (Ctrl+U, F12, Ctrl+S, etc)
+        // Atalhos (Ctrl+U, F12, Ctrl+S, Ctrl+Shift+I)
         document.addEventListener('keydown', function(e) {
-            const atalhos = [
-                (e.ctrlKey && (e.key === 'u' || e.key === 'U')), // Fonte
-                (e.key === 'F12'), // DevTools
-                (e.ctrlKey && e.shiftKey && (e.key === 'i' || e.key === 'I')), // Inspecionar
-                (e.ctrlKey && e.shiftKey && (e.key === 'j' || e.key === 'J')), // Console
-                (e.ctrlKey && (e.key === 's' || e.key === 'S')) // Salvar
-            ];
-
-            if (atalhos.some(condicao => condicao)) {
-                exibirAlerta(e);
+            if (
+                (e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.key === 's' || e.key === 'S')) || 
+                e.key === 'F12' || 
+                (e.ctrlKey && e.shiftKey && (e.key === 'i' || e.key === 'I' || e.key === 'j' || e.key === 'J'))
+            ) {
+                dispararAviso(e);
             }
         });
 
-        // Bloquear Arrastar Imagens
-        document.addEventListener('dragstart', function(e) {
-            e.preventDefault();
-        });
+        // Bloquear Arrastar
+        document.ondragstart = () => false;
     })();
 </script>
 </body>
