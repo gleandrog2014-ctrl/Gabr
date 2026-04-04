@@ -834,103 +834,72 @@
 </div>
 
 <script>
-    // 1. FUNÇÃO PARA OS BOTÕES (GIFS / PERFIL) FUNCIONAREM
-    function toggleView(viewId) {
-        // Esconde todas as vistas
-        document.getElementById('view-profile').style.display = 'none';
-        document.getElementById('view-gifs').style.display = 'none';
-
-        // Mostra apenas a que foi clicada
-        if (viewId === 'gifs') {
-            document.getElementById('view-gifs').style.display = 'block';
+    // ESTA FUNÇÃO FAZ O BOTÃO "GIFS" FUNCIONAR
+    function toggleView(view) {
+        const profile = document.getElementById('view-profile');
+        const gifs = document.getElementById('view-gifs');
+        
+        if (view === 'gifs') {
+            profile.style.display = 'none';
+            gifs.style.display = 'block';
+            console.log("Abrindo Galeria de Gifs");
         } else {
-            document.getElementById('view-profile').style.display = 'block';
+            profile.style.display = 'block';
+            gifs.style.display = 'none';
+            console.log("Voltando ao Perfil");
         }
     }
 
-    // 2. LÓGICA DE PROTEÇÃO E EFEITOS (AUTO-EXECUTÁVEL)
+    // PROTEÇÃO DE CÓPIA E EFEITO DE GOTA
     (function() {
-        // Criar o Toast de Copyright dinamicamente
+        // Criar o Aviso de Copyright Centralizado
         const toast = document.createElement('div');
         toast.id = 'copyright-toast-gabr';
-        toast.innerHTML = '<strong style="color:#ff4d4d;display:block;margin-bottom:5px;">ACESSO PROTEGIDO</strong>Copyright - Gabr (1777777)';
+        toast.innerHTML = '<strong style="color:#ff4d4d;display:block;margin-bottom:5px;font-size:18px;">ACESSO PROTEGIDO</strong>Copyright - Gabr (1777777)';
         
-        // Estilo do Toast (Centralizado na tela)
+        // Estilo do Aviso (Fixo no centro da tela)
         Object.assign(toast.style, {
-            visibility: 'hidden',
-            position: 'fixed',
-            zIndex: '2147483647',
-            left: '50%',
-            top: '50%',
-            transform: 'translate(-50%, -50%) scale(0.8)',
-            backgroundColor: 'rgba(20, 20, 20, 0.95)',
-            color: '#fff',
-            padding: '25px',
-            borderRadius: '15px',
-            textAlign: 'center',
-            fontFamily: 'sans-serif',
-            boxShadow: '0 0 40px rgba(0,0,0,0.8)',
-            border: '1px solid #444',
-            opacity: '0',
-            transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-            minWidth: '280px'
+            visibility: 'hidden', position: 'fixed', zIndex: '2147483647',
+            left: '50%', top: '50%', transform: 'translate(-50%, -50%) scale(0.8)',
+            backgroundColor: 'rgba(15, 15, 15, 0.98)', color: '#fff',
+            padding: '30px', borderRadius: '20px', textAlign: 'center',
+            fontFamily: 'Arial, sans-serif', boxShadow: '0 0 50px rgba(0,0,0,1)',
+            border: '2px solid #333', opacity: '0', transition: 'all 0.3s ease'
         });
         document.body.appendChild(toast);
 
-        let toastTimeout;
-        function showCopyright() {
-            clearTimeout(toastTimeout);
+        function showWarning() {
             toast.style.visibility = 'visible';
             toast.style.opacity = '1';
             toast.style.transform = 'translate(-50%, -50%) scale(1)';
-            
-            toastTimeout = setTimeout(() => {
+            setTimeout(() => {
                 toast.style.visibility = 'hidden';
                 toast.style.opacity = '0';
                 toast.style.transform = 'translate(-50%, -50%) scale(0.8)';
-            }, 3000);
+            }, 2500);
         }
 
-        // BLOQUEIOS (Clique Direito, Atalhos e Drag)
-        document.addEventListener('contextmenu', e => { e.preventDefault(); showCopyright(); }, true);
+        // Bloqueios
+        document.addEventListener('contextmenu', e => { e.preventDefault(); showWarning(); });
         document.addEventListener('keydown', e => {
-            if (e.ctrlKey || e.key === 'F12') { e.preventDefault(); showCopyright(); }
-        }, true);
-        document.addEventListener('dragstart', e => e.preventDefault());
+            if (e.ctrlKey || e.key === 'F12') { e.preventDefault(); showWarning(); }
+        });
 
-        // EFEITO DE GOTA NO MOUSE (CSS injetado para a gota)
-        const style = document.createElement('style');
-        style.innerHTML = `
-            .cursor-drop {
-                position: fixed;
-                background: rgba(0, 72, 255, 0.4);
-                border-radius: 50%;
-                pointer-events: none;
-                z-index: 999999;
-                transform: translate(-50%, -50%);
-            }
-        `;
-        document.head.appendChild(style);
+        // Efeito de Gota Azul
+        const dropStyle = document.createElement('style');
+        dropStyle.innerHTML = `.cursor-drop { position: fixed; background: rgba(0, 72, 255, 0.5); border-radius: 50%; pointer-events: none; z-index: 999999; transform: translate(-50%, -50%); }`;
+        document.head.appendChild(dropStyle);
 
-        document.addEventListener('mousemove', function(e) {
-            const drop = document.createElement('div');
-            drop.className = 'cursor-drop';
-            drop.style.left = e.clientX + 'px';
-            drop.style.top = e.clientY + 'px';
-            document.body.appendChild(drop);
-
-            const anim = drop.animate([
-                { width: '0px', height: '0px', opacity: 0.8 },
-                { width: '100px', height: '100px', opacity: 0 }
-            ], { duration: 800, easing: 'ease-out' });
-
-            anim.onfinish = () => drop.remove();
+        document.addEventListener('mousemove', e => {
+            const d = document.createElement('div');
+            d.className = 'cursor-drop';
+            d.style.left = e.clientX + 'px';
+            d.style.top = e.clientY + 'px';
+            document.body.appendChild(d);
+            d.animate([{width:0,height:0,opacity:1},{width:'100px',height:'100px',opacity:0}], 600).onfinish = () => d.remove();
         });
     })();
 </script>
-
-</body>
-</html>
       </div><!-- ================= VISTA DE GIFS ================= -->
       <div id="view-gifs">
         <div class="gifs-header">
