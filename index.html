@@ -757,7 +757,7 @@
 				1553350022, 1553350080, 1553358001 1553358004, 1549200788, 1549200822, 1549200844, 1557799002, 1553366005, 1549200844, 1553347776 
             </p>
           </div>
-        <style>
+       <style>
     .carrossel-wrs-container {
         width: 100%;
         max-width: 500px;
@@ -769,6 +769,7 @@
         border-radius: 5px;
         box-shadow: 0 0 20px rgba(0, 72, 255, 0.5);
         margin: 10px auto;
+        font-family: Arial, sans-serif;
     }
 
     .grid-bg {
@@ -818,42 +819,101 @@
     }
     .btn-nav-gabr:hover { background: #0048FF; color: #fff; box-shadow: 0 0 15px #0048FF; }
     .prev-gabr { left: 10px; } .next-gabr { right: 10px; }
+
+    /* Estilos da Galeria e Botões */
+    .btn-style {
+        padding: 10px 20px;
+        border: none;
+        color: white;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .cursor-drop { 
+        position: fixed; background: rgba(0, 72, 255, 0.5); 
+        border-radius: 50%; pointer-events: none; z-index: 999999; 
+        transform: translate(-50%, -50%); 
+    }
+    
+    .footer-text { text-align: center; color: #555; padding: 20px; font-size: 12px; }
 </style>
 
-<div class="carrossel-wrs-container">
-    <div class="grid-bg"></div>
-    <div class="scan-line"></div>
-    
-    <div class="slide-gabr active"><img src="https://i.imgur.com/SFnk7A6.gif"><div class="legenda-gabr-animada">PROJETO 01- Gabr </div></div>
-    <div class="slide-gabr"><img src="https://i.imgur.com/KKY2zqU.gif"><div class="legenda-gabr-animada">PROJETO 02 - Mnna </div></div>
-    <div class="slide-gabr"><img src="https://i.imgur.com/28xDTg0.gif"><div class="legenda-gabr-animada">PROJETO 03 - Marbella </div></div>
-    <div class="slide-gabr"><img src="https://i.imgur.com/kSK0E1f.gif"><div class="legenda-gabr-animada">PROJETO 04 - Armando </div></div>
+<div id="view-profile">
+    <div class="carrossel-wrs-container">
+        <div class="grid-bg"></div>
+        <div class="scan-line"></div>
+        
+        <div class="slide-gabr active">
+            <img src="https://i.imgur.com/SFnk7A6.gif">
+            <div class="legenda-gabr-animada">PROJETO 01 - Gabr</div>
+        </div>
+        <div class="slide-gabr">
+            <img src="https://i.imgur.com/KKY2zqU.gif">
+            <div class="legenda-gabr-animada">PROJETO 02 - Mnna</div>
+        </div>
+        <div class="slide-gabr">
+            <img src="https://i.imgur.com/28xDTg0.gif">
+            <div class="legenda-gabr-animada">PROJETO 03 - Marbella</div>
+        </div>
+        <div class="slide-gabr">
+            <img src="https://i.imgur.com/kSK0E1f.gif">
+            <div class="legenda-gabr-animada">PROJETO 04 - Armando</div>
+        </div>
 
-    <button class="btn-nav-gabr prev-gabr" onclick="moveSliderGabr(-1)">&#10094;</button>
-    <button class="btn-nav-gabr next-gabr" onclick="moveSliderGabr(1)">&#10095;</button>
+        <button class="btn-nav-gabr prev-gabr" onclick="moveSliderGabr(-1)">&#10094;</button>
+        <button class="btn-nav-gabr next-gabr" onclick="moveSliderGabr(1)">&#10095;</button>
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <button class="btn-style" style="background-color: #0048FF;" onclick="toggleView('gifs')">Ver Galeria de GIFs</button>
+    </div>
+</div>
+
+<div id="view-gifs" style="display:none; width:100%; min-height:100vh; background:#000; color: #fff; padding-top: 20px;">
+    <div style="text-align:center; padding:20px;">
+        <h2 style="font-family: 'Arial', sans-serif; margin-bottom: 20px;">Galería Exclusiva</h2>
+        <button class="btn-style" onclick="toggleView('profile')" style="background-color: #d9534f;">⬅ Voltar para o Perfil</button>
+    </div>
+    
+    <div id="gifs-galleries-container" style="text-align: center; padding: 20px;">
+        <p>Conteúdo da Galeria aqui...</p>
+    </div>
+
+    <div class="footer-text">
+        <p>© 2026 Gabr / Gifs / Fundos / Pcback / Pstyle.</p>
+    </div>
 </div>
 
 <script>
-    // ESTA FUNÇÃO FAZ OS BOTÕES FUNCIONAREM (GIFS / PERFIL)
+    // 1. LÓGICA DO CARROSSEL
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide-gabr');
+
+    function moveSliderGabr(step) {
+        slides[currentSlide].classList.remove('active');
+        currentSlide = (currentSlide + step + slides.length) % slides.length;
+        slides[currentSlide].classList.add('active');
+    }
+
+    // 2. ALTERNAR ENTRE PERFIL E GALERIA
     function toggleView(view) {
         const profile = document.getElementById('view-profile');
         const gifs = document.getElementById('view-gifs');
         
         if (view === 'gifs') {
-            if(profile) profile.style.display = 'none';
-            if(gifs) gifs.style.display = 'block';
-            console.log("Abrindo Galeria de Gifs");
+            profile.style.display = 'none';
+            gifs.style.display = 'block';
         } else {
-            if(profile) profile.style.display = 'block';
-            if(gifs) gifs.style.display = 'none';
-            console.log("Voltando ao Perfil");
+            profile.style.display = 'block';
+            gifs.style.display = 'none';
         }
     }
 
-    // PROTEÇÃO DE CÓPIA E EFEITO DE GOTA
+    // 3. PROTEÇÃO E EFEITO VISUAL
     (function() {
         const toast = document.createElement('div');
-        toast.id = 'copyright-toast-gabr-new';
         toast.innerHTML = '<strong style="color:#ff4d4d;display:block;margin-bottom:5px;font-size:18px;">ACESSO PROTEGIDO</strong>Copyright - Gabr (1777777)';
         
         Object.assign(toast.style, {
@@ -882,10 +942,7 @@
             if (e.ctrlKey || e.key === 'F12') { e.preventDefault(); showWarning(); }
         });
 
-        const dropStyle = document.createElement('style');
-        dropStyle.innerHTML = `.cursor-drop { position: fixed; background: rgba(0, 72, 255, 0.5); border-radius: 50%; pointer-events: none; z-index: 999999; transform: translate(-50%, -50%); }`;
-        document.head.appendChild(dropStyle);
-
+        // Efeito de rastro do mouse
         document.addEventListener('mousemove', e => {
             const d = document.createElement('div');
             d.className = 'cursor-drop';
@@ -896,35 +953,6 @@
         });
     })();
 </script>
-</div><div id="view-gifs" style="display:none; width:100%; min-height:100vh; background:#000; position:relative; z-index:10;">
-        <div class="gifs-header" style="text-align:center; padding:20px;">
-          <h2 style="color: #fff; font-family: 'Agbalumo', cursive; margin: 0;">Galería Exclusiva</h2>
-          <button class="btn-style" onclick="toggleView('profile')" style="background-color: #d9534f; margin-top: 10px; cursor: pointer;">⬅ Voltar para o Perfil</button>
-        </div>
-        
-        <div class="canvas-container" id="canvasContainer">
-          <canvas id="canvas" height="150"></canvas>
-        </div>
-
-        <div id="gifs-galleries-container" style="padding: 20px; text-align: center; color: #fff;">
-             Galería Exclusiva
-          </h2><button class="btn-style" onclick="toggleView('profile')" style="background-color: #d9534f; margin: 0;">⬅ Voltar para o Perfil</button>
-        </div><!-- Efecto Canvas Text Glow idéntico al de Gif.html -->
-        <div class="canvas-container" id="canvasContainer">
-          <canvas id="canvas" height="150"></canvas>
-        </div><!-- Contenedor donde se inyectarán las TABLAS ORIGINALES de los GIFs -->
-        <div id="gifs-galleries-container"></div>
-      </div>
-      <div class="footer-text">
-        <p>
-          © 2026 Gabr / Gifs / Fundos / Pcback / Pstyle .
-        </p>
-      </div>
-    </div><!-- Contenedor para el mensaje de Copyright -->
-    <div id="copyright-toast">
-       Copyright Gabr 
-    </div>
-    <script>
         // ==========================================
         // LÓGICA DE NAVEGACIÓN Y VISTAS
         // ==========================================
