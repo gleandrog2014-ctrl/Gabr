@@ -873,10 +873,9 @@
         </p>
       </div>
     </div><!-- Contenedor para el mensaje de Copyright -->
-    </div><div id="copyright-toast">
-        Copyright Gabr 
+    <div id="copyright-toast">
+       Copyright Gabr 
     </div>
-
     <script>
         // ==========================================
         // LÓGICA DE NAVEGACIÓN Y VISTAS
@@ -890,9 +889,10 @@
             if (viewName === 'gifs') {
                 profileView.style.display = 'none';
                 gifsView.style.display = 'block';
+                // Iniciar el canvas la primera vez que se abre para que tome el ancho correcto
                 if (!canvasInitialized) {
-                    // initGifsGallery(); // Certifique-se que estas funções existam no seu script completo
-                    // initCanvasEffect();
+                    initGifsGallery();
+                    initCanvasEffect();
                     canvasInitialized = true;
                 }
             } else {
@@ -901,53 +901,6 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
-
-        // ==========================================
-        // FUNÇÃO PARA O COPYRIGHT GABR FUNCIONAR
-        // ==========================================
-        function showCopyright() {
-            const toast = document.getElementById("copyright-toast");
-            toast.classList.add("show");
-            // Se quiser que ele suma depois de 5 segundos, use a linha abaixo:
-            // setTimeout(function(){ toast.classList.remove("show"); }, 5000);
-        }
-
-        // Mostrar o Copyright assim que a página carregar
-        window.onload = function() {
-            showCopyright();
-        };
-    </script>
-
-    <style>
-        #copyright-toast {
-            visibility: hidden;
-            min-width: 250px;
-            background-color: rgba(0, 21, 255, 0.8); /* Azul Neon Combinando */
-            color: #fff;
-            text-align: center;
-            border-radius: 5px;
-            padding: 16px;
-            position: fixed;
-            z-index: 1000;
-            left: 50%;
-            bottom: 30px;
-            font-size: 17px;
-            transform: translateX(-50%);
-            box-shadow: 0px 0px 15px rgba(0, 21, 255, 0.6);
-            opacity: 0;
-            transition: opacity 0.5s, bottom 0.5s, visibility 0.5s;
-            font-family: 'Agbalumo', cursive;
-            border: 1px solid #fff;
-        }
-
-        #copyright-toast.show {
-            visibility: visible;
-            opacity: 1;
-            bottom: 50px;
-        }
-    </style>
-</body>
-</html>
 
         // ==========================================
         // GENERADOR DE GALERÍA DE GIFS (TABLAS EXACTAS Y EDITABLES)
