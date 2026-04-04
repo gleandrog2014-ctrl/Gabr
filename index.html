@@ -1511,108 +1511,87 @@
 
 </body> ```
 
-  <style>
-    /* Bloqueia seleção de texto e imagens */
-    body, .xat-space-content, img { 
-        -webkit-user-select: none !important; 
-        user-select: none !important; 
-        -webkit-user-drag: none !important;
-    }
+ <script>
+    // Mensagem de alerta
+    const mensagemProtecao = "Acesso Protegido - Cópia Proibida - Propriedade de Gabr (1777777)";
 
-    /* Efeito de Gota (Mouse) */
-    .cursor-drop { 
-        position: fixed !important; 
-        background: rgba(0, 72, 255, 0.4) !important; 
-        border-radius: 50% !important; 
-        pointer-events: none !important; 
-        z-index: 9999999 !important; 
-        transform: translate(-50%, -50%) !important; 
-    }
+    // Bloquear Botão Direito
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        alert(mensagemProtecao);
+    });
 
-    /* Toast de Copyright CENTRALIZADO NA TELA */
-    #copyright-toast {
-        visibility: hidden;
-        position: fixed !important;
-        z-index: 2147483647 !important;
-        left: 50% !important;
-        top: 50% !important;
-        transform: translate(-50%, -50%) scale(0.8);
-        background: rgba(20, 20, 20, 0.95) !important;
-        color: #ffffff !important;
-        padding: 25px !important;
-        border-radius: 15px !important;
-        text-align: center !important;
-        font-family: Arial, sans-serif !important;
-        box-shadow: 0 0 30px rgba(0,0,0,1) !important;
-        border: 1px solid #444 !important;
-        opacity: 0;
-        transition: all 0.3s ease;
-        min-width: 280px !important;
-    }
+    // Bloquear Atalhos de Teclado
+    document.addEventListener('keydown', function(e) {
+        // Ctrl+U (Código fonte), F12 (DevTools), Ctrl+Shift+I (Inspecionar)
+        if (
+            (e.ctrlKey && (e.key === 'u' || e.key === 'U')) || 
+            e.key === 'F12' || 
+            (e.ctrlKey && e.shiftKey && (e.key === 'i' || e.key === 'I')) ||
+            (e.ctrlKey && e.shiftKey && (e.key === 'j' || e.key === 'J')) ||
+            (e.ctrlKey && (e.key === 's' || e.key === 'S'))
+        ) {
+            e.preventDefault();
+            alert(mensagemProtecao);
+            return false;
+        }
+    });
 
-    #copyright-toast.show {
-        visibility: visible !important;
-        opacity: 1 !important;
-        transform: translate(-50%, -50%) scale(1) !important;
+    // Bloquear Arrastar Imagens (Opcional, útil para galerias)
+    document.addEventListener('dragstart', function(e) {
+        e.preventDefault();
+    });
+</script>
+
+<style>
+    /* Bloquear seleção de texto visualmente */
+    body {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+</style>
+<style>
+    .cursor-drop {
+        position: fixed; /* Mantém a gota visível mesmo com scroll */
+        background: rgba(0, 72, 255, 0.4); /* Azul padrão WRS */
+        border-radius: 50%;
+        pointer-events: none; /* Não atrapalha os cliques nos botões */
+        z-index: 999999;
+        transform: translate(-50%, -50%);
     }
 </style>
 
-<div id="copyright-toast">
-    <b style="color:#ff4d4d; font-size:18px;">ACESSO PROTEGIDO</b><br>
-    Cópia Proibida<br>
-    Propriedade de Gabr (1777777)
-</div>
-
 <script>
-(function() {
-    var toast = document.getElementById('copyright-toast');
-    var toastTimeout;
+    (function() {
+        // Função que cria a gota
+        function createDrop(e) {
+            const drop = document.createElement('div');
+            drop.className = 'cursor-drop';
+            
+            // Posiciona a gota exatamente na ponta do mouse
+            drop.style.left = e.clientX + 'px';
+            drop.style.top = e.clientY + 'px';
+            
+            document.body.appendChild(drop);
 
-    function showToast() {
-        toast.classList.add('show');
-        clearTimeout(toastTimeout);
-        toastTimeout = setTimeout(function() { 
-            toast.classList.remove('show'); 
-        }, 3000);
-    }
+            // Animação de expansão e sumiço
+            const anim = drop.animate([
+                { width: '0px', height: '0px', opacity: 0.8 },
+                { width: '100px', height: '100px', opacity: 0 }
+            ], {
+                duration: 800,
+                easing: 'ease-out'
+            });
 
-    // Bloquear Clique Direito e Atalhos
-    document.addEventListener('contextmenu', function(e) {
-        e.preventDefault();
-        showToast();
-    }, true);
-
-    document.addEventListener('keydown', function(e) {
-        if (e.ctrlKey || e.key === 'F12') {
-            e.preventDefault();
-            showToast();
+            // Remove o elemento após a animação para não pesar o site
+            anim.onfinish = () => drop.remove();
         }
-    }, true);
 
-    // Efeito Gota no Mouse (Opcional, se o xat permitir animate)
-    document.addEventListener('mousemove', function(e) {
-        var d = document.createElement('div');
-        d.className = 'cursor-drop';
-        d.style.left = e.clientX + 'px';
-        d.style.top = e.clientY + 'px';
-        document.body.appendChild(d);
-
-        // Animação simples que funciona na maioria dos browsers
-        var size = 0;
-        var opacity = 0.8;
-        var timer = setInterval(function() {
-            size += 5;
-            opacity -= 0.05;
-            d.style.width = size + 'px';
-            d.style.height = size + 'px';
-            d.style.opacity = opacity;
-            if (opacity <= 0) {
-                clearInterval(timer);
-                if(d.parentNode) d.parentNode.removeChild(d);
-            }
-        }, 30);
-    });
-})();
+        // Ativa o efeito no movimento do mouse
+        document.addEventListener('mousemove', createDrop);
+    })();
 </script>
-  </body>
+</body>
 </html>
