@@ -834,30 +834,28 @@
 </div>
 
 <script>
-    // ESTA FUNÇÃO FAZ O BOTÃO "GIFS" FUNCIONAR
+    // ESTA FUNÇÃO FAZ OS BOTÕES FUNCIONAREM (GIFS / PERFIL)
     function toggleView(view) {
         const profile = document.getElementById('view-profile');
         const gifs = document.getElementById('view-gifs');
         
         if (view === 'gifs') {
-            profile.style.display = 'none';
-            gifs.style.display = 'block';
+            if(profile) profile.style.display = 'none';
+            if(gifs) gifs.style.display = 'block';
             console.log("Abrindo Galeria de Gifs");
         } else {
-            profile.style.display = 'block';
-            gifs.style.display = 'none';
+            if(profile) profile.style.display = 'block';
+            if(gifs) gifs.style.display = 'none';
             console.log("Voltando ao Perfil");
         }
     }
 
     // PROTEÇÃO DE CÓPIA E EFEITO DE GOTA
     (function() {
-        // Criar o Aviso de Copyright Centralizado
         const toast = document.createElement('div');
-        toast.id = 'copyright-toast-gabr';
+        toast.id = 'copyright-toast-gabr-new';
         toast.innerHTML = '<strong style="color:#ff4d4d;display:block;margin-bottom:5px;font-size:18px;">ACESSO PROTEGIDO</strong>Copyright - Gabr (1777777)';
         
-        // Estilo do Aviso (Fixo no centro da tela)
         Object.assign(toast.style, {
             visibility: 'hidden', position: 'fixed', zIndex: '2147483647',
             left: '50%', top: '50%', transform: 'translate(-50%, -50%) scale(0.8)',
@@ -879,13 +877,11 @@
             }, 2500);
         }
 
-        // Bloqueios
         document.addEventListener('contextmenu', e => { e.preventDefault(); showWarning(); });
         document.addEventListener('keydown', e => {
             if (e.ctrlKey || e.key === 'F12') { e.preventDefault(); showWarning(); }
         });
 
-        // Efeito de Gota Azul
         const dropStyle = document.createElement('style');
         dropStyle.innerHTML = `.cursor-drop { position: fixed; background: rgba(0, 72, 255, 0.5); border-radius: 50%; pointer-events: none; z-index: 999999; transform: translate(-50%, -50%); }`;
         document.head.appendChild(dropStyle);
@@ -900,27 +896,28 @@
         });
     })();
 </script>
-      </div><!-- ================= VISTA DE GIFS ================= -->
-      <div id="view-gifs">
-        <div class="gifs-header">
-          <h2 style="color: #fff; font-family: 'Agbalumo', cursive; margin: 0;">
+
+</div> 
+
+<div id="view-gifs" style="display:none;">
+    <div class="gifs-header">
+        <h2 style="color: #fff; font-family: 'Agbalumo', cursive; margin: 0;">
             Galería Exclusiva
-          </h2><button class="btn-style" onclick="toggleView('profile')" style="background-color: #d9534f; margin: 0;">⬅ Voltar para o Perfil</button>
-        </div><!-- Efecto Canvas Text Glow idéntico al de Gif.html -->
-        <div class="canvas-container" id="canvasContainer">
-          <canvas id="canvas" height="150"></canvas>
-        </div><!-- Contenedor donde se inyectarán las TABLAS ORIGINALES de los GIFs -->
-        <div id="gifs-galleries-container"></div>
-      </div>
-      <div class="footer-text">
-        <p>
-          © 2026 Gabr / Gifs / Fundos / Pcback / Pstyle .
-        </p>
-      </div>
-    </div><!-- Contenedor para el mensaje de Copyright -->
-    <div id="copyright-toast">
-       Copyright Gabr 
+        </h2>
+        <button class="btn-style" onclick="toggleView('profile')" style="background-color: #d9534f; margin: 10px; cursor: pointer;">⬅ Voltar para o Perfil</button>
     </div>
+    
+    <div class="canvas-container" id="canvasContainer">
+        <canvas id="canvas" height="150"></canvas>
+    </div>
+    
+    <div id="gifs-galleries-container">
+        </div>
+
+    <div class="footer-text">
+        <p>© 2026 Gabr / Gifs / Fundos / Pcback / Pstyle .</p>
+    </div>
+</div>
     <script>
         // ==========================================
         // LÓGICA DE NAVEGACIÓN Y VISTAS
