@@ -1511,127 +1511,46 @@
 
 </body> ```
 <style>
-    /* 1. Bloquear seleção de texto */
-    body {
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-    }
-
-    /* 2. Estilo da Gota de Água (Cursor) */
-    .cursor-drop {
-        position: fixed;
-        background: rgba(0, 72, 255, 0.4);
-        border-radius: 50%;
-        pointer-events: none;
-        z-index: 999999;
-        transform: translate(-50%, -50%);
-    }
-
-    /* 3. Notificação de Copyright (Toast) CENTRALIZADA NA TELA */
+    body { -webkit-user-select: none !important; user-select: none !important; }
+    .cursor-drop { position: fixed; background: rgba(0, 72, 255, 0.4); border-radius: 50%; pointer-events: none; z-index: 9999999; transform: translate(-50%, -50%); }
     #copyright-toast {
-        visibility: hidden;
-        min-width: 320px;
-        background-color: rgba(30, 30, 30, 0.98);
-        color: #ffffff;
-        text-align: center;
-        border-radius: 15px;
-        padding: 25px;
-        
-        /* Posicionamento Fixo (Acompanha a tela, não a página) */
-        position: fixed;
-        z-index: 1000000;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%) scale(0.7);
-        
-        font-family: 'Segoe UI', Roboto, sans-serif;
-        box-shadow: 0 15px 50px rgba(0,0,0,0.7);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        opacity: 0;
-        transition: opacity 0.3s, visibility 0.3s, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        visibility: hidden; position: fixed !important; z-index: 2147483647 !important;
+        left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) scale(0.8);
+        background: #222 !important; color: #fff !important; padding: 25px; border-radius: 15px;
+        text-align: center; font-family: sans-serif; box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+        opacity: 0; transition: all 0.3s; min-width: 280px; border: 1px solid #444;
     }
-
-    /* Efeito de surgimento do aviso */
-    #copyright-toast.show {
-        visibility: visible;
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-    }
-
-    #copyright-toast strong {
-        display: block;
-        font-size: 1.2em;
-        margin-bottom: 5px;
-        color: #ff4d4d; /* Cor de destaque para o alerta */
-    }
+    #copyright-toast.show { visibility: visible !important; opacity: 1 !important; transform: translate(-50%, -50%) scale(1) !important; }
 </style>
 
 <div id="copyright-toast">
-    <strong>ACESSO PROTEGIDO</strong>
-    Cópia Proibida<br>
-    Propriedade de Gabr (1777777)
+    <b style="color:#ff4d4d;font-size:1.2em">ACESSO PROTEGIDO</b><br>
+    Cópia Proibida<br>Propriedade de Gabr (1777777)
 </div>
 
 <script>
     (function() {
-        const toast = document.getElementById('copyright-toast');
-        let toastTimeout;
+        const show = () => {
+            const t = document.getElementById('copyright-toast');
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        };
 
-        // Função para mostrar o aviso centralizado
-        function showCopyright() {
-            clearTimeout(toastTimeout);
-            toast.classList.add('show');
-            
-            // O aviso some após 3 segundos
-            toastTimeout = setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000); 
-        }
+        // Bloqueios Críticos
+        window.addEventListener('contextmenu', e => { e.preventDefault(); show(); }, true);
+        window.addEventListener('keydown', e => {
+            if (e.ctrlKey || e.key === 'F12') { e.preventDefault(); show(); }
+        }, true);
 
-        // 1. Bloquear Clique Direito
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-            showCopyright();
+        // Efeito Gota
+        window.addEventListener('mousemove', e => {
+            const d = document.createElement('div');
+            d.className = 'cursor-drop';
+            d.style.left = e.clientX + 'px';
+            d.style.top = e.clientY + 'px';
+            document.body.appendChild(d);
+            d.animate([{width:0,height:0,opacity:.8},{width:'80px',height:'80px',opacity:0}],600).onfinish = () => d.remove();
         });
-
-        // 2. Bloquear Atalhos (F12, Ctrl+U, Ctrl+S, Ctrl+Shift+I/J)
-        document.addEventListener('keydown', function(e) {
-            const forbiddenKeys = ['u', 's', 'i', 'j'];
-            const isForbiddenShortcut = e.ctrlKey && forbiddenKeys.includes(e.key.toLowerCase());
-            const isDevTools = e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key.toLowerCase() === 'i' || e.key.toLowerCase() === 'j'));
-
-            if (isForbiddenShortcut || isDevTools) {
-                e.preventDefault();
-                showCopyright();
-                return false;
-            }
-        });
-
-        // 3. Bloquear Arrastar Imagens
-        document.addEventListener('dragstart', e => e.preventDefault());
-
-        // 4. Efeito de Gota ao mover o mouse
-        function createDrop(e) {
-            const drop = document.createElement('div');
-            drop.className = 'cursor-drop';
-            drop.style.left = e.clientX + 'px';
-            drop.style.top = e.clientY + 'px';
-            document.body.appendChild(drop);
-
-            const anim = drop.animate([
-                { width: '0px', height: '0px', opacity: 0.8 },
-                { width: '120px', height: '120px', opacity: 0 }
-            ], {
-                duration: 700,
-                easing: 'ease-out'
-            });
-
-            anim.onfinish = () => drop.remove();
-        }
-
-        document.addEventListener('mousemove', createDrop);
     })();
 </script>
   </body>
