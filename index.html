@@ -818,20 +818,37 @@
     <div class="slide-gabr"><img src="https://i.imgur.com/KKY2zqU.gif"><div class="legenda-gabr-animada">PROJETO 02 - Mnna </div></div>
     <div class="slide-gabr"><img src="https://i.imgur.com/28xDTg0.gif"><div class="legenda-gabr-animada">PROJETO 03 - Marbella </div></div>
     <div class="slide-gabr"><img src="https://i.imgur.com/kSK0E1f.gif"><div class="legenda-gabr-animada">PROJETO 04 - Armando </div></div>
-    <button class="btn-nav-gabr prev-gabr" onclick="moveSliderGabr(-1)">&#10094;</button>
-    <button class="btn-nav-gabr next-gabr" onclick="moveSliderGabr(1)">&#10095;</button>
+    <button class="btn-nav-gabr prev-gabr" onclick="btnMoveGabr(-1)">&#10094;</button>
+    <button class="btn-nav-gabr next-gabr" onclick="btnMoveGabr(1)">&#10095;</button>
 </div>
 
 <script>
 (function() {
-    // 1. Lógica do Carrossel
+    // 1. Lógica do Carrossel Automático + Botões
     let currentSlideGabr = 0;
     const slidesGabr = document.querySelectorAll('.slide-gabr');
-    window.moveSliderGabr = function(n) {
+    
+    function showSlideGabr(n) {
         slidesGabr[currentSlideGabr].classList.remove('active');
-        currentSlideGabr = (n + currentSlideGabr + slidesGabr.length) % slidesGabr.length;
+        currentSlideGabr = (n + slidesGabr.length) % slidesGabr.length;
         slidesGabr[currentSlideGabr].classList.add('active');
+    }
+
+    // Função para os botões (reseta o timer automático ao clicar)
+    window.btnMoveGabr = function(n) {
+        clearInterval(autoPlayGabr); // Para o tempo atual
+        showSlideGabr(currentSlideGabr + n);
+        startAutoPlay(); // Reinicia o tempo
     };
+
+    function startAutoPlay() {
+        autoPlayGabr = setInterval(() => {
+            showSlideGabr(currentSlideGabr + 1);
+        }, 5000); // Mudar a cada 5 segundos
+    }
+
+    let autoPlayGabr;
+    startAutoPlay();
 
     // 2. Lógica das Gotas (Ripple)
     document.addEventListener('mousemove', function(e) {
