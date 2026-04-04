@@ -896,31 +896,29 @@
         });
     })();
 </script>
-
-</div> 
-
-<div id="view-gifs" style="display:none;">
-    <div class="gifs-header">
-        <h2 style="color: #fff; font-family: 'Agbalumo', cursive; margin: 0;">
-            Galería Exclusiva
-        </h2>
-        <button class="btn-style" onclick="toggleView('profile')" style="background-color: #d9534f; margin: 10px; cursor: pointer;">⬅ Voltar para o Perfil</button>
-    </div>
-    
-    <div class="canvas-container" id="canvasContainer">
-        <canvas id="canvas" height="150"></canvas>
-    </div>
-    
-    <div id="gifs-galleries-container">
+</div><div id="view-gifs" style="display:none; width:100%; min-height:100vh; background:#000; position:relative; z-index:10;">
+        <div class="gifs-header" style="text-align:center; padding:20px;">
+          <h2 style="color: #fff; font-family: 'Agbalumo', cursive; margin: 0;">Galería Exclusiva</h2>
+          <button class="btn-style" onclick="toggleView('profile')" style="background-color: #d9534f; margin-top: 10px; cursor: pointer;">⬅ Voltar para o Perfil</button>
+        </div>
+        
+        <div class="canvas-container" id="canvasContainer">
+          <canvas id="canvas" height="150"></canvas>
         </div>
 
-    <div class="footer-text">
-        <p>© 2026 Gabr / Gifs / Fundos / Pcback / Pstyle .</p>
-    </div>
-</div>
+        <div id="gifs-galleries-container" style="padding: 20px; text-align: center; color: #fff;">
+            <p>Galeria de Gifs Gabr (1777777)</p>
+        </div>
 
-</body>
-</html>
+        <div class="footer-text">
+          © 2026 Gabr / Gifs / Fundos / Pcback / Pstyle .
+        </p>
+      </div>
+    </div><!-- Contenedor para el mensaje de Copyright -->
+    <div id="copyright-toast">
+       Copyright Gabr 
+    </div>
+    <script>
         // ==========================================
         // LÓGICA DE NAVEGACIÓN Y VISTAS
         // ==========================================
