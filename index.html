@@ -758,9 +758,107 @@
             </p>
           </div>
         </div>
-        <div class="spotify-container">
-          <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/6brl7bwOHmGFkNw3MBqssT?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-        </div>
+        <style>
+    /* Estilos do Carrossel */
+    .carrossel-wrs-container {
+        width: 100%; max-width: 500px; height: 320px;
+        position: relative; overflow: hidden; background: #000;
+        border: 2px solid #0048FF; border-radius: 5px;
+        box-shadow: 0 0 20px rgba(0, 72, 255, 0.5); margin: 10px auto;
+    }
+    .grid-bg {
+        position: absolute; width: 100%; height: 100%;
+        background-image: linear-gradient(rgba(0, 72, 255, 0.1) 1px, transparent 1px),
+                          linear-gradient(90deg, rgba(0, 72, 255, 0.1) 1px, transparent 1px);
+        background-size: 25px 25px; z-index: 1;
+    }
+    .scan-line {
+        position: absolute; width: 100%; height: 4px;
+        background: #0048FF; box-shadow: 0 0 15px #0048FF;
+        opacity: 0.4; z-index: 5; animation: moveScanGabr 5s linear infinite;
+    }
+    @keyframes moveScanGabr { 0% { top: -5%; } 100% { top: 105%; } }
+    .slide-gabr {
+        position: absolute; width: 100%; height: 100%;
+        opacity: 0; transition: opacity 0.8s ease-in-out;
+        display: flex; flex-direction: column;
+        justify-content: center; align-items: center; z-index: 2;
+    }
+    .slide-gabr.active { opacity: 1; }
+    .slide-gabr img { max-width: 85%; max-height: 60%; object-fit: contain; filter: drop-shadow(0 0 10px #0048FF); }
+    .legenda-gabr-animada {
+        margin-top: 20px; font-weight: 900; text-transform: uppercase;
+        letter-spacing: 3px; font-size: 13px; text-align: center;
+        background: linear-gradient(to right, #0048FF, #fff, #0048FF);
+        background-size: 200% auto; -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent; animation: gradTextGabr 3s linear infinite;
+    }
+    @keyframes gradTextGabr { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
+    .btn-nav-gabr {
+        position: absolute; top: 50%; transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.7); color: #0048FF;
+        border: 1px solid #0048FF; width: 35px; height: 35px;
+        cursor: pointer; z-index: 10; border-radius: 5px;
+    }
+    .btn-nav-gabr:hover { background: #0048FF; color: #fff; box-shadow: 0 0 15px #0048FF; }
+    .prev-gabr { left: 10px; } .next-gabr { right: 10px; }
+
+    /* Estilo das Gotas (Ripple Effect) */
+    .gabr-ripple {
+        position: fixed; background: rgba(0, 72, 255, 0.4);
+        border-radius: 50%; pointer-events: none;
+        z-index: 9999999; transform: translate(-50%, -50%);
+    }
+</style>
+
+<div class="carrossel-wrs-container">
+    <div class="grid-bg"></div>
+    <div class="scan-line"></div>
+    <div class="slide-gabr active"><img src="https://i.imgur.com/SFnk7A6.gif"><div class="legenda-gabr-animada">PROJETO 01- Gabr </div></div>
+    <div class="slide-gabr"><img src="https://i.imgur.com/KKY2zqU.gif"><div class="legenda-gabr-animada">PROJETO 02 - Mnna </div></div>
+    <div class="slide-gabr"><img src="https://i.imgur.com/28xDTg0.gif"><div class="legenda-gabr-animada">PROJETO 03 - Marbella </div></div>
+    <div class="slide-gabr"><img src="https://i.imgur.com/kSK0E1f.gif"><div class="legenda-gabr-animada">PROJETO 04 - Armando </div></div>
+    <button class="btn-nav-gabr prev-gabr" onclick="moveSliderGabr(-1)">&#10094;</button>
+    <button class="btn-nav-gabr next-gabr" onclick="moveSliderGabr(1)">&#10095;</button>
+</div>
+
+<script>
+(function() {
+    // 1. Lógica do Carrossel
+    let currentSlideGabr = 0;
+    const slidesGabr = document.querySelectorAll('.slide-gabr');
+    window.moveSliderGabr = function(n) {
+        slidesGabr[currentSlideGabr].classList.remove('active');
+        currentSlideGabr = (n + currentSlideGabr + slidesGabr.length) % slidesGabr.length;
+        slidesGabr[currentSlideGabr].classList.add('active');
+    };
+
+    // 2. Lógica das Gotas (Ripple)
+    document.addEventListener('mousemove', function(e) {
+        const drop = document.createElement('div');
+        drop.className = 'gabr-ripple';
+        drop.style.left = e.clientX + 'px';
+        drop.style.top = e.clientY + 'px';
+        document.body.appendChild(drop);
+        drop.animate([
+            { width: '0px', height: '0px', opacity: 0.8 },
+            { width: '80px', height: '80px', opacity: 0 }
+        ], { duration: 600, easing: 'ease-out' });
+        setTimeout(() => { drop.remove(); }, 600);
+    });
+
+    // 3. Bloqueios de Segurança
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('keydown', function(e) {
+        if (e.keyCode === 123 || (e.ctrlKey && e.keyCode === 85) || 
+            (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || 
+            (e.ctrlKey && e.keyCode === 83)) {
+            e.preventDefault();
+            return false;
+        }
+    });
+})();
+</script>
       </div><!-- ================= VISTA DE GIFS ================= -->
       <div id="view-gifs">
         <div class="gifs-header">
