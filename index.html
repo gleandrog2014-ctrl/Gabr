@@ -1553,30 +1553,48 @@
     }
 </style>
 <style>
+    /* Estilo das gotas do cursor */
     .cursor-drop {
-        position: fixed; /* Mantém a gota visível mesmo com scroll */
+        position: fixed;
         background: rgba(0, 72, 255, 0.4); /* Azul padrão WRS */
         border-radius: 50%;
-        pointer-events: none; /* Não atrapalha os cliques nos botões */
+        pointer-events: none;
         z-index: 999999;
         transform: translate(-50%, -50%);
     }
+
+    /* Estilo do aviso de copyright no rodapé */
+    #aviso-gabr {
+        display: none;
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #1a1a1a;
+        color: #ffffff;
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-family: sans-serif;
+        font-size: 14px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        z-index: 1000000; /* Fica acima das gotas */
+        border: 1px solid #0048ff; /* Borda no azul WRS para combinar */
+        transition: opacity 0.4s ease;
+    }
 </style>
+
+<div id="aviso-gabr">Copyright - Gabr (1777777)</div>
 
 <script>
     (function() {
-        // Função que cria a gota
+        /*** 1. EFEITO DE GOTAS NO MOUSE ***/
         function createDrop(e) {
             const drop = document.createElement('div');
             drop.className = 'cursor-drop';
-            
-            // Posiciona a gota exatamente na ponta do mouse
             drop.style.left = e.clientX + 'px';
             drop.style.top = e.clientY + 'px';
-            
             document.body.appendChild(drop);
 
-            // Animação de expansão e sumiço
             const anim = drop.animate([
                 { width: '0px', height: '0px', opacity: 0.8 },
                 { width: '100px', height: '100px', opacity: 0 }
@@ -1585,12 +1603,40 @@
                 easing: 'ease-out'
             });
 
-            // Remove o elemento após a animação para não pesar o site
             anim.onfinish = () => drop.remove();
         }
-
-        // Ativa o efeito no movimento do mouse
         document.addEventListener('mousemove', createDrop);
+
+
+        /*** 2. BLOQUEIO E AVISO DE COPYRIGHT ***/
+        const aviso = document.getElementById('aviso-gabr');
+        let timeout;
+
+        function exibirAlerta(e) {
+            e.preventDefault();
+            
+            aviso.style.display = 'block';
+            aviso.style.opacity = '1';
+
+            clearTimeout(timeout);
+
+            timeout = setTimeout(() => {
+                aviso.style.opacity = '0';
+                setTimeout(() => {
+                    if(aviso.style.opacity === '0') aviso.style.display = 'none';
+                }, 400);
+            }, 2000);
+        }
+
+        // Bloqueia clique direito
+        document.addEventListener('contextmenu', exibirAlerta);
+
+        // Bloqueia Ctrl+U e F12
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey && (e.key === 'u' || e.key === 'U')) || e.key === 'F12') {
+                exibirAlerta(e);
+            }
+        });
     })();
 </script>
 </body>
